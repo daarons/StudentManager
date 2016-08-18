@@ -16,7 +16,8 @@
     </padding>
     <children>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
-              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
                 <Text text="Accounts" styleClass="text" />
                 <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
@@ -24,7 +25,8 @@
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
-              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
                 <Text text="New Notes" styleClass="text"/>
                 <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
@@ -32,7 +34,8 @@
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
-              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
+              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
                 <Text text="Import/Export" styleClass="text"/>
                 <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
@@ -40,7 +43,8 @@
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
-              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
+              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
                 <Text text="Info" styleClass="text"/>
                 <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
