@@ -1,0 +1,25 @@
+.button {
+    -fx-font-weight: bold;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+}
+
+#accountsBtn{
+    -fx-background-image: url("/image/man.png");
+}
+
+#notesBtn{
+    -fx-background-image: url("/image/notepad.png");
+}
+
+#importExportBtn{
+    -fx-background-image: url("/image/box.png");
+}
+
+#infoBtn{
+    -fx-background-image: url("/image/info.png");
+}
+
+.text{
+    -fx-font-size: 2em;
+}

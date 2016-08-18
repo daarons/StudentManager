@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.Text?>
+<?import javafx.scene.image.*?>
+
+<GridPane fx:controller="com.daarons.studentmanager.FXMLController" xmlns:fx="http://javafx.com/fxml/1" 
+          stylesheets="@/css/Styles.css" alignment="CENTER" hgap="25" vgap="25"> 
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+    <children>
+        <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+            <children>
+                <Text text="Accounts" styleClass="text" />
+                <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+            </children>
+        </VBox>
+        <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
+              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+            <children>
+                <Text text="New Notes" styleClass="text"/>
+                <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+            </children>
+        </VBox>
+        <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+            <children>
+                <Text text="Import/Export" styleClass="text"/>
+                <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+            </children>
+        </VBox>
+        <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
+              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" GridPane.vgrow="ALWAYS">
+            <children>
+                <Text text="Info" styleClass="text"/>
+                <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+            </children>
+        </VBox>
+    </children>
+</GridPane>
