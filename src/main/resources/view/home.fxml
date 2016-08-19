@@ -10,7 +10,7 @@
 <?import javafx.scene.image.*?>
 
 <GridPane fx:controller="com.daarons.studentmanager.FXMLController" xmlns:fx="http://javafx.com/fxml/1" 
-          stylesheets="@/css/Styles.css" alignment="CENTER" hgap="25" vgap="25"> 
+          stylesheets="@/css/style.css" alignment="CENTER" hgap="25" vgap="25"> 
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>

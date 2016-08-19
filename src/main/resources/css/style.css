@@ -2,10 +2,14 @@
     -fx-font-weight: bold;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
+    -fx-background-size: 80%; 
+    -fx-background-radius: 3em;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
 }
 
 #accountsBtn{
-    -fx-background-image: url("/image/man.png");
+    -fx-background-image: url("/image/user.png");
 }
 
 #notesBtn{
@@ -13,11 +17,11 @@
 }
 
 #importExportBtn{
-    -fx-background-image: url("/image/box.png");
+    -fx-background-image: url("/image/file-zip-alt.png");
 }
 
 #infoBtn{
-    -fx-background-image: url("/image/info.png");
+    -fx-background-image: url("/image/sign-info.png");
 }
 
 .text{
