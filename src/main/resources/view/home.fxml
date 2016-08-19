@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.image.*?>
 
-<GridPane fx:controller="com.daarons.studentmanager.FXMLController" xmlns:fx="http://javafx.com/fxml/1" 
+<GridPane fx:controller="com.daarons.controller.HomeController" xmlns:fx="http://javafx.com/fxml/1" 
           stylesheets="@/css/style.css" alignment="CENTER" hgap="25" vgap="25"> 
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
@@ -21,7 +21,8 @@
             <children>
                 <Text text="Accounts" styleClass="text" />
                 <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
-                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                onAction="#handleButtonAction"/>
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
@@ -30,7 +31,8 @@
             <children>
                 <Text text="New Notes" styleClass="text"/>
                 <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
-                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                onAction="#handleButtonAction"/>
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
@@ -39,7 +41,8 @@
             <children>
                 <Text text="Import/Export" styleClass="text"/>
                 <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
-                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                onAction="#handleButtonAction"/>
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
@@ -48,7 +51,8 @@
             <children>
                 <Text text="Info" styleClass="text"/>
                 <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
-                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS"/>
+                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                onAction="#handleButtonAction"/>
             </children>
         </VBox>
     </children>
