@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 
 <ButtonBar xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/style.css" 
-           fx:controller="com.daarons.controller.HeadController"
+           fx:controller="com.daarons.controller.NavigationController"
            maxHeight="Infinity" maxWidth="Infinity">
     <buttons>
         <Button fx:id="homeBtn" id="homeBtn" HBox.hgrow="ALWAYS" 

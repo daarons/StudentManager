@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Text?>
 <?import javafx.scene.image.*?>
 
-<GridPane fx:controller="com.daarons.controller.HomeController" xmlns:fx="http://javafx.com/fxml/1" 
+<GridPane fx:controller="com.daarons.controller.NavigationController" xmlns:fx="http://javafx.com/fxml/1" 
           stylesheets="@/css/style.css" alignment="CENTER" hgap="25" vgap="25" 
           minHeight="400" minWidth="450" > 
     <padding>
