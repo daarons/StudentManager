@@ -20,13 +20,7 @@
                 <Insets bottom="3" top="3" />
             </BorderPane.margin>
             <children>
-                <Button fx:id="homeBtn" id="homeBtn" HBox.hgrow="ALWAYS" 
-                        minHeight="30" minWidth="30" maxWidth="60"
-                        maxHeight="60"  onAction="#handleButtonAction">
-                    <tooltip>
-                        <Tooltip text="Go to home page" />
-                    </tooltip>
-                </Button>
+                <fx:include source="/view/head.fxml"/>
             </children>
         </HBox>
     </top>
