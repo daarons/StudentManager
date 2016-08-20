@@ -8,6 +8,10 @@
     -fx-faint-focus-color: transparent;
 }
 
+#homeBtn{
+    -fx-background-image: url("/image/house.png");
+}
+
 #accountsBtn{
     -fx-background-image: url("/image/user.png");
 }
