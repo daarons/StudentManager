@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.* ?>
+<?import javafx.scene.text.* ?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+            fx:controller="com.daarons.controller.InfoController" minHeight="400"
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" >
+    <top>
+        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+              maxHeight="Infinity" maxWidth="Infinity">
+            <BorderPane.margin>
+                <Insets bottom="3" top="3" />
+            </BorderPane.margin>
+            <children>
+                <Button fx:id="homeBtn" id="homeBtn" HBox.hgrow="ALWAYS" 
+                        minHeight="30" minWidth="30" maxWidth="60"
+                        maxHeight="60"  onAction="#handleButtonAction">
+                    <tooltip>
+                        <Tooltip text="Go to home page" />
+                    </tooltip>
+                </Button>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <Accordion> 
+            <panes>
+                <TitledPane text="License">
+                    <content>
+                        <ScrollPane BorderPane.alignment="CENTER_LEFT" fitToHeight="true" 
+                                    fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                            <content>
+                                <TextArea fx:id="legalText" wrapText="true" editable="false">
+                    
+                                </TextArea>
+                            </content>
+                        </ScrollPane> 
+                    </content>
+                </TitledPane>
+                <TitledPane text="Attributions">
+                    <content>
+                        <ScrollPane BorderPane.alignment="CENTER_LEFT" fitToHeight="true" 
+                                    fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                            <content>
+                                <TextArea fx:id="attrText" wrapText="true" editable="false">
+                    
+                                </TextArea>
+                            </content>
+                        </ScrollPane> 
+                    </content>
+                </TitledPane>
+            </panes>
+        </Accordion>
+    </center>
+</BorderPane>
