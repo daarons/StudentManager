@@ -26,16 +26,9 @@ import java.nio.file.Paths;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
-import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -45,27 +38,9 @@ import javafx.stage.Stage;
 public class InfoController implements Initializable {
     
     @FXML
-    private Button homeBtn;
-    @FXML
     private TextArea legalText;
     @FXML
     private TextArea attrText;
-    
-    @FXML
-    private void handleButtonAction(ActionEvent event) throws Exception {
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        if (event.getSource() == homeBtn) {
-            root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
-
-    }
 
     /**
      * Initializes the controller class.
