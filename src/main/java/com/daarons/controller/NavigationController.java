@@ -34,7 +34,7 @@ public class NavigationController implements Initializable {
         }else if (event.getSource() == accountsBtn) {
             System.out.println("accounts");
         } else if (event.getSource() == notesBtn) {
-            System.out.println("notes");
+            root = FXMLLoader.load(getClass().getResource("/view/notes.fxml"));
         } else if (event.getSource() == importExportBtn) {
             System.out.println("importexport");
         } else if (event.getSource() == infoBtn) {
