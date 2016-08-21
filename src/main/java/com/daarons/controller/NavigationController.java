@@ -45,7 +45,6 @@ public class NavigationController implements Initializable {
         stage.setHeight(stage.getHeight());
         stage.setWidth(stage.getWidth());
         stage.show();
-
     }
 
     @Override

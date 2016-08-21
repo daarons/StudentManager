@@ -29,6 +29,10 @@
     -fx-background-image: url("/image/sign-info.png");
 }
 
+#saveBtn{
+    -fx-background-image: url("/image/floppy.png");
+}
+
 .text, .label{
     -fx-font-size: 2em;
 }

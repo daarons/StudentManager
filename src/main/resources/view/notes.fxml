@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+            fx:controller="com.daarons.controller.NotesController" minHeight="400"
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+    <top>
+        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+              maxHeight="Infinity" maxWidth="Infinity">
+            <BorderPane.margin>
+                <Insets bottom="3" top="3" />
+            </BorderPane.margin>
+            <children>
+                <fx:include source="/view/head.fxml"/>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <TilePane hgap="10" maxHeight="Infinity" maxWidth="Infinity" 
+                  prefTileWidth="200" prefTileHeight="180" prefColumns="2" >
+            <BorderPane.margin>
+                <Insets top="10" bottom="10" left="25"/>
+            </BorderPane.margin>
+            <VBox fillWidth="true" >
+                <children>
+                    <Label text="FluencyCoherence" styleClass="notesLabel"/>
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                </children>
+            </VBox>
+            <VBox fillWidth="true">
+                <children>
+                    <Label text="Vocabulary" styleClass="notesLabel" id="noteLabel"/>
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                </children>
+            </VBox>
+            <VBox fillWidth="true">
+                <children>
+                    <Label text="Grammar" styleClass="notesLabel"/>
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                </children>
+            </VBox>
+            <VBox fillWidth="true">
+                <children>
+                    <Label text="Pronunciation" styleClass="notesLabel"/>
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                </children>
+            </VBox>
+            <VBox fillWidth="true">
+                <children>
+                    <Label text="InteractEngage" styleClass="notesLabel"/>
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                </children>
+            </VBox>
+            <VBox fillWidth="true">
+                <children>
+                    <Label text="CommSkills" styleClass="notesLabel"/>
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                </children>
+            </VBox>
+        </TilePane> 
+    </center>
+    <!--<center>
+        <VBox maxHeight="200" maxWidth="200" BorderPane.alignment="CENTER_LEFT">
+            <BorderPane.margin>
+                <Insets left="5" />
+            </BorderPane.margin>
+            <Label text="  Add to&#13;  Student" VBox.vgrow="ALWAYS" />
+            <Button id="addAccountBtn" minHeight="50" minWidth="50"  
+                    maxHeight="100" maxWidth="100" VBox.vgrow="ALWAYS" />
+        </VBox>
+    </center>-->
+    <bottom>
+        <HBox maxHeight="200">
+            <BorderPane.margin>
+                <Insets top="3" bottom="3" left="25"/>
+            </BorderPane.margin>
+            <Button id="saveBtn" HBox.hgrow="ALWAYS" minWidth="30" minHeight="30" 
+                    maxWidth="60" maxHeight="60">
+                <tooltip>
+                    <Tooltip text="Save" />
+                </tooltip>
+            </Button>
+        </HBox>
+    </bottom>
+</BorderPane>
