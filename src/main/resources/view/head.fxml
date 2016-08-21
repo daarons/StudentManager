@@ -12,36 +12,41 @@
            maxHeight="Infinity" maxWidth="Infinity">
     <buttons>
         <Button fx:id="homeBtn" id="homeBtn" HBox.hgrow="ALWAYS" 
-            minHeight="30" minWidth="30" maxWidth="Infinity"
-            maxHeight="Infinity" onAction="#handleButtonAction">
+                minHeight="30" minWidth="30" maxWidth="Infinity"
+                maxHeight="Infinity" onAction="#handleButtonAction" 
+                focusTraversable="false">
             <tooltip>
                 <Tooltip text="Go to home page" />
             </tooltip>
         </Button>
         <Button fx:id="accountsBtn" id="accountsBtn" HBox.hgrow="ALWAYS" 
-            minHeight="30" minWidth="30" maxWidth="Infinity"
-            maxHeight="Infinity" onAction="#handleButtonAction">
+                minHeight="30" minWidth="30" maxWidth="Infinity"
+                maxHeight="Infinity" onAction="#handleButtonAction" 
+                focusTraversable="false">
             <tooltip>
                 <Tooltip text="View accounts" />
             </tooltip>
         </Button>
         <Button fx:id="notesBtn" id="notesBtn" HBox.hgrow="ALWAYS" 
-            minHeight="30" minWidth="30" maxWidth="Infinity"
-            maxHeight="Infinity" onAction="#handleButtonAction">
+                minHeight="30" minWidth="30" maxWidth="Infinity"
+                maxHeight="Infinity" onAction="#handleButtonAction" 
+                focusTraversable="false">
             <tooltip>
                 <Tooltip text="Take notes" />
             </tooltip>
         </Button>
         <Button fx:id="importExportBtn" id="importExportBtn" HBox.hgrow="ALWAYS" 
-            minHeight="30" minWidth="30" maxWidth="Infinity"
-            maxHeight="Infinity" onAction="#handleButtonAction">
+                minHeight="30" minWidth="30" maxWidth="Infinity"
+                maxHeight="Infinity" onAction="#handleButtonAction" 
+                focusTraversable="false">
             <tooltip>
                 <Tooltip text="Import/export student data" />
             </tooltip>
         </Button>
         <Button fx:id="infoBtn" id="infoBtn" HBox.hgrow="ALWAYS" 
-            minHeight="30" minWidth="30" maxWidth="Infinity"
-            maxHeight="Infinity" onAction="#handleButtonAction">
+                minHeight="30" minWidth="30" maxWidth="Infinity"
+                maxHeight="Infinity" onAction="#handleButtonAction" 
+                focusTraversable="false">
             <tooltip>
                 <Tooltip text="View program info" />
             </tooltip>
