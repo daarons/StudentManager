@@ -20,7 +20,7 @@
               GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
               GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
-                <Text text="Accounts" styleClass="text" />
+                <Label text="Accounts" styleClass="text" />
                 <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
                         maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
@@ -30,7 +30,7 @@
               GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
               GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
-                <Text text="New Notes" styleClass="text"/>
+                <Label text="New Notes" styleClass="text"/>
                 <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
                         maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
@@ -40,7 +40,7 @@
               GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
               GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
-                <Text text="Import/Export" styleClass="text"/>
+                <Label text="Import/Export" styleClass="text"/>
                 <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
                         maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
@@ -50,7 +50,7 @@
               GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
               GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
             <children>
-                <Text text="Info" styleClass="text"/>
+                <Label text="Info" styleClass="text"/>
                 <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
                         maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
