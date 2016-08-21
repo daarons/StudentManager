@@ -32,7 +32,7 @@
                         <ScrollPane BorderPane.alignment="CENTER_LEFT" fitToHeight="true" 
                                     fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
                             <content>
-                                <TextArea fx:id="legalText" wrapText="true" editable="false">
+                                <TextArea fx:id="legalText" editable="false">
                     
                                 </TextArea>
                             </content>
@@ -44,7 +44,7 @@
                         <ScrollPane BorderPane.alignment="CENTER_LEFT" fitToHeight="true" 
                                     fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
                             <content>
-                                <TextArea fx:id="attrText" wrapText="true" editable="false">
+                                <TextArea fx:id="attrText" editable="false">
                     
                                 </TextArea>
                             </content>
