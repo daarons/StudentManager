@@ -28,6 +28,6 @@
     -fx-background-image: url("/image/sign-info.png");
 }
 
-.text{
+.text, .label{
     -fx-font-size: 2em;
 }
