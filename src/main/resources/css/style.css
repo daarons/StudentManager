@@ -6,6 +6,7 @@
     -fx-background-radius: 3em;
     -fx-focus-color: transparent;
     -fx-faint-focus-color: transparent;
+    -fx-focus-traversable: false;
 }
 
 #homeBtn{
@@ -30,4 +31,8 @@
 
 .text, .label{
     -fx-font-size: 2em;
+}
+
+.text-area{
+    -fx-wrap-text: true;
 }
