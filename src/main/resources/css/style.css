@@ -41,6 +41,10 @@
     -fx-background-image: url("/image/box-out.png");
 }
 
+#okBtn{
+    -fx-background-image: url("/image/sign-check.png");
+}
+
 .text, .label{
     -fx-font-size: 2em;
 }
