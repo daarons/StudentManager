@@ -15,10 +15,17 @@
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
+    <columnConstraints>
+        <ColumnConstraints hgrow="ALWAYS"  percentWidth="50" />
+        <ColumnConstraints hgrow="ALWAYS"  percentWidth="50" />
+    </columnConstraints>
+    <rowConstraints>
+        <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+        <RowConstraints vgrow="ALWAYS" percentHeight="50" />
+    </rowConstraints>
     <children>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
-              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
-              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" >
             <children>
                 <Label text="Accounts"  />
                 <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
@@ -27,8 +34,7 @@
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
-              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
-              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+              GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" >
             <children>
                 <Label text="New Notes" />
                 <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
@@ -37,8 +43,7 @@
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
-              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
-              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity">
             <children>
                 <Label text="Import/Export" />
                 <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
@@ -47,8 +52,7 @@
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
-              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
-              GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+              GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity">
             <children>
                 <Label text="Info" />
                 <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
