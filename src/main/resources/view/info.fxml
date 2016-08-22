@@ -33,7 +33,7 @@
                                     fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
                             <content>
                                 <TextArea fx:id="legalText" editable="false">
-                    
+                                    <!-- Legalese goes here from controller -->
                                 </TextArea>
                             </content>
                         </ScrollPane> 
@@ -45,7 +45,7 @@
                                     fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
                             <content>
                                 <TextArea fx:id="attrText" editable="false">
-                    
+                                    <!-- Attributions go here from controller -->
                                 </TextArea>
                             </content>
                         </ScrollPane> 
