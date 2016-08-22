@@ -15,12 +15,15 @@
  */
 package com.daarons.controller;
 
+import java.io.File;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
 /**
  * FXML Controller class
@@ -33,10 +36,19 @@ public class ImportExportController implements Initializable {
     private Button importBtn;
     @FXML
     private Button exportBtn;
+    @FXML
+    private Text fileName;
     
     @FXML
     private void launchFileChooser(ActionEvent event) throws Exception{
+        FileChooser fc = new FileChooser();
+        File selectedFile = fc.showOpenDialog(null);
         
+        if(selectedFile != null){
+            fileName.setText("Selected: " + selectedFile.getName());
+        }else{
+            fileName.setText("No file selected");
+        }
     }
     
     @FXML
