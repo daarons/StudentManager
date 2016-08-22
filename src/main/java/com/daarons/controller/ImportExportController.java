@@ -24,6 +24,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.FileChooser.ExtensionFilter;
 
 /**
  * FXML Controller class
@@ -42,8 +43,15 @@ public class ImportExportController implements Initializable {
     @FXML
     private void launchFileChooser(ActionEvent event) throws Exception{
         FileChooser fc = new FileChooser();
-        File selectedFile = fc.showOpenDialog(null);
-        
+        File selectedFile = null;
+        if(event.getSource()==importBtn){
+            selectedFile = fc.showOpenDialog(null);
+        }else if(event.getSource()==exportBtn){
+            fc.setInitialFileName("StudentManagerDB.sql");
+            fc.getExtensionFilters().addAll(new ExtensionFilter("SQL Files", "*.sql"));
+            selectedFile = fc.showSaveDialog(null);
+        }
+
         if(selectedFile != null){
             fileName.setText("Selected: " + selectedFile.getName());
         }else{
