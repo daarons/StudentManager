@@ -36,7 +36,7 @@ public class NavigationController implements Initializable {
         } else if (event.getSource() == notesBtn) {
             root = FXMLLoader.load(getClass().getResource("/view/notes.fxml"));
         } else if (event.getSource() == importExportBtn) {
-            System.out.println("importexport");
+            root = FXMLLoader.load(getClass().getResource("/view/importExport.fxml"));
         } else if (event.getSource() == infoBtn) {
             root = FXMLLoader.load(getClass().getResource("/view/info.fxml"));
         }
