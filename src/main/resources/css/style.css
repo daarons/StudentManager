@@ -33,6 +33,14 @@
     -fx-background-image: url("/image/floppy.png");
 }
 
+#importBtn{
+    -fx-background-image: url("/image/box-in.png");
+}
+
+#exportBtn{
+    -fx-background-image: url("/image/box-out.png");
+}
+
 .text, .label{
     -fx-font-size: 2em;
 }
