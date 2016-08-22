@@ -72,16 +72,6 @@
             </VBox>
         </TilePane> 
     </center>
-    <!--<center>
-        <VBox maxHeight="200" maxWidth="200" BorderPane.alignment="CENTER_LEFT">
-            <BorderPane.margin>
-                <Insets left="5" />
-            </BorderPane.margin>
-            <Label text="  Add to&#13;  Student" VBox.vgrow="ALWAYS" />
-            <Button id="addAccountBtn" minHeight="50" minWidth="50"  
-                    maxHeight="100" maxWidth="100" VBox.vgrow="ALWAYS" />
-        </VBox>
-    </center>-->
     <bottom>
         <HBox maxHeight="200">
             <BorderPane.margin>
