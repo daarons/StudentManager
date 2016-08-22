@@ -55,7 +55,7 @@
                       GridPane.valignment="BOTTOM" GridPane.columnSpan="2" >
                     <children>
                         <Text fx:id="fileName"/>
-                        <Button id="saveBtn" VBox.vgrow="ALWAYS" minWidth="30" minHeight="30" 
+                        <Button id="okBtn" VBox.vgrow="ALWAYS" minWidth="30" minHeight="30" 
                                 maxWidth="200" maxHeight="200" onAction="#importExport">
                             <tooltip>
                                 <Tooltip text="Save" />
