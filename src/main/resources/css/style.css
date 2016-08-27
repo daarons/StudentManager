@@ -45,10 +45,18 @@
     -fx-background-image: url("/image/sign-check.png");
 }
 
+#searchField{
+    -fx-padding: 10px;
+}
+
 .text, .label{
     -fx-font-size: 2em;
 }
 
 .text-area{
     -fx-wrap-text: true;
+}
+
+.text-field, .text-field:focused{
+    -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
