@@ -18,10 +18,9 @@ package com.daarons.controller;
 import com.daarons.model.Account;
 import com.daarons.model.Student;
 import java.net.URL;
-import java.util.ArrayList;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.beans.property.SimpleStringProperty;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -29,7 +28,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.layout.GridPane;
-import javafx.util.Callback;
 
 /**
  * FXML Controller class
@@ -79,7 +77,7 @@ public class AccountsController implements Initializable {
         gridPane.add(accountsTable, 0, 1);
     }    
     
-    private TreeItem createTree(ArrayList<Account> a){
+    private TreeItem createTree(List<Account> a){
         TreeItem root = new TreeItem();
         for(Account acc : a){
             TreeItem item = new TreeItem(acc);
