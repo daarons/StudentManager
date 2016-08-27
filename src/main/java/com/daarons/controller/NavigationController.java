@@ -32,7 +32,7 @@ public class NavigationController implements Initializable {
         if(event.getSource()==homeBtn){
             root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
         }else if (event.getSource() == accountsBtn) {
-            System.out.println("accounts");
+            root = FXMLLoader.load(getClass().getResource("/view/accounts.fxml"));
         } else if (event.getSource() == notesBtn) {
             root = FXMLLoader.load(getClass().getResource("/view/notes.fxml"));
         } else if (event.getSource() == importExportBtn) {
