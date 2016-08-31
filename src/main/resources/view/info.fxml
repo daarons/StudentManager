@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.image.* ?>
+<?import javafx.scene.text.* ?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+            fx:controller="com.daarons.controller.InfoController" minHeight="400"
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" >
+    <top>
+        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+              maxHeight="Infinity" maxWidth="Infinity">
+            <BorderPane.margin>
+                <Insets bottom="3" top="3" />
+            </BorderPane.margin>
+            <children>
+                <fx:include source="/view/head.fxml"/>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <Accordion> 
+            <panes>
+                <TitledPane text="License">
+                    <content>
+                        <ScrollPane BorderPane.alignment="CENTER_LEFT" fitToHeight="true" 
+                                    fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                            <content>
+                                <TextArea fx:id="legalText" editable="false">
+                                    <!-- Legalese goes here from controller -->
+                                </TextArea>
+                            </content>
+                        </ScrollPane> 
+                    </content>
+                </TitledPane>
+                <TitledPane text="Attributions">
+                    <content>
+                        <ScrollPane BorderPane.alignment="CENTER_LEFT" fitToHeight="true" 
+                                    fitToWidth="true" hbarPolicy="NEVER" vbarPolicy="NEVER">
+                            <content>
+                                <TextArea fx:id="attrText" editable="false">
+                                    <!-- Attributions go here from controller -->
+                                </TextArea>
+                            </content>
+                        </ScrollPane> 
+                    </content>
+                </TitledPane>
+            </panes>
+        </Accordion>
+    </center>
+</BorderPane>

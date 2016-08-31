@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.text.* ?>
+<?import javafx.scene.control.TreeTableView?>
+<?import javafx.scene.control.TreeTableColumn?>
+<?import javafx.scene.control.cell.TreeItemPropertyValueFactory ?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+            fx:controller="com.daarons.controller.AccountsController" minHeight="400"
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+    <top>
+        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+              maxHeight="Infinity" maxWidth="Infinity">
+            <BorderPane.margin>
+                <Insets bottom="3" top="3" />
+            </BorderPane.margin>
+            <children>
+                <fx:include source="/view/head.fxml"/>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <GridPane fx:id="gridPane" alignment="CENTER" hgap="25" vgap="25" >
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" percentHeight="8" />
+                <RowConstraints vgrow="ALWAYS" percentHeight="92" />
+            </rowConstraints>
+            <children>                
+                <HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" 
+                      GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+                      GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                    <TextField id="searchField" promptText="Search" HBox.hgrow="ALWAYS" />                   
+                </HBox>
+                <!-- TreeTableView goes here from AccountsController.java -->
+            </children>
+        </GridPane>
+    </center>
+</BorderPane>

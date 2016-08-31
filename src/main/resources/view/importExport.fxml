@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.text.Text ?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane minHeight="400.0" minWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="com.daarons.controller.ImportExportController" 
+            stylesheets="@/css/style.css">
+    <top>
+        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+              maxHeight="Infinity" maxWidth="Infinity">
+            <BorderPane.margin>
+                <Insets bottom="3" top="3" />
+            </BorderPane.margin>
+            <children>
+                <fx:include source="/view/head.fxml"/>
+            </children>
+        </HBox>
+    </top>
+    <center>
+        <GridPane alignment="CENTER" hgap="25" vgap="25" >
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+            <children>
+                <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                      GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+                      GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Import"  />
+                        <Button fx:id="importBtn" id="importBtn" minHeight="128" minWidth="128" 
+                                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                                onAction="#launchFileChooser"/>
+                    </children>
+                </VBox>
+                <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
+                      GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+                      GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                    <children>
+                        <Label text="Export"  />
+                        <Button fx:id="exportBtn" id="exportBtn" minHeight="128" minWidth="128" 
+                                maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                                onAction="#launchFileChooser"/>
+                    </children>
+                </VBox>
+                <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                      GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
+                      GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS" 
+                      GridPane.valignment="BOTTOM" GridPane.columnSpan="2" >
+                    <children>
+                        <Text fx:id="fileName"/>
+                        <Button id="okBtn" VBox.vgrow="ALWAYS" minWidth="30" minHeight="30" 
+                                maxWidth="200" maxHeight="200" onAction="#importExport">
+                            <tooltip>
+                                <Tooltip text="Save" />
+                            </tooltip>
+                        </Button>
+                    </children>
+                </VBox>
+            </children>
+        </GridPane>
+    </center> 
+</BorderPane>
