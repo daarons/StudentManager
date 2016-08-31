@@ -30,14 +30,15 @@ public class AccountDAODerbyImpl implements AccountDAO {
 
     @Override
     public Account getAccount(long id) {
-        EntityManager em = EMSingleton.getEntityManager();
+        EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         Account account = em.find(Account.class, id);
+        em.close();
         return account;
     }
 
     @Override
     public List<Account> getAccounts(String name) {
-        EntityManager em = EMSingleton.getEntityManager();
+        EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         String qString = "SELECT a FROM Account a WHERE a.name LIKE :name";
         TypedQuery<Account> q = em.createQuery(qString, Account.class);
         q.setParameter("name", name + "%");
@@ -50,13 +51,15 @@ public class AccountDAODerbyImpl implements AccountDAO {
             }
         } catch (NoResultException e) {
             System.out.println(e);
+        }finally{
+            em.close();
         }
         return accounts;
     }
 
     @Override
     public boolean addAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
+        EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
         try {
@@ -66,13 +69,15 @@ public class AccountDAODerbyImpl implements AccountDAO {
             System.out.println(e);
             trans.rollback();
             return false;
+        }finally{
+            em.close();
         }
         return true;
     }
 
     @Override
     public boolean updateAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
+        EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
         try {
@@ -82,13 +87,15 @@ public class AccountDAODerbyImpl implements AccountDAO {
             System.out.println(e);
             trans.rollback();
             return false;
+        }finally{
+            em.close();
         }
         return true;
     }
 
     @Override
     public boolean deleteAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
+        EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
         try {
@@ -98,6 +105,8 @@ public class AccountDAODerbyImpl implements AccountDAO {
             System.out.println(e);
             trans.rollback();
             return false;
+        }finally{
+            em.close();
         }
         return true;
     }
