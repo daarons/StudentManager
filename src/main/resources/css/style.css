@@ -45,7 +45,11 @@
     -fx-background-image: url("/image/sign-check.png");
 }
 
-#searchField{
+#addBtn{
+    -fx-background-image: url("/image/sign-add.png");
+}
+
+#searchField, #addAccountField{
     -fx-padding: 10px;
 }
 
