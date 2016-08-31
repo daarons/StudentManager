@@ -46,7 +46,9 @@
                 <HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" 
                       GridPane.rowIndex="2" maxHeight="Infinity" maxWidth="Infinity" 
                       GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
-                    <TextField id="addAccountField" promptText="Add Account" HBox.hgrow="ALWAYS" /> 
+                    <TextField fx:id="addAccountField" id="addAccountField" 
+                               promptText="Add Account" HBox.hgrow="ALWAYS" 
+                                onAction="#addAccount"/> 
                     <Button fx:id="addBtn" id="addBtn" minHeight="30" 
                         maxHeight="Infinity" maxWidth="60" HBox.hgrow="ALWAYS" 
                         onAction="#addAccount"/>                  
