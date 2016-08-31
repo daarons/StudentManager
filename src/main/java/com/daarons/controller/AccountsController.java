@@ -15,6 +15,8 @@
  */
 package com.daarons.controller;
 
+import com.daarons.DAO.AccountDAO;
+import com.daarons.DAO.DAOFactory;
 import com.daarons.model.Account;
 import com.daarons.model.Student;
 import java.net.URL;
@@ -24,9 +26,12 @@ import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -35,59 +40,77 @@ import javafx.scene.layout.GridPane;
  * @author David
  */
 public class AccountsController implements Initializable {
-    
+
+    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
+    private TreeTableView accountsTable;
+
     @FXML
     private GridPane gridPane;
-    
     @FXML
-    private void searchAccounts(ActionEvent event) throws Exception{
-        
-    }
+    private TextField searchAccountsField;
     @FXML
-    private void editAccount(ActionEvent event) throws Exception{
-        
-    }
+    private TextField addAccountField;
     @FXML
-    private void addAccount(ActionEvent event) throws Exception{
-        
+    private Button addAccountBtn;
+
+    @FXML
+    private void searchAccounts(KeyEvent event) throws Exception {
+        if (event.getSource() == searchAccountsField) {
+            accountsTable.setRoot(null);
+            if (!searchAccountsField.getText().isEmpty()) {
+                List<Account> accounts = dao.getAccounts(searchAccountsField.getText());
+                if (accounts != null) {
+                    accountsTable.setRoot(createTree(accounts));
+                }
+            }
+        }
     }
-    
+
+    @FXML
+    private void editAccount(ActionEvent event) throws Exception {
+
+    }
+
+    @FXML
+    private void addAccount(ActionEvent event) throws Exception {
+
+    }
+
     /**
      * Initializes the controller class.
      */
     @Override
-    public void initialize(URL url, ResourceBundle rb) {    
-        //create table
-        TreeTableView accountsTable = new TreeTableView();
+    public void initialize(URL url, ResourceBundle rb) {
+        accountsTable = new TreeTableView();
         TreeTableColumn accountsCol = new TreeTableColumn("Account");
         accountsCol.setCellValueFactory((Object obj) -> {
-            Object dataObj = ((TreeTableColumn.CellDataFeatures)obj).getValue().getValue();
-            if(dataObj instanceof Account){
-                return new ReadOnlyStringWrapper(String.valueOf(((Account)dataObj).getName()));
-            }else if(dataObj instanceof Student){
+            Object dataObj = ((TreeTableColumn.CellDataFeatures) obj).getValue().getValue();
+            if (dataObj instanceof Account) {
+                return new ReadOnlyStringWrapper(String.valueOf(((Account) dataObj).getName()));
+            } else if (dataObj instanceof Student) {
                 Student s = (Student) dataObj;
-                if(s.getEnglishName() != null && !s.getEnglishName().equals(""))
+                if (s.getEnglishName() != null && !s.getEnglishName().equals("")) {
                     return new ReadOnlyStringWrapper(String.valueOf(s.getEnglishName()));
-                else if(s.getChineseName() != null && !s.getChineseName().equals(""))
+                } else if (s.getChineseName() != null && !s.getChineseName().equals("")) {
                     return new ReadOnlyStringWrapper(String.valueOf(s.getChineseName()));
+                }
             }
             return null;
         });
-        //accountsTable.setRoot(createTree(INSERT_ARRAYLIST_FROM_DB));
         accountsTable.setShowRoot(false);
         accountsTable.getColumns().add(accountsCol);
         accountsCol.prefWidthProperty().bind(accountsTable.widthProperty());
-        
+
         gridPane.add(accountsTable, 0, 1);
-    }    
-    
-    private TreeItem createTree(List<Account> a){
+    }
+
+    private TreeItem createTree(List<Account> accounts) {
         TreeItem root = new TreeItem();
-        for(Account acc : a){
-            TreeItem item = new TreeItem(acc);
+        for (Account a : accounts) {
+            TreeItem item = new TreeItem(a);
             item.setExpanded(true);
-            acc.getStudents().stream().forEach(student ->{
-               item.getChildren().add(new TreeItem(student));
+            a.getStudents().stream().forEach(student -> {
+                item.getChildren().add(new TreeItem(student));
             });
             root.getChildren().add(item);
         }
