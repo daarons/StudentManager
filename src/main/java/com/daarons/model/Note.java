@@ -15,19 +15,41 @@
  */
 package com.daarons.model;
 
+import java.io.Serializable;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+import org.hibernate.annotations.Type;
+
 /**
  *
  * @author David
  */
-public class Note {
+@Entity
+public class Note implements Serializable {
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @OneToOne
+    @JoinColumn(name="session", nullable=false)
     private Session session;
+    @Type(type="text")
     private String fluencyAndCoherence;
+    @Type(type="text")
     private String vocabulary;
+    @Type(type="text")
     private String grammar;
+    @Type(type="text")
     private String pronunciation;
+    @Type(type="text")
     private String interactionAndEngagement;
+    @Type(type="text")
     private String communicationSkills;
+    
+    public Note(){}
     
     public Note(Session session, String fluencyAndCoherence, String vocabulary,
             String grammar, String pronunciation, String interactionAndEngagement,

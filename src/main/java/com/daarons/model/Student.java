@@ -15,14 +15,29 @@
  */
 package com.daarons.model;
 
+import java.io.Serializable;
 import java.util.List;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
 
 /**
  *
  * @author David
  */
-public class Student {
+@Entity
+public class Student implements Serializable {
+    @Id 
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @ManyToOne
+    @JoinColumn(name="account")
     private Account account;
     private String chineseName;
     private String englishName;
@@ -31,7 +46,10 @@ public class Student {
     private String hobbies;
     private String whyLearnEnglish;
     private String otherNotes;
+    @OneToMany(fetch=FetchType.LAZY, mappedBy="student", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<Session> sessions;
+    
+    public Student(){}
     
     public Student(Account account, String chineseName, String englishName,
             int age, String location, String hobbies, String whyLearnEnglish,
