@@ -31,7 +31,11 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableView;
+import javafx.scene.input.InputEvent;
+import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseButton;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
 
 /**
@@ -72,8 +76,17 @@ public class AccountsController implements Initializable {
     }
 
     @FXML
-    private void addAccount(ActionEvent event) throws Exception {
-
+    private void addAccount(InputEvent event) throws Exception {
+        if (((event.getSource() == addAccountField
+                && event.getEventType().equals(KeyEvent.KEY_RELEASED)
+                && ((KeyEvent) event).getCode() == KeyCode.ENTER)
+                ||(event.getSource() == addAccountBtn 
+                && event.getEventType().equals(MouseEvent.MOUSE_CLICKED)
+                && ((MouseEvent) event).getButton() == MouseButton.PRIMARY))
+                && !addAccountField.getText().isEmpty()) {
+            dao.addAccount(new Account(addAccountField.getText()));
+            addAccountField.setText("");
+        }
     }
 
     /**
@@ -99,7 +112,8 @@ public class AccountsController implements Initializable {
         });
         accountsTable.setShowRoot(false);
         accountsTable.getColumns().add(accountsCol);
-        accountsCol.prefWidthProperty().bind(accountsTable.widthProperty());
+        accountsTable.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+        //accountsCol.prefWidthProperty().bind(accountsTable.widthProperty());
 
         gridPane.add(accountsTable, 0, 1);
     }
