@@ -15,24 +15,74 @@
  */
 package com.daarons.model;
 
+import java.io.Serializable;
+import javax.persistence.AttributeOverride;
+import javax.persistence.AttributeOverrides;
+import javax.persistence.Column;
+import javax.persistence.Embedded;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.OneToOne;
+
 /**
  *
  * @author David
  */
-public class Review {
+@Entity
+public class Review implements Serializable {
+
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    @OneToOne
+    @JoinColumn(name = "session", nullable = false)
     private Session session;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "grade", column = @Column(name = "fluencyAndCoherenceGrade")),
+        @AttributeOverride(name = "comment", column = @Column(name = "fluencyAndCoherenceComment"))
+    })
     private ReviewSection fluencyAndCoherence;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "grade", column = @Column(name = "vocabularyGrade")),
+        @AttributeOverride(name = "comment", column = @Column(name = "vocabularyComment"))
+    })
     private ReviewSection vocabulary;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "grade", column = @Column(name = "grammarGrade")),
+        @AttributeOverride(name = "comment", column = @Column(name = "grammarComment"))
+    })
     private ReviewSection grammar;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "grade", column = @Column(name = "pronunciationGrade")),
+        @AttributeOverride(name = "comment", column = @Column(name = "pronunciationComment"))
+    })
     private ReviewSection pronunciation;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "grade", column = @Column(name = "interactionAndEngagementGrade")),
+        @AttributeOverride(name = "comment", column = @Column(name = "interactionAndEngagementComment"))
+    })
     private ReviewSection interactionAndEngagement;
+    @Embedded
+    @AttributeOverrides({
+        @AttributeOverride(name = "grade", column = @Column(name = "communicationSkillsGrade")),
+        @AttributeOverride(name = "comment", column = @Column(name = "communicationSkillsComment"))
+    })
     private ReviewSection communicationSkills;
     
+    public Review(){}
+
     public Review(Session session, ReviewSection fluencyAndCoherence,
-            ReviewSection vocabulary, ReviewSection grammar, 
+            ReviewSection vocabulary, ReviewSection grammar,
             ReviewSection pronunciation, ReviewSection interactionAndEngagement,
-            ReviewSection communicationSkills){
+            ReviewSection communicationSkills) {
         this.session = session;
         this.fluencyAndCoherence = fluencyAndCoherence;
         this.vocabulary = vocabulary;

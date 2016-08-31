@@ -15,18 +15,37 @@
  */
 package com.daarons.model;
 
+import java.io.Serializable;
 import java.util.Date;
+import javax.persistence.CascadeType;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.OneToOne;
+import javax.persistence.Temporal;
+import javax.persistence.TemporalType;
 
 /**
  *
  * @author David
  */
-public class Session {
+@Entity
+public class Session implements Serializable {
+    @Id 
     private long id;
+    @ManyToOne
+    @JoinColumn(name="student")
     private Student student;
+    @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL)
     private Note notes;
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL)
     private Review review;
+    
+    public Session(){}
     
     public Session(Student student, Date timestamp){
         this.student = student;

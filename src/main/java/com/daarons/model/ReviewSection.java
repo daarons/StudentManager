@@ -15,13 +15,21 @@
  */
 package com.daarons.model;
 
+import java.io.Serializable;
+import javax.persistence.Embeddable;
+import org.hibernate.annotations.Type;
+
 /**
  *
  * @author David
  */
-public class ReviewSection {
+@Embeddable
+public class ReviewSection implements Serializable {
     private int grade;
+    @Type(type="text")
     private String comment;
+    
+    public ReviewSection(){}
     
     public ReviewSection(int grade, String comment){
         this.grade = grade;
