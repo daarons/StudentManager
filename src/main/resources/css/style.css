@@ -49,7 +49,7 @@
     -fx-background-image: url("/image/sign-add.png");
 }
 
-#searchField, #addAccountField{
+#searchAccountsField, #addAccountField{
     -fx-padding: 10px;
 }
 
