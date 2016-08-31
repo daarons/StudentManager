@@ -47,6 +47,10 @@ public class AccountsController implements Initializable {
     private void editAccount(ActionEvent event) throws Exception{
         
     }
+    @FXML
+    private void addAccount(ActionEvent event) throws Exception{
+        
+    }
     
     /**
      * Initializes the controller class.
