@@ -18,19 +18,16 @@ package com.daarons.controller;
 import com.daarons.DAO.AccountDAO;
 import com.daarons.DAO.DAOFactory;
 import com.daarons.model.Account;
-import com.daarons.model.Student;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
-import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableView;
+import javafx.scene.control.TreeView;
 import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -46,7 +43,7 @@ import javafx.scene.layout.GridPane;
 public class AccountsController implements Initializable {
 
     private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
-    private TreeTableView accountsTable;
+    private TreeView accountsView;
 
     @FXML
     private GridPane gridPane;
@@ -60,11 +57,11 @@ public class AccountsController implements Initializable {
     @FXML
     private void searchAccounts(KeyEvent event) throws Exception {
         if (event.getSource() == searchAccountsField) {
-            accountsTable.setRoot(null);
+            accountsView.setRoot(null);
             if (!searchAccountsField.getText().isEmpty()) {
                 List<Account> accounts = dao.getAccounts(searchAccountsField.getText());
                 if (accounts != null) {
-                    accountsTable.setRoot(createTree(accounts));
+                    accountsView.setRoot(createTree(accounts));
                 }
             }
         }
@@ -80,7 +77,7 @@ public class AccountsController implements Initializable {
         if (((event.getSource() == addAccountField
                 && event.getEventType().equals(KeyEvent.KEY_RELEASED)
                 && ((KeyEvent) event).getCode() == KeyCode.ENTER)
-                ||(event.getSource() == addAccountBtn 
+                || (event.getSource() == addAccountBtn
                 && event.getEventType().equals(MouseEvent.MOUSE_CLICKED)
                 && ((MouseEvent) event).getButton() == MouseButton.PRIMARY))
                 && !addAccountField.getText().isEmpty()) {
@@ -94,28 +91,10 @@ public class AccountsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        accountsTable = new TreeTableView();
-        TreeTableColumn accountsCol = new TreeTableColumn("Account");
-        accountsCol.setCellValueFactory((Object obj) -> {
-            Object dataObj = ((TreeTableColumn.CellDataFeatures) obj).getValue().getValue();
-            if (dataObj instanceof Account) {
-                return new ReadOnlyStringWrapper(String.valueOf(((Account) dataObj).getName()));
-            } else if (dataObj instanceof Student) {
-                Student s = (Student) dataObj;
-                if (s.getEnglishName() != null && !s.getEnglishName().equals("")) {
-                    return new ReadOnlyStringWrapper(String.valueOf(s.getEnglishName()));
-                } else if (s.getChineseName() != null && !s.getChineseName().equals("")) {
-                    return new ReadOnlyStringWrapper(String.valueOf(s.getChineseName()));
-                }
-            }
-            return null;
-        });
-        accountsTable.setShowRoot(false);
-        accountsTable.getColumns().add(accountsCol);
-        accountsTable.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
-        //accountsCol.prefWidthProperty().bind(accountsTable.widthProperty());
-
-        gridPane.add(accountsTable, 0, 1);
+        accountsView = new TreeView();
+        accountsView.setShowRoot(false);
+        accountsView.setEditable(true);
+        gridPane.add(accountsView, 0, 1);
     }
 
     private TreeItem createTree(List<Account> accounts) {
