@@ -53,10 +53,6 @@ public class AccountsController implements Initializable {
     private GridPane gridPane;
     @FXML
     private TextField searchAccountsField;
-    @FXML
-    private TextField addAccountField;
-    @FXML
-    private Button addAccountBtn;
 
     @FXML
     private void searchAccounts(KeyEvent event) throws Exception {
@@ -68,20 +64,6 @@ public class AccountsController implements Initializable {
                     accountsView.setRoot(createTree(accounts));
                 }
             }
-        }
-    }
-
-    @FXML
-    private void addAccount(InputEvent event) throws Exception {
-        if (((event.getSource() == addAccountField
-                && event.getEventType().equals(KeyEvent.KEY_RELEASED)
-                && ((KeyEvent) event).getCode() == KeyCode.ENTER)
-                || (event.getSource() == addAccountBtn
-                && event.getEventType().equals(MouseEvent.MOUSE_CLICKED)
-                && ((MouseEvent) event).getButton() == MouseButton.PRIMARY))
-                && !addAccountField.getText().isEmpty()) {
-            dao.addAccount(new Account(addAccountField.getText()));
-            addAccountField.setText("");
         }
     }
 

@@ -33,8 +33,7 @@
             </padding>
             <rowConstraints>
                 <RowConstraints vgrow="ALWAYS" percentHeight="8" />
-                <RowConstraints vgrow="ALWAYS" percentHeight="84" />
-                <RowConstraints vgrow="ALWAYS" percentHeight="8" />
+                <RowConstraints vgrow="ALWAYS" percentHeight="92" />
             </rowConstraints>
             <children>                
                 <HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" 
@@ -45,16 +44,6 @@
                                onKeyReleased="#searchAccounts" />                   
                 </HBox>
                 <!-- TreeView goes here from AccountsController.java -->
-                <HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" 
-                      GridPane.rowIndex="2" maxHeight="Infinity" maxWidth="Infinity" 
-                      GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
-                    <TextField fx:id="addAccountField" id="addAccountField" 
-                               promptText="Add Account" HBox.hgrow="ALWAYS" 
-                                onKeyReleased="#addAccount"/> 
-                    <Button fx:id="addAccountBtn" id="addBtn" minHeight="30" 
-                        maxHeight="Infinity" maxWidth="60" HBox.hgrow="ALWAYS" 
-                        onMouseClicked="#addAccount"/>                  
-                </HBox>
             </children>
         </GridPane>
     </center>
