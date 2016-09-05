@@ -61,7 +61,7 @@ public class AccountsController implements Initializable {
     @FXML
     private void searchAccounts(KeyEvent event) throws Exception {
         if (event.getSource() == searchAccountsField) {
-            accountsView.setRoot(null);
+            accountsView.setRoot(createTree(null));
             if (!searchAccountsField.getText().isEmpty()) {
                 List<Account> accounts = dao.getAccounts(searchAccountsField.getText());
                 if (accounts != null) {
@@ -94,7 +94,16 @@ public class AccountsController implements Initializable {
         accountsView.setShowRoot(false);
         accountsView.setEditable(true);
         accountsView.setCellFactory(tv -> new TextFieldTreeCell());
-
+        accountsView.setRoot(createTree(null));
+        
+        MenuItem addAccount = new MenuItem("Add Account");
+        addAccount.setOnAction((ActionEvent t) -> {
+            Account newAccount = new Account("New Account");
+            newAccount = dao.addAccount(newAccount);
+            accountsView.getRoot().getChildren().add(new AccountTreeItem(newAccount));
+        });
+        accountsView.setContextMenu(new ContextMenu(addAccount));
+        
         gridPane.add(accountsView, 0, 1);
     }
 
