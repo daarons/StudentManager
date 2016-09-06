@@ -51,14 +51,14 @@ public class AccountDAODerbyImpl implements AccountDAO {
             }
         } catch (NoResultException e) {
             System.out.println(e);
-        }finally{
+        } finally {
             em.close();
         }
         return accounts;
     }
 
     @Override
-    public boolean addAccount(Account a) {
+    public Account addAccount(Account a) {
         EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
@@ -68,33 +68,31 @@ public class AccountDAODerbyImpl implements AccountDAO {
         } catch (Exception e) {
             System.out.println(e);
             trans.rollback();
-            return false;
-        }finally{
+        } finally {
             em.close();
         }
-        return true;
+        return a;
     }
 
     @Override
-    public boolean updateAccount(Account a) {
+    public Account updateAccount(Account a) {
         EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
         try {
-            em.merge(a);
+            a = em.merge(a);
             trans.commit();
         } catch (Exception e) {
             System.out.println(e);
             trans.rollback();
-            return false;
-        }finally{
+        } finally {
             em.close();
         }
-        return true;
+        return a;
     }
 
     @Override
-    public boolean deleteAccount(Account a) {
+    public Account deleteAccount(Account a) {
         EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
         EntityTransaction trans = em.getTransaction();
         trans.begin();
@@ -104,11 +102,10 @@ public class AccountDAODerbyImpl implements AccountDAO {
         } catch (Exception e) {
             System.out.println(e);
             trans.rollback();
-            return false;
-        }finally{
+        } finally {
             em.close();
         }
-        return true;
+        return a;
     }
 
 }

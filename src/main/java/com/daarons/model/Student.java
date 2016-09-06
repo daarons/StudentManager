@@ -16,6 +16,7 @@
 package com.daarons.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -33,11 +34,12 @@ import javax.persistence.OneToMany;
  */
 @Entity
 public class Student implements Serializable {
-    @Id 
+
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @ManyToOne
-    @JoinColumn(name="account")
+    @JoinColumn(name = "account")
     private Account account;
     private String chineseName;
     private String englishName;
@@ -46,14 +48,14 @@ public class Student implements Serializable {
     private String hobbies;
     private String whyLearnEnglish;
     private String otherNotes;
-    @OneToMany(fetch=FetchType.LAZY, mappedBy="student", cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Session> sessions;
-    
-    public Student(){}
-    
+
+    public Student() {}
+
     public Student(Account account, String chineseName, String englishName,
             int age, String location, String hobbies, String whyLearnEnglish,
-            String otherNotes){
+            String otherNotes) {
         this.account = account;
         this.chineseName = chineseName;
         this.englishName = englishName;
@@ -62,6 +64,7 @@ public class Student implements Serializable {
         this.hobbies = hobbies;
         this.whyLearnEnglish = whyLearnEnglish;
         this.otherNotes = otherNotes;
+        this.sessions = new ArrayList();
     }
 
     /**
@@ -195,5 +198,16 @@ public class Student implements Serializable {
      */
     public void setSessions(List<Session> sessions) {
         this.sessions = sessions;
+    }
+
+    @Override
+    public String toString() {
+        if (englishName != null && !englishName.equals("")) {
+            return englishName;
+        } else if (chineseName != null && !chineseName.equals("")) {
+            return chineseName;
+        } else {
+            return "No name";
+        }
     }
 }

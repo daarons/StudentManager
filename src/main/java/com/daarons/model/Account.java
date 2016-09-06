@@ -16,6 +16,7 @@
 package com.daarons.model;
 
 import java.io.Serializable;
+import java.util.ArrayList;
 import java.util.List;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -42,6 +43,7 @@ public class Account implements Serializable {
     
     public Account(String name){
         this.name = name;
+        students = new ArrayList();
     }
 
     /**
@@ -77,5 +79,10 @@ public class Account implements Serializable {
      */
     public void setStudents(List<Student> students) {
         this.students = students;
+    }
+    
+    @Override
+    public String toString(){
+        return name;
     }
 }

@@ -22,7 +22,7 @@ import com.daarons.model.Account;
  * @author David
  */
 public interface AccountWriter {
-    public boolean addAccount(Account a);
-    public boolean updateAccount(Account a);
-    public boolean deleteAccount(Account a);
+    public Account addAccount(Account a);
+    public Account updateAccount(Account a);
+    public Account deleteAccount(Account a);
 }

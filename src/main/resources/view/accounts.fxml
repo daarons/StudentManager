@@ -39,9 +39,11 @@
                 <HBox spacing="10" alignment="TOP_LEFT" GridPane.columnIndex="0" 
                       GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
                       GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
-                    <TextField id="searchField" promptText="Search" HBox.hgrow="ALWAYS" />                   
+                    <TextField fx:id="searchAccountsField" id="searchAccountsField" 
+                               promptText="Search Accounts" HBox.hgrow="ALWAYS" 
+                               onKeyReleased="#searchAccounts" />                   
                 </HBox>
-                <!-- TreeTableView goes here from AccountsController.java -->
+                <!-- TreeView goes here from AccountsController.java -->
             </children>
         </GridPane>
     </center>
