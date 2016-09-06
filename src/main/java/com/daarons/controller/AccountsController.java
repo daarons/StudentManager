@@ -19,25 +19,27 @@ import com.daarons.DAO.AccountDAO;
 import com.daarons.DAO.DAOFactory;
 import com.daarons.model.Account;
 import com.daarons.model.Student;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeCell;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeView;
-import javafx.scene.input.InputEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseButton;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -77,7 +79,7 @@ public class AccountsController implements Initializable {
         accountsView.setEditable(true);
         accountsView.setCellFactory(tv -> new TextFieldTreeCell());
         accountsView.setRoot(createTree(null));
-        
+
         MenuItem addAccount = new MenuItem("Add Account");
         addAccount.setOnAction((ActionEvent t) -> {
             Account newAccount = new Account("New Account");
@@ -85,7 +87,7 @@ public class AccountsController implements Initializable {
             accountsView.getRoot().getChildren().add(new AccountTreeItem(newAccount));
         });
         accountsView.setContextMenu(new ContextMenu(addAccount));
-        
+
         gridPane.add(accountsView, 0, 1);
     }
 
@@ -115,9 +117,9 @@ public class AccountsController implements Initializable {
                 newStudent = account.getStudents().get(account.getStudents().size() - 1);
                 this.getChildren().add(new StudentTreeItem(newStudent));
                 List<AbstractTreeItem> children = this.getChildren();
-                for(AbstractTreeItem ati : children){
+                for (AbstractTreeItem ati : children) {
                     ((Student) ati.getObject()).setAccount(account);
-                }               
+                }
             });
             MenuItem deleteAccount = new MenuItem("Delete Account");
             deleteAccount.setOnAction((ActionEvent t) -> {
@@ -152,18 +154,34 @@ public class AccountsController implements Initializable {
         @Override
         public ContextMenu getContextMenu() {
             MenuItem viewStudent = new MenuItem("View Student");
-            viewStudent.setOnAction((ActionEvent t) -> {
-                //take student and go to new view, also take account? Depends on how I setup the view.
+            viewStudent.setOnAction((ActionEvent event) -> {
+                long studentId = student.getId();
+                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
+                StudentController studentController = new StudentController(student);
+                fxmlLoader.setController(studentController);
+                Stage stage = (Stage) ((Node) accountsView).getScene().getWindow();
+                Scene scene = null;
+                Parent root = null;
+                try {
+                    root = (Parent)fxmlLoader.load();
+                } catch (IOException ex) {
+                    System.out.println(ex);
+                }
+                scene = new Scene(root);
+                stage.setScene(scene);
+                stage.setHeight(stage.getHeight());
+                stage.setWidth(stage.getWidth());
+                stage.show();
             });
             MenuItem deleteStudent = new MenuItem("Delete Student");
             deleteStudent.setOnAction((ActionEvent t) -> {
                 int index = this.getParent().getChildren().indexOf(this);
-                Account parentAccount = ((Account)((AbstractTreeItem)this.getParent()).getObject());
+                Account parentAccount = ((Account) ((AbstractTreeItem) this.getParent()).getObject());
                 Student r = parentAccount.getStudents().remove(index);
                 Account newParentAccount = dao.updateAccount(parentAccount);
-                ((AbstractTreeItem)this.getParent()).setObject(newParentAccount);
+                ((AbstractTreeItem) this.getParent()).setObject(newParentAccount);
                 List<AbstractTreeItem> children = this.getParent().getChildren();
-                for(AbstractTreeItem ati : children){
+                for (AbstractTreeItem ati : children) {
                     ((Student) ati.getObject()).setAccount(newParentAccount);
                 }
                 this.getParent().getChildren().remove(this);
