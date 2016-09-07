@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/style.css" 
             minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
     <!-- The controller is com.daarons.controller.StudentController. It is set
     manually to pass the needed student to the controller to be displayed. -->
@@ -24,7 +24,7 @@
         </HBox>
     </top>
     <left>
-        <GridPane fx:id="gridPane" alignment="CENTER" hgap="25" vgap="25" >
+        <GridPane fx:id="gridPaneLeft" alignment="CENTER" hgap="25" vgap="25" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>
@@ -96,4 +96,18 @@
             </VBox>
         </GridPane>
     </left>
+    <center>
+        <GridPane fx:id="gridPaneRight" BorderPane.alignment="TOP_CENTER" 
+                  alignment="TOP_CENTER" hgap="25" vgap="25" >
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="100" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" percentHeight="100" />
+            </rowConstraints>
+        </GridPane>
+    </center>
 </BorderPane>
