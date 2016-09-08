@@ -24,7 +24,6 @@ import com.daarons.model.Student;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import java.net.URL;
-import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -40,7 +39,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
@@ -145,7 +143,7 @@ public class StudentController implements Initializable {
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
         
-        TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session");
+        TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session ID");
         sessionCol.setCellValueFactory(ti -> 
                 new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getId())));
         
