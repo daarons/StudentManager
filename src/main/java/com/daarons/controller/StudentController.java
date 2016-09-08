@@ -41,6 +41,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableColumn.CellDataFeatures;
+import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -143,14 +144,32 @@ public class StudentController implements Initializable {
         sessionTableView = new TreeTableView();
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
+        
         TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session");
         sessionCol.setCellValueFactory(ti -> 
                 new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getId())));
+        
         TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
         dateCol.setCellValueFactory(ti -> 
                 new ReadOnlyStringWrapper(ti.getValue().getValue().getTimestamp().toString()));
+        
         sessionTableView.getColumns().addAll(sessionCol, dateCol);
         sessionTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+        
+        sessionTableView.setRowFactory(ttv -> {
+            TreeTableRow row = new TreeTableRow(){
+                @Override
+                protected void updateItem(Object item, boolean empty) {
+                    super.updateItem(item, empty); 
+                    if(empty){
+                        setContextMenu(null);
+                    }else{
+                        setContextMenu(((AbstractTreeItem) getTreeItem()).getContextMenu());
+                    }
+                }
+            };
+            return row;
+        });
         
         sessionTableView.setRoot(createTree(student.getSessions()));
         sessionTableView.setShowRoot(false);
@@ -193,10 +212,6 @@ public class StudentController implements Initializable {
             for (Session s : sessions) {
                 SessionTreeItem item = new SessionTreeItem(s);
                 item.setExpanded(true);
-//                get notes and reviews?
-//                s.getStudents().forEach(student -> {
-//                    item.getChildren().add(new StudentTreeItem(student));
-//                });
                 root.getChildren().add(item);
             }
         }
