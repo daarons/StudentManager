@@ -29,6 +29,7 @@ import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
+import javafx.event.EventType;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
@@ -43,6 +44,7 @@ import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
@@ -166,6 +168,14 @@ public class StudentController implements Initializable {
                     }
                 }
             };
+            row.setOnMouseClicked(new EventHandler<MouseEvent>(){
+                @Override
+                public void handle(MouseEvent event) {
+                    if(event.getClickCount()==2){
+                        //go to session view
+                    }
+                }              
+            });
             return row;
         });
         
@@ -186,7 +196,7 @@ public class StudentController implements Initializable {
         @Override
         public ContextMenu getContextMenu() {
             MenuItem viewSession = new MenuItem("View Session");
-            //viewSession.setOnAction....
+            //viewSession.setOnAction....go to session view
             return new ContextMenu(viewSession);
         }
 
