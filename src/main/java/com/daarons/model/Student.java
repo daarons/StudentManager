@@ -48,7 +48,7 @@ public class Student implements Serializable {
     private String hobbies;
     private String whyLearnEnglish;
     private String otherNotes;
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Session> sessions;
 
     public Student() {}
