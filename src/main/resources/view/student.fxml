@@ -24,7 +24,8 @@
         </HBox>
     </top>
     <left>
-        <GridPane fx:id="gridPaneLeft" alignment="CENTER" hgap="25" vgap="25" >
+        <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
+                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>
