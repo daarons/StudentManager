@@ -17,6 +17,7 @@ package com.daarons.controller;
 
 import com.daarons.DAO.AccountDAO;
 import com.daarons.DAO.DAOFactory;
+import com.daarons.model.AbstractTreeItem;
 import com.daarons.model.Account;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
@@ -32,6 +33,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
@@ -53,7 +56,7 @@ public class StudentController implements Initializable {
     private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
     private Student student;
     private TreeTableView sessionTableView;
-    
+
     @FXML
     private BorderPane borderPane;
     @FXML
@@ -102,9 +105,9 @@ public class StudentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        gridPaneLeft.setMaxSize(screenSize.getWidth()/2, screenSize.getHeight()/2);
-        gridPaneRight.setMaxSize(screenSize.getWidth()/2, screenSize.getHeight()/2);
-        
+        gridPaneLeft.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+        gridPaneRight.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+
         englishNameField.setText(student.getEnglishName());
         chineseNameField.setText(student.getChineseName());
         ageField.setText(String.valueOf(student.getAge()));
@@ -134,7 +137,7 @@ public class StudentController implements Initializable {
         hobbiesArea.setOnKeyPressed(handleTabAction);
         motivesArea.setOnKeyPressed(handleTabAction);
         notesArea.setOnKeyPressed(handleTabAction);
-        
+
         sessionTableView = new TreeTableView();
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
@@ -142,8 +145,52 @@ public class StudentController implements Initializable {
         TreeTableColumn<Session, Date> dateCol = new TreeTableColumn("Date");
         sessionTableView.getColumns().addAll(sessionCol, dateCol);
         sessionTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
-        
+
         gridPaneRight.add(sessionTableView, 0, 0);
     }
 
+    public class SessionTreeItem extends AbstractTreeItem{
+        private Session session;
+        
+        public SessionTreeItem (Session session){
+            this.session = session;
+        }
+
+        @Override
+        public ContextMenu getContextMenu() {
+            MenuItem viewSession = new MenuItem("View Session");
+            //viewSession.setOnAction....
+            return new ContextMenu(viewSession);
+        }
+
+        @Override
+        public Object getObject() {
+            return session;
+        }
+
+        @Override
+        public void setObject(Object o) {
+            if(o instanceof Session){
+                session = (Session) o;
+            }
+        }
+        
+    }
+
+    private TreeItem createTree(List<Session> sessions) {
+        TreeItem root = new TreeItem();
+        if (sessions != null) {
+            for (Session s : sessions) {
+                SessionTreeItem item = new SessionTreeItem(s);
+                item.setExpanded(true);
+//                get notes and reviews?
+//                s.getStudents().forEach(student -> {
+//                    item.getChildren().add(new StudentTreeItem(student));
+//                });
+                root.getChildren().add(item);
+            }
+        }
+        root.setExpanded(true);
+        return root;
+    }
 }
