@@ -27,6 +27,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -39,6 +40,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
+import javafx.scene.control.TreeTableColumn.CellDataFeatures;
 import javafx.scene.control.TreeTableView;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
@@ -142,9 +144,16 @@ public class StudentController implements Initializable {
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
         TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session");
-        TreeTableColumn<Session, Date> dateCol = new TreeTableColumn("Date");
+        sessionCol.setCellValueFactory(ti -> 
+                new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getId())));
+        TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
+        dateCol.setCellValueFactory(ti -> 
+                new ReadOnlyStringWrapper(ti.getValue().getValue().getTimestamp().toString()));
         sessionTableView.getColumns().addAll(sessionCol, dateCol);
         sessionTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+        
+        sessionTableView.setRoot(createTree(student.getSessions()));
+        sessionTableView.setShowRoot(false);
 
         gridPaneRight.add(sessionTableView, 0, 0);
     }
@@ -154,6 +163,7 @@ public class StudentController implements Initializable {
         
         public SessionTreeItem (Session session){
             this.session = session;
+            setValue(session);
         }
 
         @Override
