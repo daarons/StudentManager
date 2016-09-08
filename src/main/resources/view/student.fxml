@@ -1,0 +1,114 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/style.css" 
+            minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+    <!-- The controller is com.daarons.controller.StudentController. It is set
+    manually to pass the needed student to the controller to be displayed. -->
+    <top>
+        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+              maxHeight="Infinity" maxWidth="Infinity">
+            <BorderPane.margin>
+                <Insets bottom="3" top="3" />
+            </BorderPane.margin>
+            <children>
+                <fx:include source="/view/head.fxml"/>
+            </children>
+        </HBox>
+    </top>
+    <left>
+        <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
+                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                  GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="English Name"/>
+                    <TextField fx:id="englishNameField" id="englishNameField" 
+                               HBox.hgrow="ALWAYS" />
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
+                  GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="Chinese Name"/>
+                    <TextField fx:id="chineseNameField" id="chineseNameField" 
+                               HBox.hgrow="ALWAYS" />
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                  GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="Age"/>
+                    <TextField fx:id="ageField" id="ageField" HBox.hgrow="ALWAYS" />
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
+                  GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="Location"/>
+                    <TextField fx:id="locationField" id="locationField" HBox.hgrow="ALWAYS"/>
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                  GridPane.rowIndex="2" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="Hobbies"/>
+                    <TextArea fx:id="hobbiesArea" id="hobbiesArea" HBox.hgrow="ALWAYS"/>
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
+                  GridPane.rowIndex="2" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="Motives"/>
+                    <TextArea fx:id="motivesArea" id="motivesArea" HBox.hgrow="ALWAYS"/>
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                  GridPane.rowIndex="3" GridPane.columnSpan="2" maxHeight="Infinity" 
+                  maxWidth="Infinity" GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Label text="Notes"/>
+                    <TextArea fx:id="notesArea" id="notesArea" HBox.hgrow="ALWAYS"/>
+                </children>
+            </VBox>
+            <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
+                  GridPane.rowIndex="4" maxHeight="Infinity" maxWidth="Infinity" 
+                  GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
+                <children>
+                    <Button fx:id="saveBtn" id="saveBtn" minHeight="128" minWidth="128" 
+                            maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" />
+                </children>
+            </VBox>
+        </GridPane>
+    </left>
+    <center>
+        <GridPane fx:id="gridPaneRight" BorderPane.alignment="TOP_CENTER" 
+                  alignment="TOP_CENTER" hgap="25" vgap="25" >
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="100" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" percentHeight="100" />
+            </rowConstraints>
+        </GridPane>
+    </center>
+</BorderPane>
