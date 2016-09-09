@@ -7,7 +7,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
-<?import javafx.scene.control.Separator ?>
+<?import javafx.scene.control.Separator?>
+<?import jfxtras.scene.control.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/style.css" 
             minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
@@ -25,12 +26,12 @@
         </HBox>
     </top>
     <center>
-        <GridPane fx:id="gridPane" alignment="TOP_CENTER" 
+        <GridPane fx:id="gridPaneCenter" alignment="TOP_CENTER" 
                   BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
             <padding>
-                <Insets top="25" right="25" bottom="25" left="25"/>
+                <Insets top="25" right="25" bottom="25"/>
             </padding>
-            <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" GridPane.columnIndex="0"  
+            <GridPane fx:id="gridPaneCenterLeft" alignment="TOP_CENTER" GridPane.columnIndex="0"  
                       GridPane.rowIndex="0" BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
                 <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
@@ -75,8 +76,8 @@
                     </children>
                 </VBox>
             </GridPane>
-            <Separator GridPane.columnIndex="1" GridPane.rowIndex="0"  orientation="VERTICAL" />
-            <GridPane fx:id="gridPaneRight" alignment="TOP_CENTER" GridPane.columnIndex="2" 
+            <Separator GridPane.columnIndex="1" GridPane.rowIndex="0" orientation="VERTICAL" />
+            <GridPane fx:id="gridPaneCenterRight" alignment="TOP_CENTER" GridPane.columnIndex="2" 
                       GridPane.rowIndex="0" BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
                 <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
@@ -129,6 +130,30 @@
             </GridPane>
         </GridPane>
     </center>
+    <!-- left is set below center to deal with overlap. Set background color on 
+        left to make center invisible on overlap. -->
+    <left>
+        <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
+                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
+            <padding>
+                <Insets top="25" right="25" bottom="25" left="25"/>
+            </padding>
+            <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
+                <children>
+                    <Label text="Session ID" styleClass="notesLabel"/>
+                    <TextField fx:id="sessionId" VBox.vgrow="ALWAYS" />
+                </children>
+            </VBox>
+            <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <children>
+                    <CalendarPicker fx:id="calendarPicker" VBox.vgrow="ALWAYS" 
+                                    allowNull="false" mode="SINGLE" showTime="false" />
+                    <CalendarTimePicker fx:id="timePicker" VBox.vgrow="ALWAYS" minuteStep="30" />
+                </children>
+            </VBox>
+            <Separator GridPane.columnIndex="1" GridPane.rowIndex="0" orientation="VERTICAL" GridPane.rowSpan="6"/>
+        </GridPane>
+    </left>
     <bottom>
         <HBox maxHeight="200">
             <BorderPane.margin>
