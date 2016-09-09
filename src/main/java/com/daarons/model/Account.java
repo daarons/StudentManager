@@ -39,11 +39,14 @@ public class Account implements Serializable {
     @OneToMany(fetch=FetchType.EAGER, mappedBy="account", cascade=CascadeType.ALL, orphanRemoval=true)
     private List<Student> students;
     
-    public Account(){}
+    public Account(){
+        this.name = "";
+        this.students = new ArrayList();
+    }
     
     public Account(String name){
         this.name = name;
-        students = new ArrayList();
+        this.students = new ArrayList();
     }
 
     /**

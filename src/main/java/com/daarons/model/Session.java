@@ -40,16 +40,23 @@ public class Session implements Serializable {
     private Student student;
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
-    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL)
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL, orphanRemoval=true)
     private Note notes;
-    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL)
+    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL, orphanRemoval=true)
     private Review review;
     
-    public Session(){}
+    public Session(){
+        this.student = null;
+        this.timestamp = null;
+        this.notes = null;
+        this.review = null;
+    }
     
     public Session(Student student, Date timestamp){
         this.student = student;
         this.timestamp = timestamp;
+        this.notes = null;
+        this.review = null;
     }
 
     /**
