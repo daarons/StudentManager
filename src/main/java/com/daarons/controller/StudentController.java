@@ -171,7 +171,7 @@ public class StudentController implements Initializable {
 
         TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session ID");
         sessionCol.setCellValueFactory(ti
-                -> new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getId())));
+                -> new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getSessionId())));
 
         TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
         dateCol.setCellValueFactory(ti
