@@ -51,7 +51,17 @@ public class Student implements Serializable {
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Session> sessions;
 
-    public Student() {}
+    public Student() {
+        this.account = null;
+        this.chineseName = "";
+        this.englishName = "";
+        this.age = 0;
+        this.location = "";
+        this.hobbies = "";
+        this.whyLearnEnglish = "";
+        this.otherNotes = "";
+        this.sessions = new ArrayList();
+    }
 
     public Student(Account account, String chineseName, String englishName,
             int age, String location, String hobbies, String whyLearnEnglish,

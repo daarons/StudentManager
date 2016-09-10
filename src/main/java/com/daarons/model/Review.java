@@ -77,8 +77,16 @@ public class Review implements Serializable {
     })
     private ReviewSection communicationSkills;
     
-    public Review(){}
-
+    public Review(){
+        this.session = null;
+        this.fluencyAndCoherence = null;
+        this.vocabulary = null;
+        this.grammar = null;
+        this.pronunciation = null;
+        this.interactionAndEngagement = null;
+        this.communicationSkills = null;
+    }
+    
     public Review(Session session, ReviewSection fluencyAndCoherence,
             ReviewSection vocabulary, ReviewSection grammar,
             ReviewSection pronunciation, ReviewSection interactionAndEngagement,

@@ -49,7 +49,15 @@ public class Note implements Serializable {
     @Type(type="text")
     private String communicationSkills;
     
-    public Note(){}
+    public Note(){
+        this.session = null;
+        this.fluencyAndCoherence = "";
+        this.vocabulary = "";
+        this.grammar = "";
+        this.pronunciation = "";
+        this.interactionAndEngagement = "";
+        this.communicationSkills = "";
+    }
     
     public Note(Session session, String fluencyAndCoherence, String vocabulary,
             String grammar, String pronunciation, String interactionAndEngagement,

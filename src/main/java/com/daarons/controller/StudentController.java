@@ -23,16 +23,20 @@ import com.daarons.model.Session;
 import com.daarons.model.Student;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
+import java.io.IOException;
 import java.net.URL;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
-import javafx.event.EventType;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -48,6 +52,7 @@ import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 
 /**
  * FXML Controller class
@@ -102,6 +107,25 @@ public class StudentController implements Initializable {
         }
     };
 
+    private void viewSession(Session session) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/session.fxml"));
+        SessionController sessionController = new SessionController(session);
+        fxmlLoader.setController(sessionController);
+        Stage stage = (Stage) ((Node) borderPane).getScene().getWindow();
+        Scene scene = null;
+        Parent root = null;
+        try {
+            root = (Parent) fxmlLoader.load();
+        } catch (IOException ex) {
+            System.out.println(ex);
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
+        stage.show();
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -144,51 +168,54 @@ public class StudentController implements Initializable {
         sessionTableView = new TreeTableView();
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
-        
+
         TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session ID");
-        sessionCol.setCellValueFactory(ti -> 
-                new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getId())));
-        
+        sessionCol.setCellValueFactory(ti
+                -> new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getSessionId())));
+
         TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
-        dateCol.setCellValueFactory(ti -> 
-                new ReadOnlyStringWrapper(ti.getValue().getValue().getTimestamp().toString()));
-        
+        dateCol.setCellValueFactory(ti
+                -> new ReadOnlyStringWrapper(ti.getValue().getValue().getTimestamp().toString()));
+
         sessionTableView.getColumns().addAll(sessionCol, dateCol);
         sessionTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
-        
+
         sessionTableView.setRowFactory(ttv -> {
-            TreeTableRow row = new TreeTableRow(){
+            TreeTableRow row = new TreeTableRow() {
                 @Override
                 protected void updateItem(Object item, boolean empty) {
-                    super.updateItem(item, empty); 
-                    if(empty){
+                    super.updateItem(item, empty);
+                    if (empty) {
                         setContextMenu(null);
-                    }else{
+                    } else {
                         setContextMenu(((AbstractTreeItem) getTreeItem()).getContextMenu());
                     }
                 }
             };
-            row.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            row.setOnMouseClicked(new EventHandler<MouseEvent>() {
                 @Override
                 public void handle(MouseEvent event) {
-                    if(event.getClickCount()==2){
-                        //go to session view
+                    if (event.getClickCount() == 2) {
+                        AbstractTreeItem ati = (AbstractTreeItem) sessionTableView.getSelectionModel().getSelectedItem();
+                        Session session = (Session) ati.getObject();
+                        viewSession(session);
                     }
-                }              
+                }
             });
             return row;
         });
-        
+
         sessionTableView.setRoot(createTree(student.getSessions()));
         sessionTableView.setShowRoot(false);
 
         gridPaneRight.add(sessionTableView, 0, 0);
     }
 
-    public class SessionTreeItem extends AbstractTreeItem{
+    public class SessionTreeItem extends AbstractTreeItem {
+
         private Session session;
-        
-        public SessionTreeItem (Session session){
+
+        public SessionTreeItem(Session session) {
             this.session = session;
             setValue(session);
         }
@@ -196,7 +223,9 @@ public class StudentController implements Initializable {
         @Override
         public ContextMenu getContextMenu() {
             MenuItem viewSession = new MenuItem("View Session");
-            //viewSession.setOnAction....go to session view
+            viewSession.setOnAction((ActionEvent event) -> {
+                viewSession(session);
+            });
             return new ContextMenu(viewSession);
         }
 
@@ -207,11 +236,11 @@ public class StudentController implements Initializable {
 
         @Override
         public void setObject(Object o) {
-            if(o instanceof Session){
+            if (o instanceof Session) {
                 session = (Session) o;
             }
         }
-        
+
     }
 
     private TreeItem createTree(List<Session> sessions) {
