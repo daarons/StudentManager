@@ -20,6 +20,8 @@ import java.util.Date;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
@@ -33,8 +35,10 @@ import javax.persistence.TemporalType;
  */
 @Entity
 public class Session implements Serializable {
-    @Id 
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
+    private long sessionId;
     @ManyToOne
     @JoinColumn(name="student")
     private Student student;
@@ -64,13 +68,6 @@ public class Session implements Serializable {
      */
     public long getId() {
         return id;
-    }
-
-    /**
-     * @param id the id to set
-     */
-    public void setId(long id) {
-        this.id = id;
     }
 
     /**
@@ -127,5 +124,19 @@ public class Session implements Serializable {
      */
     public void setReview(Review review) {
         this.review = review;
+    }
+
+    /**
+     * @return the sessionId
+     */
+    public long getSessionId() {
+        return sessionId;
+    }
+
+    /**
+     * @param sessionId the sessionId to set
+     */
+    public void setSessionId(long sessionId) {
+        this.sessionId = sessionId;
     }
 }
