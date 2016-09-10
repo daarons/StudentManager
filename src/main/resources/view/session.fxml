@@ -31,7 +31,8 @@
             <padding>
                 <Insets top="25" right="25" bottom="25"/>
             </padding>
-            <GridPane fx:id="gridPaneCenterLeft" alignment="TOP_CENTER" GridPane.columnIndex="0"  
+            <Separator GridPane.columnIndex="0" GridPane.rowIndex="0" orientation="VERTICAL"/>
+            <GridPane fx:id="gridPaneCenterLeft" alignment="TOP_CENTER" GridPane.columnIndex="1"  
                       GridPane.rowIndex="0" BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
                 <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
@@ -76,8 +77,8 @@
                     </children>
                 </VBox>
             </GridPane>
-            <Separator GridPane.columnIndex="1" GridPane.rowIndex="0" orientation="VERTICAL" />
-            <GridPane fx:id="gridPaneCenterRight" alignment="TOP_CENTER" GridPane.columnIndex="2" 
+            <Separator GridPane.columnIndex="2" GridPane.rowIndex="0" orientation="VERTICAL" />
+            <GridPane fx:id="gridPaneCenterRight" alignment="TOP_CENTER" GridPane.columnIndex="3" 
                       GridPane.rowIndex="0" BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
                 <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
@@ -141,7 +142,7 @@
             <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <children>
                     <Label text="Session ID" styleClass="notesLabel"/>
-                    <TextField fx:id="sessionId" VBox.vgrow="ALWAYS" />
+                    <TextField fx:id="sessionIdField" VBox.vgrow="ALWAYS" />
                 </children>
             </VBox>
             <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="1">
@@ -151,7 +152,6 @@
                     <CalendarTimePicker fx:id="timePicker" VBox.vgrow="ALWAYS" minuteStep="30" />
                 </children>
             </VBox>
-            <Separator GridPane.columnIndex="1" GridPane.rowIndex="0" orientation="VERTICAL" GridPane.rowSpan="6"/>
         </GridPane>
     </left>
     <bottom>
