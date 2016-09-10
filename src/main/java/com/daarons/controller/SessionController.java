@@ -27,6 +27,8 @@ import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -39,10 +41,13 @@ import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
+import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import jfxtras.scene.control.CalendarPicker;
+import jfxtras.scene.control.CalendarTimePicker;
 
 /**
  * FXML Controller class
@@ -62,9 +67,9 @@ public class SessionController implements Initializable {
     @FXML
     private BorderPane borderPane;
     @FXML
-    private GridPane gridPaneLeft;
+    private GridPane gridPaneCenterCenter;
     @FXML
-    private GridPane gridPaneRight;
+    private GridPane gridPaneCenterRight;
     @FXML
     private TextArea fluencyCoherenceNotes;
     @FXML
@@ -102,6 +107,12 @@ public class SessionController implements Initializable {
     @FXML
     private TextArea commSkillsReview;
     @FXML
+    private TextField sessionIdField;
+    @FXML
+    private CalendarPicker calendarPicker;
+    @FXML
+    private CalendarTimePicker timePicker;
+    @FXML
     private Button saveBtn;
 
     /**
@@ -120,6 +131,14 @@ public class SessionController implements Initializable {
                 ((TextArea) node).setOnKeyPressed(handleTabAction);
             }
         }
+        
+        sessionIdField.setText(String.valueOf(session.getId()));
+        
+        Date timestamp = session.getTimestamp();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        calendarPicker.setCalendar(calendar);      
+        timePicker.setCalendar(calendar);
 
         Note sessionNotes = session.getNotes();
         if (sessionNotes != null) {
