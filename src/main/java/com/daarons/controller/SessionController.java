@@ -26,10 +26,13 @@ import com.daarons.model.Student;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -131,13 +134,13 @@ public class SessionController implements Initializable {
                 ((TextArea) node).setOnKeyPressed(handleTabAction);
             }
         }
-        
-        sessionIdField.setText(String.valueOf(session.getId()));
-        
+
+        sessionIdField.setText(String.valueOf(session.getSessionId()));
+
         Date timestamp = session.getTimestamp();
         Calendar calendar = Calendar.getInstance();
         calendar.setTime(timestamp);
-        calendarPicker.setCalendar(calendar);      
+        calendarPicker.setCalendar(calendar);
         timePicker.setCalendar(calendar);
 
         Note sessionNotes = session.getNotes();
@@ -167,6 +170,21 @@ public class SessionController implements Initializable {
         }
 
         saveBtn.setOnAction((ActionEvent event) -> {
+            long sessionId = Long.parseLong(sessionIdField.getText());
+            session.setSessionId(sessionId);
+
+            Calendar newCalendar = calendarPicker.getCalendar();
+            Calendar newTimeCalendar = timePicker.getCalendar();
+            int day = newCalendar.get(Calendar.DAY_OF_WEEK);
+            int month = newCalendar.get(Calendar.MONTH);
+            int date = newCalendar.get(Calendar.DATE);
+            int year = newCalendar.get(Calendar.YEAR);
+            int hour = newTimeCalendar.get(Calendar.HOUR_OF_DAY);
+            int min = newTimeCalendar.get(Calendar.MINUTE);
+            Calendar c = new GregorianCalendar(year, month, date, hour, min);
+            Date newTimestamp = new Timestamp(c.getTimeInMillis());
+            session.setTimestamp(newTimestamp);
+
             Note notes = new Note();
             notes.setFluencyAndCoherence(fluencyCoherenceNotes.getText());
             notes.setVocabulary(vocabularyNotes.getText());
@@ -198,7 +216,7 @@ public class SessionController implements Initializable {
                             commSkillsReview.getText()));
             review.setSession(session);
             session.setReview(review);
-            
+
             Account account = session.getStudent().getAccount();
             for (Student student : account.getStudents()) {
                 if (student.getId() == session.getStudent().getId()) {
