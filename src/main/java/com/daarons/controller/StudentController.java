@@ -84,9 +84,9 @@ public class StudentController implements Initializable {
     @FXML
     private Button saveBtn;
     @FXML
-    private GridPane gridPaneCenter;
+    private GridPane gridPaneLeft;
     @FXML
-    private GridPane gridPaneRight;
+    private GridPane gridPaneCenter;
 
     public StudentController(Student student) {
         this.student = student;
@@ -131,9 +131,9 @@ public class StudentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-//        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-//        gridPaneCenter.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
-//        gridPaneRight.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        gridPaneLeft.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+        gridPaneCenter.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
 
         englishNameField.setText(student.getEnglishName());
         chineseNameField.setText(student.getChineseName());
@@ -208,7 +208,7 @@ public class StudentController implements Initializable {
         sessionTableView.setRoot(createTree(student.getSessions()));
         sessionTableView.setShowRoot(false);
 
-        gridPaneRight.add(sessionTableView, 0, 0);
+        gridPaneCenter.add(sessionTableView, 0, 0);
     }
 
     public class SessionTreeItem extends AbstractTreeItem {

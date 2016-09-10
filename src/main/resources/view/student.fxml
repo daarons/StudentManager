@@ -23,8 +23,8 @@
             </children>
         </HBox>
     </top>
-    <right>
-        <GridPane fx:id="gridPaneRight" BorderPane.alignment="TOP_CENTER" 
+    <center>
+        <GridPane fx:id="gridPaneCenter" BorderPane.alignment="TOP_CENTER" 
                   alignment="TOP_CENTER" hgap="25" vgap="25" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
@@ -38,9 +38,9 @@
             </rowConstraints>
             <!-- TreeTableView goes to (0,0), LineChart goes to (0,1) -->
         </GridPane>
-    </right>
-    <center>
-        <GridPane fx:id="gridPaneCenter" alignment="TOP_CENTER" 
+    </center>
+    <left>
+        <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
                   BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
@@ -48,55 +48,55 @@
             <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
                   GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" >
                 <children>
-                    <Label text="English Name"/>
-                    <TextField fx:id="englishNameField" id="englishNameField"/>
+                    <Label text="English Name" VBox.vgrow="ALWAYS" />
+                    <TextField fx:id="englishNameField" id="englishNameField" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
             <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
                   GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity">
                 <children>
-                    <Label text="Chinese Name"/>
-                    <TextField fx:id="chineseNameField" id="chineseNameField"/>
+                    <Label text="Chinese Name" VBox.vgrow="ALWAYS"/>
+                    <TextField fx:id="chineseNameField" id="chineseNameField" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
             <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
                   GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity">
                 <children>
-                    <Label text="Age"/>
-                    <TextField fx:id="ageField" id="ageField" />
+                    <Label text="Age" VBox.vgrow="ALWAYS"/>
+                    <TextField fx:id="ageField" id="ageField" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
             <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
                   GridPane.rowIndex="1" maxHeight="Infinity" maxWidth="Infinity">
                 <children>
-                    <Label text="Location"/>
-                    <TextField fx:id="locationField" id="locationField"/>
+                    <Label text="Location" VBox.vgrow="ALWAYS"/>
+                    <TextField fx:id="locationField" id="locationField" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
             <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
                   GridPane.rowIndex="2" maxHeight="Infinity" maxWidth="Infinity">
                 <children>
-                    <Label text="Hobbies"/>
-                    <TextArea fx:id="hobbiesArea" id="hobbiesArea"/>
+                    <Label text="Hobbies" VBox.vgrow="ALWAYS"/>
+                    <TextArea fx:id="hobbiesArea" id="hobbiesArea" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
             <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
                   GridPane.rowIndex="2" maxHeight="Infinity" maxWidth="Infinity">
                 <children>
-                    <Label text="Motives"/>
-                    <TextArea fx:id="motivesArea" id="motivesArea"/>
+                    <Label text="Motives" VBox.vgrow="ALWAYS"/>
+                    <TextArea fx:id="motivesArea" id="motivesArea" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
             <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
                   GridPane.rowIndex="3" GridPane.columnSpan="2" maxHeight="Infinity" 
                   maxWidth="Infinity">
                 <children>
-                    <Label text="Notes"/>
-                    <TextArea fx:id="notesArea" id="notesArea"/>
+                    <Label text="Notes" VBox.vgrow="ALWAYS"/>
+                    <TextArea fx:id="notesArea" id="notesArea" VBox.vgrow="ALWAYS"/>
                 </children>
             </VBox>
         </GridPane>
-    </center>
+    </left>
     <bottom>
         <HBox maxHeight="200">
             <BorderPane.margin>
