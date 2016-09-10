@@ -84,7 +84,7 @@ public class StudentController implements Initializable {
     @FXML
     private Button saveBtn;
     @FXML
-    private GridPane gridPaneLeft;
+    private GridPane gridPaneCenter;
     @FXML
     private GridPane gridPaneRight;
 
@@ -131,9 +131,9 @@ public class StudentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        gridPaneLeft.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
-        gridPaneRight.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+//        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+//        gridPaneCenter.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+//        gridPaneRight.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
 
         englishNameField.setText(student.getEnglishName());
         chineseNameField.setText(student.getChineseName());
