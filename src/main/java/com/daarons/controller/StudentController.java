@@ -23,8 +23,12 @@ import com.daarons.model.Session;
 import com.daarons.model.Student;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
+import extfx.scene.chart.DateAxis;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -37,11 +41,15 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
@@ -51,6 +59,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
 
@@ -209,6 +218,47 @@ public class StudentController implements Initializable {
         sessionTableView.setShowRoot(false);
 
         gridPaneCenter.add(sessionTableView, 0, 0);
+
+        Calendar now = Calendar.getInstance();
+        int year = now.get(Calendar.YEAR);
+
+        now = new GregorianCalendar(year, Calendar.JANUARY, 1);
+        Date lowerBound = now.getTime();
+
+        now = new GregorianCalendar(year, Calendar.DECEMBER, 31);
+        Date upperBound = now.getTime();
+
+        DateAxis xAxis = new DateAxis("Date", lowerBound, upperBound);
+        NumberAxis yAxis = new NumberAxis("Score", 0, 30, 10);
+        LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
+        lineChart.setTitle(student.toString() + "'s scores");
+        lineChart.setLegendVisible(false);
+
+        XYChart.Series<Date,Number> series = new XYChart.Series();
+        series.setName("Scores this Year");
+        series.getData().add(new XYChart.Data(new GregorianCalendar(2016, 11, 15).getTime(), 20));
+        series.getData().add(new XYChart.Data(new GregorianCalendar(2016, 2, 15).getTime(), 10));
+        lineChart.getData().add(series);
+        
+        for(XYChart.Series<Date,Number> s : lineChart.getData()){
+            for(XYChart.Data<Date,Number> d : s.getData()){
+                Tooltip.install(d.getNode(), new Tooltip(
+                        d.getXValue().toString() + "\n" +
+                                "Score: " + d.getYValue()
+                ));
+                
+                d.getNode().setOnMouseEntered(event -> d.getNode().getStyleClass().add("onHover"));
+                d.getNode().setOnMouseExited(event -> d.getNode().getStyleClass().remove("onHover"));
+            }
+        }
+
+        gridPaneCenter.add(lineChart, 0, 1);
+        
+        RowConstraints row1 = new RowConstraints();
+        row1.setPercentHeight(50);
+        RowConstraints row2 = new RowConstraints();
+        row2.setPercentHeight(50);
+        gridPaneCenter.getRowConstraints().setAll(row1, row2);
     }
 
     public class SessionTreeItem extends AbstractTreeItem {

@@ -64,3 +64,7 @@
 .text-field, .text-field:focused{
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
 }
+
+.onHover{
+    -fx-background-color: orange;
+}
