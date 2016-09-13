@@ -25,12 +25,18 @@ import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import extfx.scene.chart.DateAxis;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -62,6 +68,7 @@ import javafx.scene.layout.GridPane;
 import javafx.scene.layout.RowConstraints;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -234,26 +241,50 @@ public class StudentController implements Initializable {
         lineChart.setTitle(student.toString() + "'s scores");
         lineChart.setLegendVisible(false);
 
-        XYChart.Series<Date,Number> series = new XYChart.Series();
+        XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores this Year");
         series.getData().add(new XYChart.Data(new GregorianCalendar(2016, 11, 15).getTime(), 20));
         series.getData().add(new XYChart.Data(new GregorianCalendar(2016, 2, 15).getTime(), 10));
         lineChart.getData().add(series);
-        
-        for(XYChart.Series<Date,Number> s : lineChart.getData()){
-            for(XYChart.Data<Date,Number> d : s.getData()){
-                Tooltip.install(d.getNode(), new Tooltip(
-                        d.getXValue().toString() + "\n" +
-                                "Score: " + d.getYValue()
-                ));
-                
+
+        Tooltip tooltip = new Tooltip();
+        try {
+            Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
+            fieldBehavior.setAccessible(true);
+            Class[] classes = Tooltip.class.getDeclaredClasses();
+            for (Class clazz : classes) {
+                if (clazz.getName().equals("javafx.scene.control.Tooltip$TooltipBehavior")) {
+                    Constructor ctor = clazz.getDeclaredConstructor(
+                            Duration.class,
+                            Duration.class,
+                            Duration.class,
+                            boolean.class);
+                    ctor.setAccessible(true);
+                    Object tooltipBehavior = ctor.newInstance(
+                            new Duration(0),
+                            new Duration(Double.POSITIVE_INFINITY),
+                            new Duration(0),
+                            false);
+                    fieldBehavior.set(null, tooltipBehavior);
+                    break;
+                }
+            }
+        } catch (Exception ex) {
+            System.out.println(ex);
+        }
+
+        for (XYChart.Series<Date, Number> s : lineChart.getData()) {
+            for (XYChart.Data<Date, Number> d : s.getData()) {
+                tooltip.setText(d.getXValue().toString() + "\nScore: " + d.getYValue());
+                Tooltip.install(d.getNode(), tooltip);
+
                 d.getNode().setOnMouseEntered(event -> d.getNode().getStyleClass().add("onHover"));
                 d.getNode().setOnMouseExited(event -> d.getNode().getStyleClass().remove("onHover"));
             }
         }
 
         gridPaneCenter.add(lineChart, 0, 1);
-        
+
         RowConstraints row1 = new RowConstraints();
         row1.setPercentHeight(50);
         RowConstraints row2 = new RowConstraints();
