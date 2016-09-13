@@ -25,7 +25,7 @@
     </top>
     <center>
         <GridPane fx:id="gridPaneCenter" BorderPane.alignment="TOP_CENTER" 
-                  alignment="TOP_CENTER" hgap="25" vgap="25" >
+                  alignment="TOP_CENTER" hgap="25" vgap="25" maxHeight="Infinity" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>
@@ -41,7 +41,7 @@
     </center>
     <left>
         <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
-                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
+                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" maxHeight="Infinity" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>

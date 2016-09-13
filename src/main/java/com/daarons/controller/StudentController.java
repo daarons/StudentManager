@@ -132,8 +132,8 @@ public class StudentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        gridPaneLeft.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
-        gridPaneCenter.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+        gridPaneLeft.setMaxWidth(screenSize.getWidth() / 2);
+        gridPaneCenter.setMaxWidth(screenSize.getWidth() / 2);
 
         englishNameField.setText(student.getEnglishName());
         chineseNameField.setText(student.getChineseName());
