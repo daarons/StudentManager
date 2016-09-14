@@ -236,7 +236,7 @@ public class StudentController implements Initializable {
         Date upperBound = now.getTime();
 
         DateAxis xAxis = new DateAxis("Date", lowerBound, upperBound);
-        NumberAxis yAxis = new NumberAxis("Score", 0, 30, 10);
+        NumberAxis yAxis = new NumberAxis("Score", 6, 30, 10);
         LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(student.toString() + "'s scores");
         lineChart.setLegendVisible(false);
