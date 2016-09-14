@@ -243,8 +243,11 @@ public class StudentController implements Initializable {
 
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores this Year");
-        series.getData().add(new XYChart.Data(new GregorianCalendar(2016, 11, 15).getTime(), 20));
-        series.getData().add(new XYChart.Data(new GregorianCalendar(2016, 2, 15).getTime(), 10));
+        for(Session s : student.getSessions()){
+            Date xTimestamp = s.getTimestamp();
+            int yTotalScore = s.getReview().getTotalGrade();
+            series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
+        }
         lineChart.getData().add(series);
 
         Tooltip tooltip = new Tooltip();
