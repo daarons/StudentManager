@@ -23,8 +23,12 @@ import com.daarons.model.Session;
 import com.daarons.model.Student;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
+import extfx.scene.chart.DateAxis;
 import java.io.IOException;
+import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.beans.property.ReadOnlyStringWrapper;
@@ -37,11 +41,15 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.chart.LineChart;
+import javafx.scene.chart.NumberAxis;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
+import javafx.scene.control.Tooltip;
 import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
@@ -51,8 +59,10 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.RowConstraints;
 import javafx.stage.Screen;
 import javafx.stage.Stage;
+import javafx.util.Duration;
 
 /**
  * FXML Controller class
@@ -86,7 +96,7 @@ public class StudentController implements Initializable {
     @FXML
     private GridPane gridPaneLeft;
     @FXML
-    private GridPane gridPaneRight;
+    private GridPane gridPaneCenter;
 
     public StudentController(Student student) {
         this.student = student;
@@ -132,8 +142,8 @@ public class StudentController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        gridPaneLeft.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
-        gridPaneRight.setMaxSize(screenSize.getWidth() / 2, screenSize.getHeight() / 2);
+        gridPaneLeft.setMaxWidth(screenSize.getWidth() / 2);
+        gridPaneCenter.setMaxWidth(screenSize.getWidth() / 2);
 
         englishNameField.setText(student.getEnglishName());
         chineseNameField.setText(student.getChineseName());
@@ -208,7 +218,65 @@ public class StudentController implements Initializable {
         sessionTableView.setRoot(createTree(student.getSessions()));
         sessionTableView.setShowRoot(false);
 
-        gridPaneRight.add(sessionTableView, 0, 0);
+        gridPaneCenter.add(sessionTableView, 0, 0);
+
+        DateAxis xAxis = new DateAxis();
+        xAxis.setLabel("Date");
+        NumberAxis yAxis = new NumberAxis("Score", 6, 30, 10);
+        LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
+        lineChart.setTitle(student.toString() + "'s scores");
+        lineChart.setLegendVisible(false);
+
+        XYChart.Series<Date, Number> series = new XYChart.Series();
+        series.setName("Scores");
+        for (Session s : student.getSessions()) {
+            Date xTimestamp = s.getTimestamp();
+            int yTotalScore = s.getReview().getTotalGrade();
+            series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
+        }
+        lineChart.getData().add(series);
+
+        for (XYChart.Series<Date, Number> s : lineChart.getData()) {
+            for (XYChart.Data<Date, Number> d : s.getData()) {
+                Tooltip tooltip = new Tooltip(d.getXValue().toString() + "\nScore: " + d.getYValue());
+                try {
+                    Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
+                    fieldBehavior.setAccessible(true);
+                    Class[] classes = Tooltip.class.getDeclaredClasses();
+                    for (Class clazz : classes) {
+                        if (clazz.getName().equals("javafx.scene.control.Tooltip$TooltipBehavior")) {
+                            Constructor ctor = clazz.getDeclaredConstructor(
+                                    Duration.class,
+                                    Duration.class,
+                                    Duration.class,
+                                    boolean.class);
+                            ctor.setAccessible(true);
+                            Object tooltipBehavior = ctor.newInstance(
+                                    new Duration(0),
+                                    new Duration(Double.POSITIVE_INFINITY),
+                                    new Duration(0),
+                                    false);
+                            fieldBehavior.set(null, tooltipBehavior);
+                            break;
+                        }
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
+                Tooltip.install(d.getNode(), tooltip);
+
+                d.getNode().setOnMouseEntered(event -> d.getNode().getStyleClass().add("onHover"));
+                d.getNode().setOnMouseExited(event -> d.getNode().getStyleClass().remove("onHover"));
+            }
+        }
+
+        gridPaneCenter.add(lineChart, 0, 1);
+
+        RowConstraints row1 = new RowConstraints();
+        row1.setPercentHeight(50);
+        RowConstraints row2 = new RowConstraints();
+        row2.setPercentHeight(50);
+        gridPaneCenter.getRowConstraints().setAll(row1, row2);
     }
 
     public class SessionTreeItem extends AbstractTreeItem {

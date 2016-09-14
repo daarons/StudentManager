@@ -204,4 +204,15 @@ public class Review implements Serializable {
     public void setCommunicationSkills(ReviewSection communicationSkills) {
         this.communicationSkills = communicationSkills;
     }
+    
+    public int getTotalGrade(){
+        int i = 0;
+        i += fluencyAndCoherence.getGrade();
+        i += vocabulary.getGrade();
+        i += grammar.getGrade();
+        i += pronunciation.getGrade();
+        i += interactionAndEngagement.getGrade();
+        i += communicationSkills.getGrade();
+        return i;
+    }
 }
