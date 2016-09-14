@@ -226,23 +226,15 @@ public class StudentController implements Initializable {
 
         gridPaneCenter.add(sessionTableView, 0, 0);
 
-        Calendar now = Calendar.getInstance();
-        int year = now.get(Calendar.YEAR);
-
-        now = new GregorianCalendar(year, Calendar.JANUARY, 1);
-        Date lowerBound = now.getTime();
-
-        now = new GregorianCalendar(year, Calendar.DECEMBER, 31);
-        Date upperBound = now.getTime();
-
-        DateAxis xAxis = new DateAxis("Date", lowerBound, upperBound);
+        DateAxis xAxis = new DateAxis();
+        xAxis.setLabel("Date");
         NumberAxis yAxis = new NumberAxis("Score", 6, 30, 10);
         LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(student.toString() + "'s scores");
         lineChart.setLegendVisible(false);
 
         XYChart.Series<Date, Number> series = new XYChart.Series();
-        series.setName("Scores this Year");
+        series.setName("Scores");
         for (Session s : student.getSessions()) {
             Date xTimestamp = s.getTimestamp();
             int yTotalScore = s.getReview().getTotalGrade();
