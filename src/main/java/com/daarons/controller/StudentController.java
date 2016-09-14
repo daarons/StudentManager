@@ -243,42 +243,40 @@ public class StudentController implements Initializable {
 
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores this Year");
-        for(Session s : student.getSessions()){
+        for (Session s : student.getSessions()) {
             Date xTimestamp = s.getTimestamp();
             int yTotalScore = s.getReview().getTotalGrade();
             series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
         }
         lineChart.getData().add(series);
 
-        Tooltip tooltip = new Tooltip();
-        try {
-            Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
-            fieldBehavior.setAccessible(true);
-            Class[] classes = Tooltip.class.getDeclaredClasses();
-            for (Class clazz : classes) {
-                if (clazz.getName().equals("javafx.scene.control.Tooltip$TooltipBehavior")) {
-                    Constructor ctor = clazz.getDeclaredConstructor(
-                            Duration.class,
-                            Duration.class,
-                            Duration.class,
-                            boolean.class);
-                    ctor.setAccessible(true);
-                    Object tooltipBehavior = ctor.newInstance(
-                            new Duration(0),
-                            new Duration(Double.POSITIVE_INFINITY),
-                            new Duration(0),
-                            false);
-                    fieldBehavior.set(null, tooltipBehavior);
-                    break;
-                }
-            }
-        } catch (Exception ex) {
-            System.out.println(ex);
-        }
-
         for (XYChart.Series<Date, Number> s : lineChart.getData()) {
             for (XYChart.Data<Date, Number> d : s.getData()) {
-                tooltip.setText(d.getXValue().toString() + "\nScore: " + d.getYValue());
+                Tooltip tooltip = new Tooltip(d.getXValue().toString() + "\nScore: " + d.getYValue());
+                try {
+                    Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
+                    fieldBehavior.setAccessible(true);
+                    Class[] classes = Tooltip.class.getDeclaredClasses();
+                    for (Class clazz : classes) {
+                        if (clazz.getName().equals("javafx.scene.control.Tooltip$TooltipBehavior")) {
+                            Constructor ctor = clazz.getDeclaredConstructor(
+                                    Duration.class,
+                                    Duration.class,
+                                    Duration.class,
+                                    boolean.class);
+                            ctor.setAccessible(true);
+                            Object tooltipBehavior = ctor.newInstance(
+                                    new Duration(0),
+                                    new Duration(Double.POSITIVE_INFINITY),
+                                    new Duration(0),
+                                    false);
+                            fieldBehavior.set(null, tooltipBehavior);
+                            break;
+                        }
+                    }
+                } catch (Exception ex) {
+                    System.out.println(ex);
+                }
                 Tooltip.install(d.getNode(), tooltip);
 
                 d.getNode().setOnMouseEntered(event -> d.getNode().getStyleClass().add("onHover"));
