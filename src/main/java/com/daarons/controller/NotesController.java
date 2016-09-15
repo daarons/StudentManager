@@ -21,9 +21,12 @@ import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Rectangle2D;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.TilePane;
+import javafx.stage.Screen;
 
 /**
  * FXML Controller class
@@ -32,6 +35,9 @@ import javafx.scene.input.KeyEvent;
  */
 public class NotesController implements Initializable {
 
+    @FXML
+    private TilePane tilePane;
+    
     @FXML
     private void handleTabAction(KeyEvent event) throws Exception{
         if(event.getCode()==KeyCode.TAB){
@@ -50,7 +56,9 @@ public class NotesController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        tilePane.setPrefTileHeight(screenSize.getHeight() / 4.5);
+        tilePane.setPrefTileWidth(screenSize.getWidth() / 6.5);
     }    
     
 }

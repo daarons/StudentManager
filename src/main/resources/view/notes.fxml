@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/style.css" 
             fx:controller="com.daarons.controller.NotesController" minHeight="400"
             minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
     <top>
@@ -23,8 +23,8 @@
         </HBox>
     </top>
     <center>
-        <TilePane hgap="10" maxHeight="Infinity" maxWidth="Infinity" 
-                  prefTileWidth="200" prefTileHeight="180" prefColumns="2" >
+        <TilePane hgap="10" maxHeight="Infinity" maxWidth="Infinity" fx:id="tilePane"
+                prefColumns="2" >
             <BorderPane.margin>
                 <Insets top="10" bottom="10" left="25"/>
             </BorderPane.margin>
