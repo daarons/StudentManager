@@ -15,18 +15,24 @@
  */
 package com.daarons.controller;
 
+import com.daarons.DAO.AccountDAO;
+import com.daarons.DAO.DAOFactory;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import java.net.URL;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Screen;
+import jfxtras.scene.control.CalendarTimePicker;
 
 /**
  * FXML Controller class
@@ -34,9 +40,26 @@ import javafx.stage.Screen;
  * @author David
  */
 public class NotesController implements Initializable {
+    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
 
     @FXML
     private TilePane tilePane;
+    @FXML
+    private TextArea fluencyCoherenceNote;
+    @FXML
+    private TextArea vocabularyNote;
+    @FXML
+    private TextArea grammarNote;
+    @FXML
+    private TextArea pronunciationNote;
+    @FXML
+    private TextArea interactEngageNote;
+    @FXML
+    private TextArea commSkillsNote;
+    @FXML
+    private Button saveBtn;
+    @FXML
+    private CalendarTimePicker timePicker;
     
     @FXML
     private void handleTabAction(KeyEvent event) throws Exception{
@@ -51,6 +74,13 @@ public class NotesController implements Initializable {
         }
     }
     
+    @FXML
+    private void saveNotes(KeyEvent event) throws Exception{
+        if(event.getSource() == saveBtn){
+            //grab account and update
+        }
+    }
+    
     /**
      * Initializes the controller class.
      */
@@ -59,6 +89,19 @@ public class NotesController implements Initializable {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
         tilePane.setPrefTileHeight(screenSize.getHeight() / 4.5);
         tilePane.setPrefTileWidth(screenSize.getWidth() / 6.5);
+        
+        timePicker.setPrefSize(screenSize.getWidth() / 5, 60);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int minute = cal.get(Calendar.MINUTE);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        if(minute > 5 && minute < 35){
+            cal.set(Calendar.MINUTE, 30);
+        }else{
+            cal.set(Calendar.MINUTE, 00);
+            cal.set(Calendar.HOUR_OF_DAY, hour + 1);
+        }
+        timePicker.setCalendar(cal);
     }    
     
 }
