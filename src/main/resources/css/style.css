@@ -59,6 +59,7 @@
 
 .text-area{
     -fx-wrap-text: true;
+    -fx-font-size: 1.5em;
 }
 
 .text-field, .text-field:focused{
