@@ -85,6 +85,8 @@
                 </tooltip>
             </Button>
             <CalendarTimePicker fx:id="timePicker" minuteStep="30" />
+            <TextField fx:id="accountField" promptText="Account" />
+            <TextField fx:id="studentField" promptText="Student" />
         </HBox>
     </bottom>
 </BorderPane>
