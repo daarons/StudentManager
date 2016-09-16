@@ -7,8 +7,9 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
+<?import jfxtras.scene.control.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/style.css" 
             fx:controller="com.daarons.controller.NotesController" minHeight="400"
             minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
     <top>
@@ -23,66 +24,70 @@
         </HBox>
     </top>
     <center>
-        <TilePane hgap="10" maxHeight="Infinity" maxWidth="Infinity" 
-                  prefTileWidth="200" prefTileHeight="180" prefColumns="2" >
+        <TilePane hgap="10" maxHeight="Infinity" maxWidth="Infinity" fx:id="tilePane"
+                prefColumns="2" >
             <BorderPane.margin>
                 <Insets top="10" bottom="10" left="25"/>
             </BorderPane.margin>
             <VBox fillWidth="true" >
                 <children>
                     <Label text="FluencyCoherence" styleClass="notesLabel"/>
-                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="fluencyCoherenceNote"
                               onKeyPressed="#handleTabAction" styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="Vocabulary" styleClass="notesLabel" id="noteLabel"/>
-                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="vocabularyNote"
                               onKeyPressed="#handleTabAction" styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="Grammar" styleClass="notesLabel"/>
-                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="grammarNote"
                               onKeyPressed="#handleTabAction" styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="Pronunciation" styleClass="notesLabel"/>
-                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="pronunciationNote"
                               onKeyPressed="#handleTabAction" styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="InteractEngage" styleClass="notesLabel"/>
-                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="interactEngageNote"
                               onKeyPressed="#handleTabAction" styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="CommSkills" styleClass="notesLabel"/>
-                    <TextArea VBox.vgrow="ALWAYS" editable="true" 
+                    <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="commSkillsNote"
                               onKeyPressed="#handleTabAction" styleClass="notes" />
                 </children>
             </VBox>
         </TilePane> 
     </center>
     <bottom>
-        <HBox maxHeight="200">
+        <HBox maxHeight="200" spacing="10" >
             <BorderPane.margin>
                 <Insets top="3" bottom="3" left="25"/>
             </BorderPane.margin>
             <Button id="saveBtn" HBox.hgrow="ALWAYS" minWidth="30" minHeight="30" 
-                    maxWidth="60" maxHeight="60">
+                    maxWidth="60" maxHeight="60" fx:id="saveBtn" onMouseClicked="#saveNotes" >
                 <tooltip>
                     <Tooltip text="Save" />
                 </tooltip>
             </Button>
+            <CalendarTimePicker fx:id="timePicker" minuteStep="30" />
+            <TextField fx:id="accountField" promptText="Account" />
+            <TextField fx:id="studentField" promptText="Student" />
+            <TextField fx:id="sessionIdField" promptText="Session ID" />
         </HBox>
     </bottom>
 </BorderPane>
