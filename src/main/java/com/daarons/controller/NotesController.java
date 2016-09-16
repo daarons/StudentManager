@@ -119,10 +119,7 @@ public class NotesController implements Initializable {
                 student.getSessions().add(session);
                 account.getStudents().add(student);
             } else if (students == null || students.isEmpty()) {
-                account = accounts.stream()
-                        .filter(a -> a.getName().equals(accountField.getText()))
-                        .findFirst()
-                        .get();
+                account = accounts.get(0);
                 student = new Student();
                 student.setEnglishName(studentField.getText());
                 student.setAccount(account);
