@@ -23,7 +23,9 @@ import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import java.net.URL;
 import java.util.Calendar;
+import java.util.List;
 import java.util.ResourceBundle;
+import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -46,8 +48,6 @@ import org.controlsfx.control.textfield.TextFields;
 public class NotesController implements Initializable {
 
     private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
-    private Account account;
-    private Student student;
 
     @FXML
     private TilePane tilePane;
@@ -116,6 +116,11 @@ public class NotesController implements Initializable {
 
         TextFields.bindAutoCompletion(accountField, t -> {
             return dao.getAccounts(t.getUserText());
+        });
+        TextFields.bindAutoCompletion(studentField, t -> {
+            List<Account> accounts = dao.getAccounts(accountField.getText());
+            return accounts.stream().filter(a -> a.getStudents() != null)
+                    .flatMap(a -> a.getStudents().stream()).collect(Collectors.toList());
         });
 
         studentField.disableProperty().bind(
