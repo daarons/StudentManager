@@ -79,7 +79,7 @@
                 <Insets top="3" bottom="3" left="25"/>
             </BorderPane.margin>
             <Button id="saveBtn" HBox.hgrow="ALWAYS" minWidth="30" minHeight="30" 
-                    maxWidth="60" maxHeight="60" fx:id="saveBtn" onAction="#saveNotes" >
+                    maxWidth="60" maxHeight="60" fx:id="saveBtn" onMouseClicked="#saveNotes" >
                 <tooltip>
                     <Tooltip text="Save" />
                 </tooltip>
@@ -87,6 +87,7 @@
             <CalendarTimePicker fx:id="timePicker" minuteStep="30" />
             <TextField fx:id="accountField" promptText="Account" />
             <TextField fx:id="studentField" promptText="Student" />
+            <TextField fx:id="sessionIdField" promptText="Session ID" />
         </HBox>
     </bottom>
 </BorderPane>
