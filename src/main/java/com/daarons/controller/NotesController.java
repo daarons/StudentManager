@@ -18,6 +18,8 @@ package com.daarons.controller;
 import com.daarons.DAO.AccountDAO;
 import com.daarons.DAO.DAOFactory;
 import com.daarons.model.Account;
+import com.daarons.model.Note;
+import com.daarons.model.Session;
 import com.daarons.model.Student;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
@@ -35,6 +37,7 @@ import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Screen;
 import jfxtras.scene.control.CalendarTimePicker;
@@ -71,6 +74,8 @@ public class NotesController implements Initializable {
     private TextField accountField;
     @FXML
     private TextField studentField;
+    @FXML
+    private TextField sessionIdField;
 
     @FXML
     private void handleTabAction(KeyEvent event) throws Exception {
@@ -86,9 +91,67 @@ public class NotesController implements Initializable {
     }
 
     @FXML
-    private void saveNotes(KeyEvent event) throws Exception {
+    private void saveNotes(MouseEvent event) {
         if (event.getSource() == saveBtn) {
-            //grab account and update
+            List<Account> accounts = dao.getAccounts(accountField.getText());
+            List<Student> students = accounts != null ? accounts.stream()
+                    .filter(a -> a.getStudents() != null)
+                    .flatMap(a -> a.getStudents().stream().filter(s
+                                    -> s.getEnglishName().equalsIgnoreCase(studentField.getText())
+                                    || s.getChineseName().equalsIgnoreCase(studentField.getText())))
+                    .collect(Collectors.toList()) : null;
+            Account account = null;
+            Student student = null;
+            Session session = null;
+            Note note = null;
+            if (accounts == null) {
+                account = new Account(accountField.getText());
+                student = new Student();
+                student.setEnglishName(studentField.getText());
+                student.setAccount(account);
+                session = new Session(student, timePicker.getCalendar().getTime());
+                note = new Note(session, fluencyCoherenceNote.getText(),
+                        vocabularyNote.getText(), grammarNote.getText(),
+                        pronunciationNote.getText(), interactEngageNote.getText(),
+                        commSkillsNote.getText());
+                session.setNotes(note);
+                session.setSessionId(Long.parseLong(sessionIdField.getText()));
+                student.getSessions().add(session);
+                account.getStudents().add(student);
+            } else if (students == null || students.isEmpty()) {
+                account = accounts.stream()
+                        .filter(a -> a.getName().equals(accountField.getText()))
+                        .findFirst()
+                        .get();
+                student = new Student();
+                student.setEnglishName(studentField.getText());
+                student.setAccount(account);
+                session = new Session(student, timePicker.getCalendar().getTime());
+                note = new Note(session, fluencyCoherenceNote.getText(),
+                        vocabularyNote.getText(), grammarNote.getText(),
+                        pronunciationNote.getText(), interactEngageNote.getText(),
+                        commSkillsNote.getText());
+                session.setNotes(note);
+                session.setSessionId(Long.parseLong(sessionIdField.getText()));
+                student.getSessions().add(session);
+                account.getStudents().add(student);
+            } else {
+                account = accounts.get(0);
+                student = students.get(0);
+                for (Student s : account.getStudents()) {
+                    if (s.getId() == student.getId()) {
+                        session = new Session(s, timePicker.getCalendar().getTime());
+                        note = new Note(session, fluencyCoherenceNote.getText(),
+                                vocabularyNote.getText(), grammarNote.getText(),
+                                pronunciationNote.getText(), interactEngageNote.getText(),
+                                commSkillsNote.getText());
+                        session.setNotes(note);
+                        session.setSessionId(Long.parseLong(sessionIdField.getText()));
+                        s.getSessions().add(session);
+                    }
+                }
+            }
+            dao.updateAccount(account);
         }
     }
 
