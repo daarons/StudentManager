@@ -230,9 +230,11 @@ public class StudentController implements Initializable {
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores");
         for (Session s : student.getSessions()) {
-            Date xTimestamp = s.getTimestamp();
-            int yTotalScore = s.getReview().getTotalGrade();
-            series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
+            if (s.getReview() != null) {
+                Date xTimestamp = s.getTimestamp();
+                int yTotalScore = s.getReview().getTotalGrade();
+                series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
+            }
         }
         lineChart.getData().add(series);
 
