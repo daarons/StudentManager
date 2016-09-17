@@ -37,11 +37,17 @@ public class AccountDAODerbyImpl implements AccountDAO {
     }
 
     @Override
-    public List<Account> getAccounts(String name) {
+    public List<Account> getAccountsLike(String name) {
         EntityManager em = EMFSingleton.getEntityManagerFactory().createEntityManager();
-        String qString = "SELECT a FROM Account a WHERE a.name LIKE :name";
-        TypedQuery<Account> q = em.createQuery(qString, Account.class);
-        q.setParameter("name", name + "%");
+        String qStringLike = "SELECT a FROM Account a WHERE a.name LIKE :name";
+        String qStringAll = "FROM Account";
+        TypedQuery<Account> q;
+        if (name.equals("*")) {
+            q = em.createQuery(qStringAll, Account.class);
+        } else {
+            q = em.createQuery(qStringLike, Account.class);
+            q.setParameter("name", name + "%");
+        }
 
         List<Account> accounts = null;
         try {

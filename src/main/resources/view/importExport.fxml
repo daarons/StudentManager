@@ -28,6 +28,14 @@
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>
+            <columnConstraints>
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+                <ColumnConstraints hgrow="ALWAYS" percentWidth="50" />
+            </columnConstraints>
+            <rowConstraints>
+                <RowConstraints vgrow="ALWAYS" percentHeight="75" />
+                <RowConstraints vgrow="ALWAYS" percentHeight="25" />
+            </rowConstraints>
             <children>
                 <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
                       GridPane.rowIndex="0" maxHeight="Infinity" maxWidth="Infinity" 

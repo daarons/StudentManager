@@ -93,7 +93,7 @@ public class NotesController implements Initializable {
     @FXML
     private void saveNotes(MouseEvent event) {
         if (event.getSource() == saveBtn) {
-            List<Account> accounts = dao.getAccounts(accountField.getText());
+            List<Account> accounts = dao.getAccountsLike(accountField.getText());
             List<Student> students = accounts != null ? accounts.stream()
                     .filter(a -> a.getStudents() != null)
                     .flatMap(a -> a.getStudents().stream().filter(s
@@ -175,10 +175,10 @@ public class NotesController implements Initializable {
         timePicker.setCalendar(cal);
 
         TextFields.bindAutoCompletion(accountField, t -> {
-            return dao.getAccounts(t.getUserText());
+            return dao.getAccountsLike(t.getUserText());
         });
         TextFields.bindAutoCompletion(studentField, t -> {
-            List<Account> accounts = dao.getAccounts(accountField.getText());
+            List<Account> accounts = dao.getAccountsLike(accountField.getText());
             return accounts.stream().filter(a -> a.getStudents() != null)
                     .flatMap(a -> a.getStudents().stream()).collect(Collectors.toList());
         });

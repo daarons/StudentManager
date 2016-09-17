@@ -15,16 +15,26 @@
  */
 package com.daarons.controller;
 
+import com.daarons.DAO.AccountDAO;
+import com.daarons.DAO.DAOFactory;
+import com.daarons.DAO.EMFSingleton;
+import com.daarons.model.Account;
 import java.io.File;
 import java.net.URL;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
-import javafx.stage.FileChooser.ExtensionFilter;
+import javafx.stage.DirectoryChooser;
+import javax.persistence.EntityManager;
+import org.hibernate.Session;
+import org.hibernate.jdbc.Work;
 
 /**
  * FXML Controller class
@@ -33,43 +43,108 @@ import javafx.stage.FileChooser.ExtensionFilter;
  */
 public class ImportExportController implements Initializable {
 
+    private File file;
+    private boolean importDb;
+
     @FXML
     private Button importBtn;
     @FXML
     private Button exportBtn;
     @FXML
     private Text fileName;
-    
-    @FXML
-    private void launchFileChooser(ActionEvent event) throws Exception{
-        FileChooser fc = new FileChooser();
-        File selectedFile = null;
-        if(event.getSource()==importBtn){
-            selectedFile = fc.showOpenDialog(null);
-        }else if(event.getSource()==exportBtn){
-            fc.setInitialFileName("StudentManagerDB.sql");
-            fc.getExtensionFilters().addAll(new ExtensionFilter("SQL Files", "*.sql"));
-            selectedFile = fc.showSaveDialog(null);
-        }
 
-        if(selectedFile != null){
-            fileName.setText("Selected: " + selectedFile.getName());
-        }else{
+    @FXML
+    private void launchFileChooser(ActionEvent event) throws Exception {
+        DirectoryChooser dc = new DirectoryChooser();
+        if (event.getSource() == importBtn) {
+            importDb = true;
+        } else if (event.getSource() == exportBtn) {
+            importDb = false;            
+        }
+        file = dc.showDialog(null);
+
+        if (file != null) {
+            fileName.setText("Selected: " + file.getPath());
+        } else {
             fileName.setText("No file selected");
         }
     }
-    
+
     @FXML
-    private void importExport(ActionEvent event) throws Exception{
-        
+    private void importExport(ActionEvent event) {
+        EntityManager em = null;
+        Session session = null;
+        if (!importDb) {
+            try {
+                em = EMFSingleton.getEntityManagerFactory()
+                        .createEntityManager();
+                em.getTransaction().begin();
+                session = em.unwrap(Session.class);
+                session.doWork((Connection connection) -> {
+                    String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
+                        "NOTE", "REVIEW"};
+                    for (int i = 0; i < tables.length; i++) {
+                        PreparedStatement ps = connection.prepareStatement(
+                                "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
+                        ps.setString(1, null);
+                        ps.setString(2, tables[i]);
+                        ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
+                        ps.setString(4, "`");
+                        ps.setString(5, null);
+                        ps.setString(6, null);
+                        ps.execute();
+                    }
+                    connection.close();
+                });
+            } catch (Exception e) {
+                //if user attempts to overwrite previously written .dat files
+                //an error is thrown and the files are not overwritten
+                //warn user that this happened
+                e.printStackTrace();
+            } finally {
+                em.close();
+            }
+        } else if (importDb) {
+            try {
+                //importing must delete all accounts
+                AccountDAO dao = DAOFactory.getAccountDAO("derby");
+                List<Account> accounts = dao.getAccountsLike("*");
+                accounts.forEach(account -> dao.deleteAccount(account));
+                em = EMFSingleton.getEntityManagerFactory()
+                        .createEntityManager();
+                em.getTransaction().begin();
+                session = em.unwrap(Session.class);
+                session.doWork((Connection connection) -> {
+                    String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
+                        "NOTE", "REVIEW"};
+                    for (int i = 0; i < tables.length; i++) {
+                        PreparedStatement ps = connection.prepareStatement(
+                                "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
+                        ps.setString(1, null);
+                        ps.setString(2, tables[i]);
+                        ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
+                        ps.setString(4, "`");
+                        ps.setString(5, null);
+                        ps.setString(6, null);
+                        ps.setString(7, "1");
+                        ps.execute();
+                    }
+                    connection.close();
+                });
+            } catch (Exception e) {
+                e.printStackTrace();
+            } finally {
+                em.close();
+            }
+        }
     }
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
-    
+    }
+
 }
