@@ -27,6 +27,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.text.Text;
+import javafx.stage.DirectoryChooser;
 import javafx.stage.FileChooser;
 import javafx.stage.FileChooser.ExtensionFilter;
 import javax.persistence.EntityManager;
@@ -58,9 +59,8 @@ public class ImportExportController implements Initializable {
             file = fc.showOpenDialog(null);
         } else if (event.getSource() == exportBtn) {
             importDb = false;
-            fc.setInitialFileName("StudentManagerDB.sql");
-            fc.getExtensionFilters().addAll(new ExtensionFilter("SQL Files", "*.sql"));
-            file = fc.showSaveDialog(null);
+            DirectoryChooser dc = new DirectoryChooser();
+            file = dc.showDialog(null);
         }
 
         if (file != null) {
@@ -78,11 +78,8 @@ public class ImportExportController implements Initializable {
             try {
                 em = EMFSingleton.getEntityManagerFactory()
                         .createEntityManager();
-                System.out.println("Created em");
                 em.getTransaction().begin();
-                System.out.println("Begin trans");
                 session = em.unwrap(Session.class);
-                System.out.println("Unwrap session");
                 session.doWork(new Work() {
                     @Override
                     public void execute(Connection connection) throws SQLException {
@@ -93,20 +90,19 @@ public class ImportExportController implements Initializable {
                                     "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
                             ps.setString(1, null);
                             ps.setString(2, tables[i]);
-                            ps.setString(3, tables[i] + ".dat");
+                            ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
                             ps.setString(4, "`");
                             ps.setString(5, null);
                             ps.setString(6, null);
-                            System.out.println("Created preparedstatement");
                             ps.execute();
-                            System.out.println("Exectued preparedstatement");
                         }
                         connection.close();
-                        System.out.println("closed connection");
                     }
                 });
             } catch (Exception e) {
-                System.out.println("Exception...");
+                //if user attempts to overwrite previously written .dat files
+                //an error is thrown and the files are not overwritten
+                //warn user that this happened
                 e.printStackTrace();
             } finally {
                 em.close();
