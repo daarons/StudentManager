@@ -58,11 +58,10 @@ public class ImportExportController implements Initializable {
         DirectoryChooser dc = new DirectoryChooser();
         if (event.getSource() == importBtn) {
             importDb = true;
-            file = dc.showDialog(null);
         } else if (event.getSource() == exportBtn) {
-            importDb = false;
-            file = dc.showDialog(null);
+            importDb = false;            
         }
+        file = dc.showDialog(null);
 
         if (file != null) {
             fileName.setText("Selected: " + file.getPath());
@@ -81,24 +80,21 @@ public class ImportExportController implements Initializable {
                         .createEntityManager();
                 em.getTransaction().begin();
                 session = em.unwrap(Session.class);
-                session.doWork(new Work() {
-                    @Override
-                    public void execute(Connection connection) throws SQLException {
-                        String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
-                            "NOTE", "REVIEW"};
-                        for (int i = 0; i < tables.length; i++) {
-                            PreparedStatement ps = connection.prepareStatement(
-                                    "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
-                            ps.setString(1, null);
-                            ps.setString(2, tables[i]);
-                            ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
-                            ps.setString(4, "`");
-                            ps.setString(5, null);
-                            ps.setString(6, null);
-                            ps.execute();
-                        }
-                        connection.close();
+                session.doWork((Connection connection) -> {
+                    String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
+                        "NOTE", "REVIEW"};
+                    for (int i = 0; i < tables.length; i++) {
+                        PreparedStatement ps = connection.prepareStatement(
+                                "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
+                        ps.setString(1, null);
+                        ps.setString(2, tables[i]);
+                        ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
+                        ps.setString(4, "`");
+                        ps.setString(5, null);
+                        ps.setString(6, null);
+                        ps.execute();
                     }
+                    connection.close();
                 });
             } catch (Exception e) {
                 //if user attempts to overwrite previously written .dat files
@@ -118,25 +114,22 @@ public class ImportExportController implements Initializable {
                         .createEntityManager();
                 em.getTransaction().begin();
                 session = em.unwrap(Session.class);
-                session.doWork(new Work() {
-                    @Override
-                    public void execute(Connection connection) throws SQLException {
-                        String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
-                            "NOTE", "REVIEW"};
-                        for (int i = 0; i < tables.length; i++) {
-                            PreparedStatement ps = connection.prepareStatement(
-                                    "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
-                            ps.setString(1, null);
-                            ps.setString(2, tables[i]);
-                            ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
-                            ps.setString(4, "`");
-                            ps.setString(5, null);
-                            ps.setString(6, null);
-                            ps.setString(7, "1");
-                            ps.execute();
-                        }
-                        connection.close();
+                session.doWork((Connection connection) -> {
+                    String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
+                        "NOTE", "REVIEW"};
+                    for (int i = 0; i < tables.length; i++) {
+                        PreparedStatement ps = connection.prepareStatement(
+                                "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
+                        ps.setString(1, null);
+                        ps.setString(2, tables[i]);
+                        ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
+                        ps.setString(4, "`");
+                        ps.setString(5, null);
+                        ps.setString(6, null);
+                        ps.setString(7, "1");
+                        ps.execute();
                     }
+                    connection.close();
                 });
             } catch (Exception e) {
                 e.printStackTrace();
