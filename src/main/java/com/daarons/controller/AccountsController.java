@@ -62,7 +62,7 @@ public class AccountsController implements Initializable {
         if (event.getSource() == searchAccountsField) {
             accountsView.setRoot(createTree(null));
             if (!searchAccountsField.getText().isEmpty()) {
-                List<Account> accounts = dao.getAccounts(searchAccountsField.getText());
+                List<Account> accounts = dao.getAccountsLike(searchAccountsField.getText());
                 if (accounts != null) {
                     accountsView.setRoot(createTree(accounts));
                 }

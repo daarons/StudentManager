@@ -24,5 +24,5 @@ import java.util.List;
  */
 public interface AccountReader {
     public Account getAccount(long id);
-    public List<Account> getAccounts(String name);
+    public List<Account> getAccountsLike(String name);
 }
