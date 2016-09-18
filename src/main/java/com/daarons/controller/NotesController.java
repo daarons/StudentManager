@@ -114,7 +114,7 @@ public class NotesController implements Initializable {
                         vocabularyNote.getText(), grammarNote.getText(),
                         pronunciationNote.getText(), interactEngageNote.getText(),
                         commSkillsNote.getText());
-                session.setNotes(note);
+                session.setNote(note);
                 session.setSessionId(Long.parseLong(sessionIdField.getText()));
                 student.getSessions().add(session);
                 account.getStudents().add(student);
@@ -128,7 +128,7 @@ public class NotesController implements Initializable {
                         vocabularyNote.getText(), grammarNote.getText(),
                         pronunciationNote.getText(), interactEngageNote.getText(),
                         commSkillsNote.getText());
-                session.setNotes(note);
+                session.setNote(note);
                 session.setSessionId(Long.parseLong(sessionIdField.getText()));
                 student.getSessions().add(session);
                 account.getStudents().add(student);
@@ -142,7 +142,7 @@ public class NotesController implements Initializable {
                                 vocabularyNote.getText(), grammarNote.getText(),
                                 pronunciationNote.getText(), interactEngageNote.getText(),
                                 commSkillsNote.getText());
-                        session.setNotes(note);
+                        session.setNote(note);
                         session.setSessionId(Long.parseLong(sessionIdField.getText()));
                         s.getSessions().add(session);
                     }

@@ -150,8 +150,8 @@ public class StudentController implements Initializable {
         ageField.setText(String.valueOf(student.getAge()));
         locationField.setText(student.getLocation());
         hobbiesArea.setText(student.getHobbies());
-        motivesArea.setText(student.getWhyLearnEnglish());
-        notesArea.setText(student.getOtherNotes());
+        motivesArea.setText(student.getMotive());
+        notesArea.setText(student.getOtherInfo());
 
         saveBtn.setOnAction((ActionEvent event) -> {
             student.setEnglishName(englishNameField.getText());
@@ -160,8 +160,8 @@ public class StudentController implements Initializable {
             student.setAge(age == null ? 0 : age);
             student.setLocation(locationField.getText());
             student.setHobbies(hobbiesArea.getText());
-            student.setWhyLearnEnglish(motivesArea.getText());
-            student.setOtherNotes(notesArea.getText());
+            student.setMotive(motivesArea.getText());
+            student.setOtherInfo(notesArea.getText());
             Account account = student.getAccount();
             for (Student s : account.getStudents()) {
                 if (s.getId() == student.getId()) {

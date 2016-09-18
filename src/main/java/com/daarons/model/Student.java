@@ -46,8 +46,8 @@ public class Student implements Serializable {
     private int age;
     private String location;
     private String hobbies;
-    private String whyLearnEnglish;
-    private String otherNotes;
+    private String motive;
+    private String otherInfo;
     @OneToMany(fetch = FetchType.EAGER, mappedBy = "student", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Session> sessions;
 
@@ -58,22 +58,22 @@ public class Student implements Serializable {
         this.age = 0;
         this.location = "";
         this.hobbies = "";
-        this.whyLearnEnglish = "";
-        this.otherNotes = "";
+        this.motive = "";
+        this.otherInfo = "";
         this.sessions = new ArrayList();
     }
 
     public Student(Account account, String chineseName, String englishName,
-            int age, String location, String hobbies, String whyLearnEnglish,
-            String otherNotes) {
+            int age, String location, String hobbies, String motive,
+            String otherInfo) {
         this.account = account;
         this.chineseName = chineseName;
         this.englishName = englishName;
         this.age = age;
         this.location = location;
         this.hobbies = hobbies;
-        this.whyLearnEnglish = whyLearnEnglish;
-        this.otherNotes = otherNotes;
+        this.motive = motive;
+        this.otherInfo = otherInfo;
         this.sessions = new ArrayList();
     }
 
@@ -171,29 +171,29 @@ public class Student implements Serializable {
     /**
      * @return the whyLearnEnglish
      */
-    public String getWhyLearnEnglish() {
-        return whyLearnEnglish;
+    public String getMotive() {
+        return motive;
     }
 
     /**
      * @param whyLearnEnglish the whyLearnEnglish to set
      */
-    public void setWhyLearnEnglish(String whyLearnEnglish) {
-        this.whyLearnEnglish = whyLearnEnglish;
+    public void setMotive(String whyLearnEnglish) {
+        this.motive = whyLearnEnglish;
     }
 
     /**
      * @return the otherNotes
      */
-    public String getOtherNotes() {
-        return otherNotes;
+    public String getOtherInfo() {
+        return otherInfo;
     }
 
     /**
      * @param otherNotes the otherNotes to set
      */
-    public void setOtherNotes(String otherNotes) {
-        this.otherNotes = otherNotes;
+    public void setOtherInfo(String otherNotes) {
+        this.otherInfo = otherNotes;
     }
 
     /**

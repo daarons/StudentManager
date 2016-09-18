@@ -143,7 +143,7 @@ public class SessionController implements Initializable {
         calendarPicker.setCalendar(calendar);
         timePicker.setCalendar(calendar);
 
-        Note sessionNotes = session.getNotes();
+        Note sessionNotes = session.getNote();
         if (sessionNotes != null) {
             fluencyCoherenceNotes.setText(sessionNotes.getFluencyAndCoherence());
             vocabularyNotes.setText(sessionNotes.getVocabulary());
@@ -185,15 +185,15 @@ public class SessionController implements Initializable {
             Date newTimestamp = new Timestamp(c.getTimeInMillis());
             session.setTimestamp(newTimestamp);
 
-            Note notes = new Note();
-            notes.setFluencyAndCoherence(fluencyCoherenceNotes.getText());
-            notes.setVocabulary(vocabularyNotes.getText());
-            notes.setGrammar(grammarNotes.getText());
-            notes.setPronunciation(pronunciationNotes.getText());
-            notes.setInteractionAndEngagement(interactEngageNotes.getText());
-            notes.setCommunicationSkills(commSkillsNotes.getText());
-            notes.setSession(session);
-            session.setNotes(notes);
+            Note note = new Note();
+            note.setFluencyAndCoherence(fluencyCoherenceNotes.getText());
+            note.setVocabulary(vocabularyNotes.getText());
+            note.setGrammar(grammarNotes.getText());
+            note.setPronunciation(pronunciationNotes.getText());
+            note.setInteractionAndEngagement(interactEngageNotes.getText());
+            note.setCommunicationSkills(commSkillsNotes.getText());
+            note.setSession(session);
+            session.setNote(note);
 
             Review review = new Review();
             review.setFluencyAndCoherence(
