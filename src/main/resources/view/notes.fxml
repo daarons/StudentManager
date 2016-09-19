@@ -33,42 +33,42 @@
                 <children>
                     <Label text="FluencyCoherence" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="fluencyCoherenceNote"
-                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                              styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="Vocabulary" styleClass="notesLabel" id="noteLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="vocabularyNote"
-                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                              styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="Grammar" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="grammarNote"
-                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                              styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="Pronunciation" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="pronunciationNote"
-                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                              styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="InteractEngage" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="interactEngageNote"
-                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                              styleClass="notes" />
                 </children>
             </VBox>
             <VBox fillWidth="true">
                 <children>
                     <Label text="CommSkills" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="commSkillsNote"
-                              onKeyPressed="#handleTabAction" styleClass="notes" />
+                              styleClass="notes" />
                 </children>
             </VBox>
         </TilePane> 

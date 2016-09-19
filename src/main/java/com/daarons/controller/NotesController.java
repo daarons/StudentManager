@@ -21,8 +21,7 @@ import com.daarons.model.Account;
 import com.daarons.model.Note;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
-import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
-import com.sun.javafx.scene.control.skin.TextAreaSkin;
+import com.daarons.util.*;
 import java.net.URL;
 import java.util.Calendar;
 import java.util.List;
@@ -35,7 +34,6 @@ import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Button;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
@@ -78,19 +76,6 @@ public class NotesController implements Initializable {
     private TextField sessionIdField;
 
     @FXML
-    private void handleTabAction(KeyEvent event) throws Exception {
-        if (event.getCode() == KeyCode.TAB) {
-            TextArea text = (TextArea) event.getSource();
-            TextAreaSkin skin = (TextAreaSkin) text.getSkin();
-            if (skin.getBehavior() instanceof TextAreaBehavior) {
-                TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
-                behavior.callAction("TraverseNext");
-                event.consume();
-            }
-        }
-    }
-
-    @FXML
     private void saveNotes(MouseEvent event) {
         if (event.getSource() == saveBtn) {
             List<Account> accounts = dao.getAccountsLike(accountField.getText());
@@ -110,10 +95,12 @@ public class NotesController implements Initializable {
                 student.setEnglishName(studentField.getText());
                 student.setAccount(account);
                 session = new Session(student, timePicker.getCalendar().getTime());
-                note = new Note(session, fluencyCoherenceNote.getText(),
-                        vocabularyNote.getText(), grammarNote.getText(),
-                        pronunciationNote.getText(), interactEngageNote.getText(),
-                        commSkillsNote.getText());
+                note = new Note(session, fluencyCoherenceNote.getText().replaceAll("`", ""),
+                        vocabularyNote.getText().replaceAll("`", ""), 
+                        grammarNote.getText().replaceAll("`", ""),
+                        pronunciationNote.getText().replaceAll("`", ""), 
+                        interactEngageNote.getText().replaceAll("`", ""),
+                        commSkillsNote.getText().replaceAll("`", ""));
                 session.setNote(note);
                 session.setSessionId(Long.parseLong(sessionIdField.getText()));
                 student.getSessions().add(session);
@@ -124,10 +111,12 @@ public class NotesController implements Initializable {
                 student.setEnglishName(studentField.getText());
                 student.setAccount(account);
                 session = new Session(student, timePicker.getCalendar().getTime());
-                note = new Note(session, fluencyCoherenceNote.getText(),
-                        vocabularyNote.getText(), grammarNote.getText(),
-                        pronunciationNote.getText(), interactEngageNote.getText(),
-                        commSkillsNote.getText());
+                note = new Note(session, fluencyCoherenceNote.getText().replaceAll("`", ""),
+                        vocabularyNote.getText().replaceAll("`", ""),
+                        grammarNote.getText().replaceAll("`", ""),
+                        pronunciationNote.getText().replaceAll("`", ""),
+                        interactEngageNote.getText().replaceAll("`", ""),
+                        commSkillsNote.getText().replaceAll("`", ""));
                 session.setNote(note);
                 session.setSessionId(Long.parseLong(sessionIdField.getText()));
                 student.getSessions().add(session);
@@ -138,10 +127,12 @@ public class NotesController implements Initializable {
                 for (Student s : account.getStudents()) {
                     if (s.getId() == student.getId()) {
                         session = new Session(s, timePicker.getCalendar().getTime());
-                        note = new Note(session, fluencyCoherenceNote.getText(),
-                                vocabularyNote.getText(), grammarNote.getText(),
-                                pronunciationNote.getText(), interactEngageNote.getText(),
-                                commSkillsNote.getText());
+                        note = new Note(session, fluencyCoherenceNote.getText().replaceAll("`", ""),
+                                vocabularyNote.getText().replaceAll("`", ""),
+                                grammarNote.getText().replaceAll("`", ""),
+                                pronunciationNote.getText().replaceAll("`", ""),
+                                interactEngageNote.getText().replaceAll("`", ""),
+                                commSkillsNote.getText().replaceAll("`", ""));
                         session.setNote(note);
                         session.setSessionId(Long.parseLong(sessionIdField.getText()));
                         s.getSessions().add(session);
@@ -185,7 +176,13 @@ public class NotesController implements Initializable {
 
         studentField.disableProperty().bind(
                 Bindings.isEmpty(accountField.textProperty()));
-
+        
+        fluencyCoherenceNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        vocabularyNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        grammarNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        pronunciationNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        interactEngageNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        commSkillsNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
     }
 
 }
