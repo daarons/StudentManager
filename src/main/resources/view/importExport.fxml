@@ -44,7 +44,7 @@
                         <Label text="Import"  />
                         <Button fx:id="importBtn" id="importBtn" minHeight="128" minWidth="128" 
                                 maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
-                                onAction="#launchFileChooser"/>
+                                onAction="#chooseFolder"/>
                     </children>
                 </VBox>
                 <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
@@ -54,7 +54,7 @@
                         <Label text="Export"  />
                         <Button fx:id="exportBtn" id="exportBtn" minHeight="128" minWidth="128" 
                                 maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
-                                onAction="#launchFileChooser"/>
+                                onAction="#chooseFolder"/>
                     </children>
                 </VBox>
                 <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
@@ -62,7 +62,7 @@
                       GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS" 
                       GridPane.valignment="BOTTOM" GridPane.columnSpan="2" >
                     <children>
-                        <Text fx:id="fileName"/>
+                        <Text fx:id="folderName"/>
                         <Button id="okBtn" VBox.vgrow="ALWAYS" minWidth="30" minHeight="30" 
                                 maxWidth="200" maxHeight="200" onAction="#importExport">
                             <tooltip>
