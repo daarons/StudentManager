@@ -33,7 +33,7 @@ import javax.persistence.OneToMany;
 @Entity
 public class Account implements Serializable {
     @Id 
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private String name;
     @OneToMany(fetch=FetchType.EAGER, mappedBy="account", cascade=CascadeType.ALL, orphanRemoval=true)

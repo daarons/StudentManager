@@ -36,7 +36,7 @@ import javax.persistence.TemporalType;
 @Entity
 public class Session implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     private long sessionId;
     @ManyToOne
