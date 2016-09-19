@@ -15,22 +15,13 @@
  */
 package com.daarons.DAO;
 
+import java.io.File;
+
 /**
  *
  * @author David
  */
-public class DAOFactory {
-    public static AccountDAO getAccountDAO(String impl){
-        if(impl.equalsIgnoreCase("derby")){
-            return new AccountDAODerbyImpl();
-        }
-        return null;
-    }
-    
-    public static ImportExportDAO getImportExportDAO(String impl){
-        if(impl.equalsIgnoreCase("derby")){
-            return new ImportExportDAODerbyImpl();
-        }
-        return null;
-    }
+public interface ImportExportDAO {
+    public boolean importDB(File folder);
+    public boolean exportDB(File folder);
 }
