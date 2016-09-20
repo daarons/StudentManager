@@ -13,24 +13,18 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.daarons.DAO;
+package com.daarons.util;
 
 /**
  *
  * @author David
  */
-public class DAOFactory {
-    public static AccountDAO getAccountDAO(String impl){
-        if(impl.equalsIgnoreCase("derby")){
-            return new AccountDAODerbyImpl();
+public class Validator {
+
+    public static boolean isNumber(String text) {
+        if (text.matches("^[0-9]+$")) {
+            return true;
         }
-        return null;
-    }
-    
-    public static ImportExportDAO getImportExportDAO(String impl){
-        if(impl.equalsIgnoreCase("derby")){
-            return new ImportExportDAODerbyImpl();
-        }
-        return null;
+        return false;
     }
 }

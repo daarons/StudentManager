@@ -35,7 +35,7 @@ import javax.persistence.OneToOne;
 public class Review implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @GeneratedValue(strategy = GenerationType.AUTO)
     private long id;
     @OneToOne
     @JoinColumn(name = "session", nullable = false)

@@ -18,23 +18,26 @@ package com.daarons.controller;
 import com.daarons.DAO.AccountDAO;
 import com.daarons.DAO.DAOFactory;
 import com.daarons.DAO.EMFSingleton;
+import com.daarons.DAO.ImportExportDAO;
 import com.daarons.model.Account;
 import java.io.File;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
-import java.sql.SQLException;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 import javax.persistence.EntityManager;
 import org.hibernate.Session;
-import org.hibernate.jdbc.Work;
 
 /**
  * FXML Controller class
@@ -43,100 +46,82 @@ import org.hibernate.jdbc.Work;
  */
 public class ImportExportController implements Initializable {
 
-    private File file;
-    private boolean importDb;
+    private File folder;
+    private boolean importDB;
+    private boolean exportDB;
+    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("derby");
 
     @FXML
     private Button importBtn;
     @FXML
     private Button exportBtn;
     @FXML
-    private Text fileName;
+    private Text folderName;
 
     @FXML
-    private void launchFileChooser(ActionEvent event) throws Exception {
+    private void chooseFolder(ActionEvent event) throws Exception {
+        importDB = false;
+        exportDB = false;
         DirectoryChooser dc = new DirectoryChooser();
         if (event.getSource() == importBtn) {
-            importDb = true;
+            Alert importAlert = new Alert(AlertType.CONFIRMATION, "Importing a "
+                    + "database will delete the current database. Do you want "
+                    + "to continue?");
+            Optional<ButtonType> result = importAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                importDB = true;
+            } else {
+                folderName.setText("No folder selected");
+                return;
+            }
         } else if (event.getSource() == exportBtn) {
-            importDb = false;            
+            exportDB = true;
         }
-        file = dc.showDialog(null);
 
-        if (file != null) {
-            fileName.setText("Selected: " + file.getPath());
+        folder = dc.showDialog(null);
+
+        if (folder == null) {
+            folderName.setText("No folder selected");
         } else {
-            fileName.setText("No file selected");
+            folderName.setText("Selected: " + folder.getPath());
         }
     }
 
     @FXML
     private void importExport(ActionEvent event) {
-        EntityManager em = null;
-        Session session = null;
-        if (!importDb) {
-            try {
-                em = EMFSingleton.getEntityManagerFactory()
-                        .createEntityManager();
-                em.getTransaction().begin();
-                session = em.unwrap(Session.class);
-                session.doWork((Connection connection) -> {
-                    String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
-                        "NOTE", "REVIEW"};
-                    for (int i = 0; i < tables.length; i++) {
-                        PreparedStatement ps = connection.prepareStatement(
-                                "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
-                        ps.setString(1, null);
-                        ps.setString(2, tables[i]);
-                        ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
-                        ps.setString(4, "`");
-                        ps.setString(5, null);
-                        ps.setString(6, null);
-                        ps.execute();
-                    }
-                    connection.close();
-                });
-            } catch (Exception e) {
-                //if user attempts to overwrite previously written .dat files
-                //an error is thrown and the files are not overwritten
-                //warn user that this happened
-                e.printStackTrace();
-            } finally {
-                em.close();
+        if (folder == null) {
+            Alert folderAlert = new Alert(AlertType.ERROR, "No folder selected!");
+            folderAlert.showAndWait();
+        } else if (importDB) {
+            Alert importAlert = new Alert(AlertType.CONFIRMATION, "Importing a database"
+                    + " will delete the current database. Do you want to continue?");
+            Optional<ButtonType> result = importAlert.showAndWait();
+            if (result.isPresent() && result.get() == ButtonType.OK) {
+                boolean isImported = dao.importDB(folder);
+                if(isImported){
+                    folderName.setText("Import successful!");
+                }else{
+                    importAlert = new Alert(AlertType.ERROR, "Import failed!\n"
+                            + "Make sure the database is working properly.");
+                    importAlert.showAndWait();
+                    folderName.setText("Import failed!");
+                }
             }
-        } else if (importDb) {
-            try {
-                //importing must delete all accounts
-                AccountDAO dao = DAOFactory.getAccountDAO("derby");
-                List<Account> accounts = dao.getAccountsLike("*");
-                accounts.forEach(account -> dao.deleteAccount(account));
-                em = EMFSingleton.getEntityManagerFactory()
-                        .createEntityManager();
-                em.getTransaction().begin();
-                session = em.unwrap(Session.class);
-                session.doWork((Connection connection) -> {
-                    String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
-                        "NOTE", "REVIEW"};
-                    for (int i = 0; i < tables.length; i++) {
-                        PreparedStatement ps = connection.prepareStatement(
-                                "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
-                        ps.setString(1, null);
-                        ps.setString(2, tables[i]);
-                        ps.setString(3, file.getPath() + File.separator + tables[i] + ".dat");
-                        ps.setString(4, "`");
-                        ps.setString(5, null);
-                        ps.setString(6, null);
-                        ps.setString(7, "1");
-                        ps.execute();
-                    }
-                    connection.close();
-                });
-            } catch (Exception e) {
-                e.printStackTrace();
-            } finally {
-                em.close();
+        }else if(exportDB){
+            boolean isExported = dao.exportDB(folder);
+            if(isExported){
+                folderName.setText("Export successful!");
+            }else{
+                Alert exportAlert = new Alert(AlertType.ERROR, "Export failed!\n"
+                        + "Make sure that the database is working properly.\n"
+                        + "If you are trying to overwrite previously exported files, "
+                        + "the export will fail. Make sure that you are not exporting "
+                        + "to a folder that already contains exported files.");
+                exportAlert.showAndWait();
+                folderName.setText("Export failed!");
             }
         }
+        folder = null;
     }
 
     /**
@@ -144,7 +129,7 @@ public class ImportExportController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        folderName.setText("No folder selected");
     }
 
 }
