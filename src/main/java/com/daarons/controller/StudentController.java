@@ -21,6 +21,8 @@ import com.daarons.model.AbstractTreeItem;
 import com.daarons.model.Account;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
+import com.daarons.util.HandleTab;
+import com.daarons.util.Validator;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import extfx.scene.chart.DateAxis;
@@ -44,6 +46,8 @@ import javafx.scene.Scene;
 import javafx.scene.chart.LineChart;
 import javafx.scene.chart.NumberAxis;
 import javafx.scene.chart.XYChart;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
@@ -102,21 +106,6 @@ public class StudentController implements Initializable {
         this.student = student;
     }
 
-    EventHandler<KeyEvent> handleTabAction = new EventHandler<KeyEvent>() {
-        @Override
-        public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.TAB) {
-                TextArea text = (TextArea) event.getSource();
-                TextAreaSkin skin = (TextAreaSkin) text.getSkin();
-                if (skin.getBehavior() instanceof TextAreaBehavior) {
-                    TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
-                    behavior.callAction("TraverseNext");
-                    event.consume();
-                }
-            }
-        }
-    };
-
     private void viewSession(Session session) {
         FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/session.fxml"));
         SessionController sessionController = new SessionController(session);
@@ -154,26 +143,35 @@ public class StudentController implements Initializable {
         notesArea.setText(student.getOtherInfo());
 
         saveBtn.setOnAction((ActionEvent event) -> {
-            student.setEnglishName(englishNameField.getText());
-            student.setChineseName(chineseNameField.getText());
-            Integer age = Integer.getInteger(ageField.getText());
-            student.setAge(age == null ? 0 : age);
-            student.setLocation(locationField.getText());
-            student.setHobbies(hobbiesArea.getText());
-            student.setMotive(motivesArea.getText());
-            student.setOtherInfo(notesArea.getText());
-            Account account = student.getAccount();
-            for (Student s : account.getStudents()) {
-                if (s.getId() == student.getId()) {
-                    s = student;
+            if ((!englishNameField.getText().trim().isEmpty()
+                    || !chineseNameField.getText().trim().isEmpty())
+                    && Validator.isNumber(ageField.getText())) {
+                student.setEnglishName(englishNameField.getText());
+                student.setChineseName(chineseNameField.getText());
+                Integer age = Integer.getInteger(ageField.getText());
+                student.setAge(age == null ? 0 : age);
+                student.setLocation(locationField.getText());
+                student.setHobbies(hobbiesArea.getText());
+                student.setMotive(motivesArea.getText());
+                student.setOtherInfo(notesArea.getText());
+                Account account = student.getAccount();
+                for (Student s : account.getStudents()) {
+                    if (s.getId() == student.getId()) {
+                        s = student;
+                    }
                 }
+                dao.updateAccount(account);
+            } else {
+                Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
+                        + "at least one name field is filled in and the age is a "
+                        + "number before saving.");
+                saveAlert.showAndWait();
             }
-            dao.updateAccount(account);
         });
 
-        hobbiesArea.setOnKeyPressed(handleTabAction);
-        motivesArea.setOnKeyPressed(handleTabAction);
-        notesArea.setOnKeyPressed(handleTabAction);
+        hobbiesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        motivesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        notesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
 
         sessionTableView = new TreeTableView();
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
