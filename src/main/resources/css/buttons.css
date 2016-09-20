@@ -1,0 +1,70 @@
+/*
+Copyright 2016 David Aarons.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+*/
+/* 
+    Created on : Sep 20, 2016, 4:04:22 PM
+    Author     : David
+*/
+
+.button {
+    -fx-font-weight: bold;
+    -fx-background-repeat: no-repeat;
+    -fx-background-position: center;
+    -fx-background-size: 80%; 
+    -fx-background-radius: 3em;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-focus-traversable: false;
+}
+
+#homeBtn{
+    -fx-background-image: url("/image/house.png");
+}
+
+#accountsBtn{
+    -fx-background-image: url("/image/user.png");
+}
+
+#notesBtn{
+    -fx-background-image: url("/image/notepad.png");
+}
+
+#importExportBtn{
+    -fx-background-image: url("/image/file-zip-alt.png");
+}
+
+#infoBtn{
+    -fx-background-image: url("/image/sign-info.png");
+}
+
+#saveBtn{
+    -fx-background-image: url("/image/floppy.png");
+}
+
+#importBtn{
+    -fx-background-image: url("/image/box-in.png");
+}
+
+#exportBtn{
+    -fx-background-image: url("/image/box-out.png");
+}
+
+#okBtn{
+    -fx-background-image: url("/image/sign-check.png");
+}
+
+#addBtn{
+    -fx-background-image: url("/image/sign-add.png");
+}
