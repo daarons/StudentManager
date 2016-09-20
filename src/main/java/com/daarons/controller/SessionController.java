@@ -23,6 +23,8 @@ import com.daarons.model.Review;
 import com.daarons.model.ReviewSection;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
+import com.daarons.util.HandleTab;
+import com.daarons.util.Validator;
 import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
 import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import java.net.URL;
@@ -32,7 +34,6 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -41,6 +42,8 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
 import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.TextArea;
@@ -131,7 +134,7 @@ public class SessionController implements Initializable {
                 ((ChoiceBox) node).setItems(cbList);
                 ((ChoiceBox) node).getSelectionModel().selectFirst();
             } else if (node instanceof TextArea) {
-                ((TextArea) node).setOnKeyPressed(handleTabAction);
+                ((TextArea) node).setOnKeyPressed(new HandleTab());
             }
         }
 
@@ -170,65 +173,71 @@ public class SessionController implements Initializable {
         }
 
         saveBtn.setOnAction((ActionEvent event) -> {
-            long sessionId = Long.parseLong(sessionIdField.getText());
-            session.setSessionId(sessionId);
+            if (Validator.isNumber(sessionIdField.getText())) {
+                long sessionId = Long.parseLong(sessionIdField.getText());
+                session.setSessionId(sessionId);
 
-            Calendar newCalendar = calendarPicker.getCalendar();
-            Calendar newTimeCalendar = timePicker.getCalendar();
-            int day = newCalendar.get(Calendar.DAY_OF_WEEK);
-            int month = newCalendar.get(Calendar.MONTH);
-            int date = newCalendar.get(Calendar.DATE);
-            int year = newCalendar.get(Calendar.YEAR);
-            int hour = newTimeCalendar.get(Calendar.HOUR_OF_DAY);
-            int min = newTimeCalendar.get(Calendar.MINUTE);
-            Calendar c = new GregorianCalendar(year, month, date, hour, min);
-            Date newTimestamp = new Timestamp(c.getTimeInMillis());
-            session.setTimestamp(newTimestamp);
+                Calendar newCalendar = calendarPicker.getCalendar();
+                Calendar newTimeCalendar = timePicker.getCalendar();
+                int day = newCalendar.get(Calendar.DAY_OF_WEEK);
+                int month = newCalendar.get(Calendar.MONTH);
+                int date = newCalendar.get(Calendar.DATE);
+                int year = newCalendar.get(Calendar.YEAR);
+                int hour = newTimeCalendar.get(Calendar.HOUR_OF_DAY);
+                int min = newTimeCalendar.get(Calendar.MINUTE);
+                Calendar c = new GregorianCalendar(year, month, date, hour, min);
+                Date newTimestamp = new Timestamp(c.getTimeInMillis());
+                session.setTimestamp(newTimestamp);
 
-            Note note = new Note();
-            note.setFluencyAndCoherence(fluencyCoherenceNotes.getText());
-            note.setVocabulary(vocabularyNotes.getText());
-            note.setGrammar(grammarNotes.getText());
-            note.setPronunciation(pronunciationNotes.getText());
-            note.setInteractionAndEngagement(interactEngageNotes.getText());
-            note.setCommunicationSkills(commSkillsNotes.getText());
-            note.setSession(session);
-            session.setNote(note);
+                Note note = new Note();
+                note.setFluencyAndCoherence(fluencyCoherenceNotes.getText().replaceAll("`", ""));
+                note.setVocabulary(vocabularyNotes.getText().replaceAll("`", ""));
+                note.setGrammar(grammarNotes.getText().replaceAll("`", ""));
+                note.setPronunciation(pronunciationNotes.getText().replaceAll("`", ""));
+                note.setInteractionAndEngagement(interactEngageNotes.getText().replaceAll("`", ""));
+                note.setCommunicationSkills(commSkillsNotes.getText().replaceAll("`", ""));
+                note.setSession(session);
+                session.setNote(note);
 
-            Review review = new Review();
-            review.setFluencyAndCoherence(
-                    new ReviewSection((int) fluencyCoherenceBox.getValue(),
-                            fluencyCoherenceReview.getText()));
-            review.setVocabulary(
-                    new ReviewSection((int) vocabularyBox.getValue(),
-                            vocabularyReview.getText()));
-            review.setGrammar(
-                    new ReviewSection((int) grammarBox.getValue(),
-                            grammarReview.getText()));
-            review.setPronunciation(
-                    new ReviewSection((int) pronunciationBox.getValue(),
-                            pronunciationReview.getText()));
-            review.setInteractionAndEngagement(
-                    new ReviewSection((int) interactEngageBox.getValue(),
-                            interactEngageReview.getText()));
-            review.setCommunicationSkills(
-                    new ReviewSection((int) commSkillsBox.getValue(),
-                            commSkillsReview.getText()));
-            review.setSession(session);
-            session.setReview(review);
+                Review review = new Review();
+                review.setFluencyAndCoherence(
+                        new ReviewSection((int) fluencyCoherenceBox.getValue(),
+                                fluencyCoherenceReview.getText().replaceAll("`", "")));
+                review.setVocabulary(
+                        new ReviewSection((int) vocabularyBox.getValue(),
+                                vocabularyReview.getText().replaceAll("`", "")));
+                review.setGrammar(
+                        new ReviewSection((int) grammarBox.getValue(),
+                                grammarReview.getText().replaceAll("`", "")));
+                review.setPronunciation(
+                        new ReviewSection((int) pronunciationBox.getValue(),
+                                pronunciationReview.getText().replaceAll("`", "")));
+                review.setInteractionAndEngagement(
+                        new ReviewSection((int) interactEngageBox.getValue(),
+                                interactEngageReview.getText().replaceAll("`", "")));
+                review.setCommunicationSkills(
+                        new ReviewSection((int) commSkillsBox.getValue(),
+                                commSkillsReview.getText().replaceAll("`", "")));
+                review.setSession(session);
+                session.setReview(review);
 
-            Account account = session.getStudent().getAccount();
-            for (Student student : account.getStudents()) {
-                if (student.getId() == session.getStudent().getId()) {
-                    for (Session s : student.getSessions()) {
-                        if (s.getId() == session.getId()) {
-                            s = session;
-                            break;
+                Account account = session.getStudent().getAccount();
+                for (Student student : account.getStudents()) {
+                    if (student.getId() == session.getStudent().getId()) {
+                        for (Session s : student.getSessions()) {
+                            if (s.getId() == session.getId()) {
+                                s = session;
+                                break;
+                            }
                         }
                     }
                 }
+                dao.updateAccount(account);
+            }else{
+                Alert saveAlert = new Alert(AlertType.ERROR, "The session ID "
+                        + "field does not contain a session ID.");
+                saveAlert.showAndWait();
             }
-            dao.updateAccount(account);
         });
 
     }
@@ -247,20 +256,5 @@ public class SessionController implements Initializable {
             }
         }
     }
-
-    EventHandler<KeyEvent> handleTabAction = new EventHandler<KeyEvent>() {
-        @Override
-        public void handle(KeyEvent event) {
-            if (event.getCode() == KeyCode.TAB) {
-                TextArea text = (TextArea) event.getSource();
-                TextAreaSkin skin = (TextAreaSkin) text.getSkin();
-                if (skin.getBehavior() instanceof TextAreaBehavior) {
-                    TextAreaBehavior behavior = (TextAreaBehavior) skin.getBehavior();
-                    behavior.callAction("TraverseNext");
-                    event.consume();
-                }
-            }
-        }
-    };
 
 }
