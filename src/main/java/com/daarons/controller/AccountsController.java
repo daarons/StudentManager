@@ -31,6 +31,9 @@ import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextField;
@@ -92,7 +95,6 @@ public class AccountsController implements Initializable {
         gridPane.add(accountsView, 0, 1);
     }
 
-
     public class AccountTreeItem extends AbstractTreeItem {
 
         private Account account;
@@ -119,13 +121,21 @@ public class AccountsController implements Initializable {
             });
             MenuItem deleteAccount = new MenuItem("Delete Account");
             deleteAccount.setOnAction((ActionEvent t) -> {
-                dao.deleteAccount(account);
-                this.getParent().getChildren().remove(this);
+                Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                        + "sure that you want to delete account "
+                        + account.getName() + " ?");
+                deleteAlert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        dao.deleteAccount(account);
+                        this.getParent().getChildren().remove(this);
+                    }
+                });
             });
             return new ContextMenu(addStudent, deleteAccount);
         }
 
         @Override
+
         public Object getObject() {
             return account;
         }
@@ -159,7 +169,7 @@ public class AccountsController implements Initializable {
                 Scene scene = null;
                 Parent root = null;
                 try {
-                    root = (Parent)fxmlLoader.load();
+                    root = (Parent) fxmlLoader.load();
                 } catch (IOException ex) {
                     System.out.println(ex);
                 }
@@ -171,16 +181,23 @@ public class AccountsController implements Initializable {
             });
             MenuItem deleteStudent = new MenuItem("Delete Student");
             deleteStudent.setOnAction((ActionEvent t) -> {
-                int index = this.getParent().getChildren().indexOf(this);
-                Account parentAccount = ((Account) ((AbstractTreeItem) this.getParent()).getObject());
-                Student r = parentAccount.getStudents().remove(index);
-                Account newParentAccount = dao.updateAccount(parentAccount);
-                ((AbstractTreeItem) this.getParent()).setObject(newParentAccount);
-                List<AbstractTreeItem> children = this.getParent().getChildren();
-                for (AbstractTreeItem ati : children) {
-                    ((Student) ati.getObject()).setAccount(newParentAccount);
-                }
-                this.getParent().getChildren().remove(this);
+                Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                        + "sure that you want to delete student "
+                        + student.toString() + " ?");
+                deleteAlert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        int index = this.getParent().getChildren().indexOf(this);
+                        Account parentAccount = ((Account) ((AbstractTreeItem) this.getParent()).getObject());
+                        Student r = parentAccount.getStudents().remove(index);
+                        Account newParentAccount = dao.updateAccount(parentAccount);
+                        ((AbstractTreeItem) this.getParent()).setObject(newParentAccount);
+                        List<AbstractTreeItem> children = this.getParent().getChildren();
+                        for (AbstractTreeItem ati : children) {
+                            ((Student) ati.getObject()).setAccount(newParentAccount);
+                        }
+                        this.getParent().getChildren().remove(this);
+                    }
+                });
             });
             return new ContextMenu(viewStudent, deleteStudent);
         }
