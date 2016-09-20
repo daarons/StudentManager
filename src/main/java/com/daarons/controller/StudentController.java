@@ -23,8 +23,6 @@ import com.daarons.model.Session;
 import com.daarons.model.Student;
 import com.daarons.util.HandleTab;
 import com.daarons.util.Validator;
-import com.sun.javafx.scene.control.behavior.TextAreaBehavior;
-import com.sun.javafx.scene.control.skin.TextAreaSkin;
 import extfx.scene.chart.DateAxis;
 import java.io.IOException;
 import java.lang.reflect.Constructor;
@@ -58,7 +56,6 @@ import javafx.scene.control.TreeItem;
 import javafx.scene.control.TreeTableColumn;
 import javafx.scene.control.TreeTableRow;
 import javafx.scene.control.TreeTableView;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
@@ -146,14 +143,14 @@ public class StudentController implements Initializable {
             if ((!englishNameField.getText().trim().isEmpty()
                     || !chineseNameField.getText().trim().isEmpty())
                     && Validator.isNumber(ageField.getText())) {
-                student.setEnglishName(englishNameField.getText());
-                student.setChineseName(chineseNameField.getText());
+                student.setEnglishName(englishNameField.getText().replaceAll("`", ""));
+                student.setChineseName(chineseNameField.getText().replaceAll("`", ""));
                 Integer age = Integer.getInteger(ageField.getText());
                 student.setAge(age == null ? 0 : age);
-                student.setLocation(locationField.getText());
-                student.setHobbies(hobbiesArea.getText());
-                student.setMotive(motivesArea.getText());
-                student.setOtherInfo(notesArea.getText());
+                student.setLocation(locationField.getText().replaceAll("`", ""));
+                student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
+                student.setMotive(motivesArea.getText().replaceAll("`", ""));
+                student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
                 Account account = student.getAccount();
                 for (Student s : account.getStudents()) {
                     if (s.getId() == student.getId()) {
