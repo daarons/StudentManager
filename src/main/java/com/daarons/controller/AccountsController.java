@@ -272,16 +272,16 @@ public class AccountsController implements Initializable {
                     Account a = null;
                     if (o instanceof Account) {
                         a = (Account) o;
-                        a.setName(textField.getText());
+                        a.setName(textField.getText().replaceAll("`", ""));
                         ti.setValue(a);
                         ti.setObject(a);
                     } else if (o instanceof Student) {
                         Student s = (Student) o;
                         a = s.getAccount();
                         if (containsChinese(textField.getText())) {
-                            s.setChineseName(textField.getText());
+                            s.setChineseName(textField.getText().replaceAll("`", ""));
                         } else {
-                            s.setEnglishName(textField.getText());
+                            s.setEnglishName(textField.getText().replaceAll("`", ""));
                         }
                         int index = getTreeItem().getParent().getChildren().indexOf(ti);
                         a.getStudents().set(index, s);
@@ -289,7 +289,7 @@ public class AccountsController implements Initializable {
                         ti.setObject(s);
                     }
                     Account updatedAccount = dao.updateAccount(a);
-                    commitEdit(textField.getText());
+                    commitEdit(textField.getText().replaceAll("`", ""));
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 }
