@@ -14,7 +14,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
             fx:controller="com.daarons.controller.AccountsController" minHeight="400"
-            minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
         <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
               maxHeight="Infinity" maxWidth="Infinity">
@@ -27,7 +27,7 @@
         </HBox>
     </top>
     <center>
-        <GridPane fx:id="gridPane" alignment="CENTER" hgap="25" vgap="25" >
+        <GridPane fx:id="gridPane" styleClass="pane" alignment="CENTER" hgap="25" vgap="25" >
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>

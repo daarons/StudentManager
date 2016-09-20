@@ -12,7 +12,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
             fx:controller="com.daarons.controller.InfoController" minHeight="400"
-            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" >
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
         <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
               maxHeight="Infinity" maxWidth="Infinity">

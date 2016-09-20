@@ -1,3 +1,11 @@
+.root, .pane{
+    -fx-background-color: black;
+}
+
+.text, .label{
+    -fx-font-size: 2em;
+}
+
 .button {
     -fx-font-weight: bold;
     -fx-background-repeat: no-repeat;
@@ -51,10 +59,6 @@
 
 #searchAccountsField, #addAccountField{
     -fx-padding: 10px;
-}
-
-.text, .label{
-    -fx-font-size: 2em;
 }
 
 .text-area{
