@@ -11,7 +11,7 @@
 
 <BorderPane minHeight="400.0" minWidth="400.0" xmlns:fx="http://javafx.com/fxml/1" 
             fx:controller="com.daarons.controller.ImportExportController" 
-            stylesheets="@/css/style.css" styleClass="pane">
+            stylesheets="@/css/main.css" styleClass="pane">
     <top>
         <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
               maxHeight="Infinity" maxWidth="Infinity">

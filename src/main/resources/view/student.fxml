@@ -8,7 +8,7 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/style.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/main.css" 
             minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <!-- The controller is com.daarons.controller.StudentController. It is set
     manually to pass the needed student to the controller to be displayed. -->

@@ -3,7 +3,6 @@
 }
 
 .text, .label{
-    -fx-fill: #cccccc; 
     -fx-font-size: 2em;
 }
 

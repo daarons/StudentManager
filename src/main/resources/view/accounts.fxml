@@ -12,7 +12,7 @@
 <?import javafx.scene.control.TreeTableColumn?>
 <?import javafx.scene.control.cell.TreeItemPropertyValueFactory ?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/main.css" 
             fx:controller="com.daarons.controller.AccountsController" minHeight="400"
             minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
