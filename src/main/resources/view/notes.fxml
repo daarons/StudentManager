@@ -11,7 +11,7 @@
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/style.css" 
             fx:controller="com.daarons.controller.NotesController" minHeight="400"
-            minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
         <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
               maxHeight="Infinity" maxWidth="Infinity">
@@ -25,7 +25,7 @@
     </top>
     <center>
         <TilePane hgap="10" maxHeight="Infinity" maxWidth="Infinity" fx:id="tilePane"
-                prefColumns="2" >
+                prefColumns="2" styleClass="pane">
             <BorderPane.margin>
                 <Insets top="10" bottom="10" left="25"/>
             </BorderPane.margin>
