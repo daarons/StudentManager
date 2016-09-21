@@ -3,7 +3,26 @@
 }
 
 .text, .label{
+    -fx-text-fill: #cccccc;
     -fx-font-size: 2em;
+}
+
+.menu-item .label{
+    -fx-text-fill: black;
+}
+
+.tree-table-view .label, .choice-box .label, .value{
+    -fx-text-fill: black;
+}
+
+.CalendarTimePickerSkin .timeLabel{
+    -fx-fill: -fx-accent;
+    -fx-font-weight: bold;
+    -fx-opacity: 1;
+}
+
+#hourSlider{
+    -fx-padding: 2.5em 0em 0em 0em;
 }
 
 #searchAccountsField, #addAccountField{
