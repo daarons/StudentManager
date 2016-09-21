@@ -19,7 +19,6 @@ limitations under the License.
 */
 
 .button {
-    -fx-font-weight: bold;
     -fx-background-repeat: no-repeat;
     -fx-background-position: center;
     -fx-background-size: 80%; 
