@@ -36,6 +36,7 @@
 
 .text-field, .text-field:focused{
     -fx-prompt-text-fill: derive(-fx-control-inner-background, -30%);
+    -fx-font-size: 1.5em;
 }
 
 .onHover{
