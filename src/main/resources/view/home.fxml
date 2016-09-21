@@ -10,8 +10,9 @@
 <?import javafx.scene.image.*?>
 
 <GridPane fx:controller="com.daarons.controller.NavigationController" xmlns:fx="http://javafx.com/fxml/1" 
-          stylesheets="@/css/style.css" alignment="CENTER" hgap="25" vgap="25" 
-          minHeight="400" minWidth="450" > 
+          stylesheets="@/css/main.css, @/css/buttons.css" 
+          alignment="CENTER" hgap="25" vgap="25" 
+          minHeight="400" minWidth="450" styleClass="pane"> 
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
@@ -29,7 +30,7 @@
             <children>
                 <Label text="Accounts"  />
                 <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
-                        maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                        maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
             </children>
         </VBox>
@@ -38,7 +39,7 @@
             <children>
                 <Label text="New Notes" />
                 <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
-                        maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                        maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
             </children>
         </VBox>
@@ -47,7 +48,7 @@
             <children>
                 <Label text="Import/Export" />
                 <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
-                        maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                        maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
             </children>
         </VBox>
@@ -56,7 +57,7 @@
             <children>
                 <Label text="Info" />
                 <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
-                        maxHeight="Infinity" maxWidth="Infinity" VBox.vgrow="ALWAYS" 
+                        maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
                         onAction="#handleButtonAction"/>
             </children>
         </VBox>

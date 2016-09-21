@@ -10,11 +10,11 @@
 <?import javafx.scene.image.* ?>
 <?import javafx.scene.text.* ?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/style.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" id="GridPane" stylesheets="@/css/main.css" 
             fx:controller="com.daarons.controller.InfoController" minHeight="400"
-            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" >
+            minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
-        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+        <HBox BorderPane.alignment="TOP_LEFT"
               maxHeight="Infinity" maxWidth="Infinity">
             <BorderPane.margin>
                 <Insets bottom="3" top="3" />

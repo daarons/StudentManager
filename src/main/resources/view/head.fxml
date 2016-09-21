@@ -7,7 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<ButtonBar xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/style.css" 
+<ButtonBar xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/buttons.css" 
            fx:controller="com.daarons.controller.NavigationController"
            maxHeight="Infinity" maxWidth="Infinity">
     <buttons>

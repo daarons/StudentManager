@@ -8,12 +8,14 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/style.css" 
-            minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" 
+            stylesheets="@/css/main.css, @/css/buttons.css" 
+            minHeight="400" minWidth="450" maxHeight="Infinity"
+            maxWidth="Infinity" styleClass="pane">
     <!-- The controller is com.daarons.controller.StudentController. It is set
     manually to pass the needed student to the controller to be displayed. -->
     <top>
-        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+        <HBox BorderPane.alignment="TOP_LEFT" 
               maxHeight="Infinity" maxWidth="Infinity">
             <BorderPane.margin>
                 <Insets bottom="3" top="3" />
@@ -25,7 +27,8 @@
     </top>
     <center>
         <GridPane fx:id="gridPaneCenter" BorderPane.alignment="TOP_CENTER" 
-                  alignment="TOP_CENTER" hgap="25" vgap="25" maxHeight="Infinity" >
+                  alignment="TOP_CENTER" hgap="25" vgap="25" 
+                  maxHeight="Infinity" styleClass="pane">
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>
@@ -40,8 +43,9 @@
         </GridPane>
     </center>
     <left>
-        <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
-                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" maxHeight="Infinity" >
+        <GridPane fx:id="gridPaneLeft"
+                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" 
+                  maxHeight="Infinity" styleClass="pane">
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>

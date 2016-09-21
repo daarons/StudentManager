@@ -10,12 +10,14 @@
 <?import javafx.scene.control.Separator?>
 <?import jfxtras.scene.control.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/style.css" 
-            minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity">
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" 
+            stylesheets="@/css/main.css, @/css/buttons.css" 
+            minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity"
+            styleClass="pane">
     <!-- The controller is com.daarons.controller.SessionController. It is set
     manually to pass the needed session to the controller to be displayed. -->
     <top>
-        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+        <HBox BorderPane.alignment="TOP_LEFT"
               maxHeight="Infinity" maxWidth="Infinity">
             <BorderPane.margin>
                 <Insets bottom="3" top="3" />
@@ -26,103 +28,104 @@
         </HBox>
     </top>
     <center>
-        <GridPane fx:id="gridPaneCenter" alignment="TOP_CENTER" 
-                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
+        <GridPane fx:id="gridPaneCenter" styleClass="pane" hgap="25" vgap="25"
+                  BorderPane.alignment="TOP_CENTER" >
             <padding>
                 <Insets top="25" right="25" bottom="25"/>
             </padding>
             <Separator GridPane.columnIndex="0" GridPane.rowIndex="0" orientation="VERTICAL"/>
-            <GridPane fx:id="gridPaneCenterLeft" alignment="TOP_CENTER" GridPane.columnIndex="1"  
-                      GridPane.rowIndex="0" BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
-                <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <GridPane fx:id="gridPaneCenterLeft" GridPane.columnIndex="1"  
+                      GridPane.rowIndex="0" hgap="25" vgap="25" 
+                      styleClass="pane">
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
-                        <Label text="FluencyCoherence" styleClass="notesLabel"/>
+                        <Label text="FluencyCoherence"/>
                         <TextArea fx:id="fluencyCoherenceNotes" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
                     <children>
-                        <Label text="Vocabulary" styleClass="notesLabel" id="noteLabel"/>
+                        <Label text="Vocabulary" id="noteLabel"/>
                         <TextArea fx:id="vocabularyNotes" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Grammar" styleClass="notesLabel"/>
+                        <Label text="Grammar"/>
                         <TextArea fx:id="grammarNotes" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Pronunciation" styleClass="notesLabel"/>
+                        <Label text="Pronunciation"/>
                         <TextArea fx:id="pronunciationNotes" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="2">
                     <children>
-                        <Label text="InteractEngage" styleClass="notesLabel"/>
+                        <Label text="InteractEngage"/>
                         <TextArea fx:id="interactEngageNotes" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <children>
-                        <Label text="CommSkills" styleClass="notesLabel"/>
+                        <Label text="CommSkills"/>
                         <TextArea fx:id="commSkillsNotes" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
             </GridPane>
             <Separator GridPane.columnIndex="2" GridPane.rowIndex="0" orientation="VERTICAL" />
-            <GridPane fx:id="gridPaneCenterRight" alignment="TOP_CENTER" GridPane.columnIndex="3" 
-                      GridPane.rowIndex="0" BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
-                <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <GridPane fx:id="gridPaneCenterRight" GridPane.columnIndex="3" 
+                      GridPane.rowIndex="0" hgap="25" vgap="25" styleClass="pane">
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
                     <children>
-                        <Label text="FluencyCoherence" styleClass="notesLabel"/>
+                        <Label text="FluencyCoherence"/>
                         <ChoiceBox fx:id="fluencyCoherenceBox"/>
                         <TextArea fx:id="fluencyCoherenceReview" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="1" GridPane.rowIndex="0">
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="0">
                     <children>
-                        <Label text="Vocabulary" styleClass="notesLabel" id="noteLabel"/>
+                        <Label text="Vocabulary"/>
                         <ChoiceBox fx:id="vocabularyBox"/>
                         <TextArea fx:id="vocabularyReview" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="1">
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Grammar" styleClass="notesLabel"/>
+                        <Label text="Grammar"/>
                         <ChoiceBox fx:id="grammarBox"/>
                         <TextArea fx:id="grammarReview" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="1">
                     <children>
-                        <Label text="Pronunciation" styleClass="notesLabel"/>
+                        <Label text="Pronunciation"/>
                         <ChoiceBox fx:id="pronunciationBox"/>
                         <TextArea fx:id="pronunciationReview" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="2">
+                <VBox GridPane.columnIndex="0" GridPane.rowIndex="2">
                     <children>
-                        <Label text="InteractEngage" styleClass="notesLabel"/>
+                        <Label text="InteractEngage"/>
                         <ChoiceBox fx:id="interactEngageBox"/>
                         <TextArea fx:id="interactEngageReview" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
                     </children>
                 </VBox>
-                <VBox fillWidth="true" GridPane.columnIndex="1" GridPane.rowIndex="2">
+                <VBox GridPane.columnIndex="1" GridPane.rowIndex="2">
                     <children>
-                        <Label text="CommSkills" styleClass="notesLabel"/>
+                        <Label text="CommSkills"/>
                         <ChoiceBox fx:id="commSkillsBox"/>
                         <TextArea fx:id="commSkillsReview" VBox.vgrow="ALWAYS" editable="true" 
                                   styleClass="notes" />
@@ -132,20 +135,20 @@
         </GridPane>
     </center>
     <!-- left is set below center to deal with overlap. Set background color on 
-        left to make center invisible on overlap. -->
+    left to make center invisible on overlap. -->
     <left>
-        <GridPane fx:id="gridPaneLeft" alignment="TOP_CENTER" 
-                  BorderPane.alignment="TOP_CENTER" hgap="25" vgap="25" >
+        <GridPane fx:id="gridPaneLeft" BorderPane.alignment="TOP_CENTER" 
+                  hgap="25" vgap="25" styleClass="pane">
             <padding>
                 <Insets top="25" right="25" bottom="25" left="25"/>
             </padding>
-            <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="0">
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="0">
                 <children>
-                    <Label text="Session ID" styleClass="notesLabel"/>
+                    <Label text="Session ID"/>
                     <TextField fx:id="sessionIdField" VBox.vgrow="ALWAYS" />
                 </children>
             </VBox>
-            <VBox fillWidth="true" GridPane.columnIndex="0" GridPane.rowIndex="1">
+            <VBox GridPane.columnIndex="0" GridPane.rowIndex="1">
                 <children>
                     <CalendarPicker fx:id="calendarPicker" VBox.vgrow="ALWAYS" 
                                     allowNull="false" mode="SINGLE" showTime="false" />
