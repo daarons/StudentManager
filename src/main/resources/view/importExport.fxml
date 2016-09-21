@@ -13,7 +13,7 @@
             fx:controller="com.daarons.controller.ImportExportController" 
             stylesheets="@/css/main.css, @/css/buttons.css" styleClass="pane">
     <top>
-        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+        <HBox BorderPane.alignment="TOP_LEFT"
               maxHeight="Infinity" maxWidth="Infinity">
             <BorderPane.margin>
                 <Insets bottom="3" top="3" />

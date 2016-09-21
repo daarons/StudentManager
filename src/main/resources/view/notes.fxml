@@ -13,7 +13,7 @@
             fx:controller="com.daarons.controller.NotesController" minHeight="400"
             minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
-        <HBox BorderPane.alignment="TOP_LEFT" HBox.hgrow="ALWAYS"
+        <HBox BorderPane.alignment="TOP_LEFT"
               maxHeight="Infinity" maxWidth="Infinity">
             <BorderPane.margin>
                 <Insets bottom="3" top="3" />
@@ -36,35 +36,35 @@
                               styleClass="notes" />
                 </children>
             </VBox>
-            <VBox fillWidth="true">
+            <VBox>
                 <children>
                     <Label text="Vocabulary" styleClass="notesLabel" id="noteLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="vocabularyNote"
                               styleClass="notes" />
                 </children>
             </VBox>
-            <VBox fillWidth="true">
+            <VBox>
                 <children>
                     <Label text="Grammar" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="grammarNote"
                               styleClass="notes" />
                 </children>
             </VBox>
-            <VBox fillWidth="true">
+            <VBox>
                 <children>
                     <Label text="Pronunciation" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="pronunciationNote"
                               styleClass="notes" />
                 </children>
             </VBox>
-            <VBox fillWidth="true">
+            <VBox>
                 <children>
                     <Label text="InteractEngage" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="interactEngageNote"
                               styleClass="notes" />
                 </children>
             </VBox>
-            <VBox fillWidth="true">
+            <VBox>
                 <children>
                     <Label text="CommSkills" styleClass="notesLabel"/>
                     <TextArea VBox.vgrow="ALWAYS" editable="true" fx:id="commSkillsNote"
