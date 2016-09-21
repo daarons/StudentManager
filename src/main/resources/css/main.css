@@ -41,3 +41,8 @@
 .onHover{
     -fx-background-color: orange;
 }
+
+#folderName{
+    -fx-fill: #cccccc;
+    -fx-font-size: 2em;
+}

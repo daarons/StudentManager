@@ -62,7 +62,7 @@
                       GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS" 
                       GridPane.valignment="BOTTOM" GridPane.columnSpan="2" >
                     <children>
-                        <Text fx:id="folderName"/>
+                        <Text fx:id="folderName" id="folderName"/>
                         <Button id="okBtn" VBox.vgrow="ALWAYS" minWidth="30" minHeight="30" 
                                 maxWidth="200" maxHeight="200" onAction="#importExport">
                             <tooltip>
