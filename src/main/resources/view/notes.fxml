@@ -9,7 +9,7 @@
 <?import javafx.geometry.*?>
 <?import jfxtras.scene.control.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/main.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/main.css, @/css/buttons.css" 
             fx:controller="com.daarons.controller.NotesController" minHeight="400"
             minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>

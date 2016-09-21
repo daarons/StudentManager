@@ -10,7 +10,8 @@
 <?import javafx.scene.control.Separator?>
 <?import jfxtras.scene.control.*?>
 
-<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" stylesheets="@/css/main.css" 
+<BorderPane xmlns:fx="http://javafx.com/fxml/1" fx:id="borderPane" 
+            stylesheets="@/css/main.css, @/css/buttons.css" 
             minHeight="400" minWidth="450" maxHeight="Infinity" maxWidth="Infinity"
             styleClass="pane">
     <!-- The controller is com.daarons.controller.SessionController. It is set
