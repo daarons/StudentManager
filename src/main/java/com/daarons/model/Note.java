@@ -21,8 +21,8 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.OneToOne;
-import org.hibernate.annotations.Type;
 
 /**
  *
@@ -36,17 +36,17 @@ public class Note implements Serializable {
     @OneToOne
     @JoinColumn(name="session", nullable=false)
     private Session session;
-    @Type(type="text")
+    @Lob
     private String fluencyAndCoherence;
-    @Type(type="text")
+    @Lob
     private String vocabulary;
-    @Type(type="text")
+    @Lob
     private String grammar;
-    @Type(type="text")
+    @Lob
     private String pronunciation;
-    @Type(type="text")
+    @Lob
     private String interactionAndEngagement;
-    @Type(type="text")
+    @Lob
     private String communicationSkills;
     
     public Note(){
