@@ -11,7 +11,7 @@
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <mainClass>com.daarons.studentmanager.MainApp</mainClass>
+        <mainClass>com.daarons.studentmanager.StudentManagerApp</mainClass>
     </properties>
 
     <organization>
