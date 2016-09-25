@@ -23,6 +23,11 @@
 
 #hourSlider{
     -fx-padding: 2.5em 0em 0em 0em;
+    -fx-focus-traversable: false;
+}
+
+#minuteSlider{
+    -fx-focus-traversable: false;
 }
 
 #searchAccountsField, #addAccountField{
