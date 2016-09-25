@@ -52,15 +52,15 @@ public class Session implements Serializable {
     public Session(){
         this.student = null;
         this.timestamp = null;
-        this.note = null;
-        this.review = null;
+        this.note = new Note();
+        this.review = new Review();
     }
     
     public Session(Student student, Date timestamp){
         this.student = student;
         this.timestamp = timestamp;
-        this.note = null;
-        this.review = null;
+        this.note = new Note();
+        this.review = new Review();
     }
 
     /**

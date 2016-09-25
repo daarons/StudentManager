@@ -79,12 +79,12 @@ public class Review implements Serializable {
     
     public Review(){
         this.session = null;
-        this.fluencyAndCoherence = null;
-        this.vocabulary = null;
-        this.grammar = null;
-        this.pronunciation = null;
-        this.interactionAndEngagement = null;
-        this.communicationSkills = null;
+        this.fluencyAndCoherence = new ReviewSection();
+        this.vocabulary = new ReviewSection();
+        this.grammar = new ReviewSection();
+        this.pronunciation = new ReviewSection();
+        this.interactionAndEngagement = new ReviewSection();
+        this.communicationSkills = new ReviewSection();
     }
     
     public Review(Session session, ReviewSection fluencyAndCoherence,

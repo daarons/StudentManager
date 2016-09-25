@@ -29,7 +29,10 @@ public class ReviewSection implements Serializable {
     @Lob
     private String comment;
     
-    public ReviewSection(){}
+    public ReviewSection(){
+        this.grade = 1;
+        this.comment = "";
+    }
     
     public ReviewSection(int grade, String comment){
         this.grade = grade;
