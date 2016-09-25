@@ -54,6 +54,8 @@ public class Session implements Serializable {
         this.timestamp = null;
         this.note = new Note();
         this.review = new Review();
+        this.note.setSession(this);
+        this.review.setSession(this);
     }
     
     public Session(Student student, Date timestamp){
@@ -61,6 +63,8 @@ public class Session implements Serializable {
         this.timestamp = timestamp;
         this.note = new Note();
         this.review = new Review();
+        this.note.setSession(this);
+        this.review.setSession(this);
     }
 
     /**
