@@ -79,29 +79,34 @@
                 <Insets top="3" bottom="3" left="25"/>
             </BorderPane.margin>
             <Button id="saveBtn" HBox.hgrow="ALWAYS" minWidth="30" minHeight="30" 
-                    maxWidth="60" maxHeight="60" fx:id="saveBtn" onMouseClicked="#saveNotes" >
+                    maxWidth="60" maxHeight="60" fx:id="saveBtn" 
+                    onMouseClicked="#saveNotes" focusTraversable="false" >
                 <tooltip>
                     <Tooltip text="Save" />
                 </tooltip>
             </Button>
-            <CalendarTimePicker fx:id="timePicker" minuteStep="30" />
+            <CalendarTimePicker fx:id="timePicker" minuteStep="30" 
+                                focusTraversable="false"/>
             <VBox>
                 <HBox.margin>
                     <Insets top="30" />
                 </HBox.margin>
-                <TextField fx:id="accountField" promptText="Account"/>
+                <TextField fx:id="accountField" promptText="Account" 
+                           focusTraversable="false"/>
             </VBox>
             <VBox>
                 <HBox.margin>
                     <Insets top="30" />
                 </HBox.margin>
-                <TextField fx:id="studentField" promptText="Student" />
+                <TextField fx:id="studentField" promptText="Student" 
+                           focusTraversable="false"/>
             </VBox>
             <VBox>
                 <HBox.margin>
                     <Insets top="30" />
                 </HBox.margin>
-                <TextField fx:id="sessionIdField" promptText="Session ID"/>
+                <TextField fx:id="sessionIdField" promptText="Session ID" 
+                           focusTraversable="false"/>
             </VBox>
         </HBox>
     </bottom>
