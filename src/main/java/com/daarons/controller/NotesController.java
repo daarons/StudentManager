@@ -151,7 +151,18 @@ public class NotesController implements Initializable {
                     }
                 }
             }
-            dao.updateAccount(account);
+            Account updatedAccount = dao.updateAccount(account);
+            students = updatedAccount.getStudents().stream()
+                    .filter(s
+                            -> s.getEnglishName().equalsIgnoreCase(studentField.getText())
+                            || s.getChineseName().equalsIgnoreCase(studentField.getText()))
+                    .collect(Collectors.toList());
+            student = students.get(0);
+            for(Session sess : student.getSessions()){
+                if(sess.getSessionId() == session.getSessionId()){
+                    session = sess;
+                }
+            }
             viewSession(session);
         } else {
             Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
