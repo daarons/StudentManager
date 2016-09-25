@@ -47,6 +47,7 @@ import javafx.scene.chart.XYChart;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.ContextMenu;
 import javafx.scene.control.MenuItem;
 import javafx.scene.control.TextArea;
@@ -225,9 +226,9 @@ public class StudentController implements Initializable {
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores");
         for (Session s : student.getSessions()) {
-                Date xTimestamp = s.getTimestamp();
-                int yTotalScore = s.getReview().getTotalGrade();
-                series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
+            Date xTimestamp = s.getTimestamp();
+            int yTotalScore = s.getReview().getTotalGrade();
+            series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
         }
         lineChart.getData().add(series);
 
@@ -289,7 +290,31 @@ public class StudentController implements Initializable {
             viewSession.setOnAction((ActionEvent event) -> {
                 viewSession(session);
             });
-            return new ContextMenu(viewSession);
+            MenuItem deleteSession = new MenuItem("Delete Session");
+            deleteSession.setOnAction((ActionEvent event) -> {
+                Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                        + "sure that you want to delete session "
+                        + session.getSessionId() + " ?");
+                deleteAlert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        Account account = session.getStudent().getAccount();
+                        for(Student s : account.getStudents()){
+                            if(s.getId() == student.getId()){
+                                for(Session sess : s.getSessions()){
+                                    if(sess.getId() == session.getId()){
+                                        s.getSessions().remove(sess);
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        dao.updateAccount(account);
+                        this.getParent().getChildren().remove(this);
+                    }
+                });
+            });
+            return new ContextMenu(viewSession, deleteSession);
         }
 
         @Override
