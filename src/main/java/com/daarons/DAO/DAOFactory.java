@@ -21,15 +21,15 @@ package com.daarons.DAO;
  */
 public class DAOFactory {
     public static AccountDAO getAccountDAO(String impl){
-        if(impl.equalsIgnoreCase("derby")){
-            return new AccountDAODerbyImpl();
+        if(impl.equalsIgnoreCase("hibernate")){
+            return new AccountDAOHibernateImpl();
         }
         return null;
     }
     
     public static ImportExportDAO getImportExportDAO(String impl){
-        if(impl.equalsIgnoreCase("derby")){
-            return new ImportExportDAODerbyImpl();
+        if(impl.equalsIgnoreCase("hibernate")){
+            return new ImportExportDAOHibernateImpl();
         }
         return null;
     }

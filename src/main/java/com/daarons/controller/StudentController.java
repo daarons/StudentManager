@@ -72,7 +72,7 @@ import javafx.util.Duration;
  */
 public class StudentController implements Initializable {
 
-    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
+    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private Student student;
     private TreeTableView sessionTableView;
 

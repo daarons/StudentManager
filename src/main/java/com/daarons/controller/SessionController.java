@@ -57,7 +57,7 @@ import jfxtras.scene.control.CalendarTimePicker;
  */
 public class SessionController implements Initializable {
 
-    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
+    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private Session session;
     private ArrayList<Node> nodes;
 

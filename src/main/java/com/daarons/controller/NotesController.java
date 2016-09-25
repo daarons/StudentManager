@@ -50,7 +50,7 @@ import org.controlsfx.control.textfield.TextFields;
  */
 public class NotesController implements Initializable {
 
-    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
+    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
 
     @FXML
     private TilePane tilePane;

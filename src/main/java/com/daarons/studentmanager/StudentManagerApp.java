@@ -1,6 +1,6 @@
 package com.daarons.studentmanager;
 
-import com.daarons.DAO.EMFSingleton;
+import com.daarons.DAO.EMSingleton;
 import java.io.File;
 import java.io.IOException;
 import java.util.logging.LogManager;
@@ -43,7 +43,7 @@ public class StudentManagerApp extends Application {
                 //turns off logging b/c derby logs a lot on startup
                 LogManager.getLogManager().reset(); 
                 //connects to db
-                EMFSingleton.getEntityManagerFactory(); 
+                EMSingleton.getEntityManager(); 
                 return null;
             }
         };        
@@ -77,7 +77,8 @@ public class StudentManagerApp extends Application {
 
     @Override
     public void stop() {
-        EMFSingleton.getEntityManagerFactory().close();
+        EMSingleton.getEntityManager().close();
+        EMSingleton.getEntityManagerFactory().close();
     }
 
     private void showMainStage() {

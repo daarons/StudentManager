@@ -52,7 +52,7 @@ import javafx.stage.Stage;
  */
 public class AccountsController implements Initializable {
 
-    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
+    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private TreeView accountsView;
 
     @FXML

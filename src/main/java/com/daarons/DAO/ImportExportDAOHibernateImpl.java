@@ -28,7 +28,7 @@ import org.hibernate.Session;
  *
  * @author David
  */
-public class ImportExportDAODerbyImpl implements ImportExportDAO {
+public class ImportExportDAOHibernateImpl implements ImportExportDAO {
 
     private EntityManager em;
     private Session session;
@@ -39,7 +39,7 @@ public class ImportExportDAODerbyImpl implements ImportExportDAO {
             //import procedure
             deleteAccounts();
 
-            em = EMFSingleton.getEntityManagerFactory().createEntityManager();
+            em = EMSingleton.getEntityManager();
             em.getTransaction().begin();
             session = em.unwrap(Session.class);
             session.doWork((Connection connection) -> {
@@ -77,8 +77,7 @@ public class ImportExportDAODerbyImpl implements ImportExportDAO {
     @Override
     public boolean exportDB(File folder) {
         try {
-            em = EMFSingleton.getEntityManagerFactory()
-                    .createEntityManager();
+            em = EMSingleton.getEntityManager();
             em.getTransaction().begin();
             session = em.unwrap(Session.class);
             session.doWork((Connection connection) -> {
@@ -112,7 +111,7 @@ public class ImportExportDAODerbyImpl implements ImportExportDAO {
     }
 
     private void deleteAccounts() {
-        AccountDAO dao = DAOFactory.getAccountDAO("derby");
+        AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
         List<Account> accounts = dao.getAccountsLike("*");
         accounts.forEach(account -> dao.deleteAccount(account));
     }

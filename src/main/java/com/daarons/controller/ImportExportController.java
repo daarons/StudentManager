@@ -41,7 +41,7 @@ public class ImportExportController implements Initializable {
     private File folder;
     private boolean importDB;
     private boolean exportDB;
-    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("derby");
+    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("hibernate");
 
     @FXML
     private Button importBtn;

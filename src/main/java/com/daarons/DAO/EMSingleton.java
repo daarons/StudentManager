@@ -23,13 +23,21 @@ import javax.persistence.Persistence;
  *
  * @author David
  */
-public class EMFSingleton {
+public class EMSingleton {
     private static EntityManagerFactory emf;
+    private static EntityManager em;
     
     public static EntityManagerFactory getEntityManagerFactory(){
         if(emf == null){
             emf = Persistence.createEntityManagerFactory("StudentManagerPU");
         }
         return emf;
+    }
+    
+    public static EntityManager getEntityManager(){
+        if(em == null || !em.isOpen()){
+            em = getEntityManagerFactory().createEntityManager();
+        }
+        return em;
     }
 }
