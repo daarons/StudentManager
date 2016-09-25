@@ -160,8 +160,8 @@ public class AccountsController implements Initializable {
         @Override
         public ContextMenu getContextMenu() {
             MenuItem viewStudent = new MenuItem("View Student");
-            viewStudent.setOnAction((ActionEvent event) -> {
-                long studentId = student.getId();
+            viewStudent.setOnAction((ActionEvent event) -> { 
+                //go to student view
                 FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
                 StudentController studentController = new StudentController(student);
                 fxmlLoader.setController(studentController);
@@ -171,7 +171,7 @@ public class AccountsController implements Initializable {
                 try {
                     root = (Parent) fxmlLoader.load();
                 } catch (IOException ex) {
-                    System.out.println(ex);
+                    ex.printStackTrace();
                 }
                 scene = new Scene(root);
                 stage.setScene(scene);
@@ -188,7 +188,7 @@ public class AccountsController implements Initializable {
                     if (response == ButtonType.OK) {
                         int index = this.getParent().getChildren().indexOf(this);
                         Account parentAccount = ((Account) ((AbstractTreeItem) this.getParent()).getObject());
-                        Student r = parentAccount.getStudents().remove(index);
+                        parentAccount.getStudents().remove(index);
                         Account newParentAccount = dao.updateAccount(parentAccount);
                         ((AbstractTreeItem) this.getParent()).setObject(newParentAccount);
                         List<AbstractTreeItem> children = this.getParent().getChildren();
@@ -288,7 +288,7 @@ public class AccountsController implements Initializable {
                         ti.setValue(s);
                         ti.setObject(s);
                     }
-                    Account updatedAccount = dao.updateAccount(a);
+                    dao.updateAccount(a);
                     commitEdit(textField.getText().replaceAll("`", ""));
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
