@@ -217,7 +217,7 @@ public class StudentController implements Initializable {
 
         DateAxis xAxis = new DateAxis();
         xAxis.setLabel("Date");
-        NumberAxis yAxis = new NumberAxis("Score", 6, 30, 10);
+        NumberAxis yAxis = new NumberAxis("Score", 6, 30, 2);
         LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(student.toString() + "'s scores");
         lineChart.setLegendVisible(false);
@@ -225,11 +225,9 @@ public class StudentController implements Initializable {
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores");
         for (Session s : student.getSessions()) {
-            if (s.getReview() != null) {
                 Date xTimestamp = s.getTimestamp();
                 int yTotalScore = s.getReview().getTotalGrade();
                 series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
-            }
         }
         lineChart.getData().add(series);
 
