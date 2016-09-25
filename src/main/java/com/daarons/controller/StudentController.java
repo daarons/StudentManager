@@ -31,6 +31,7 @@ import java.net.URL;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.ReadOnlyLongWrapper;
 import javafx.beans.property.ReadOnlyStringWrapper;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -175,9 +176,9 @@ public class StudentController implements Initializable {
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
 
-        TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session ID");
+        TreeTableColumn<Session, Number> sessionCol = new TreeTableColumn("Session ID");
         sessionCol.setCellValueFactory(ti
-                -> new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getSessionId())));
+                -> new ReadOnlyLongWrapper(ti.getValue().getValue().getSessionId()));
 
         TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
         dateCol.setCellValueFactory(ti
