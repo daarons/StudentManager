@@ -22,15 +22,21 @@ import com.daarons.model.Note;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
 import com.daarons.util.*;
+import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.geometry.Rectangle2D;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.Alert;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
@@ -40,6 +46,7 @@ import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.TilePane;
 import javafx.stage.Screen;
+import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarTimePicker;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -79,13 +86,13 @@ public class NotesController implements Initializable {
 
     @FXML
     private void saveNotes(MouseEvent event) {
-        if (event.getSource() == saveBtn 
+        if (event.getSource() == saveBtn
                 && !accountField.getText().trim().isEmpty()
                 && !studentField.getText().trim().isEmpty()
                 && Validator.isNumber(sessionIdField.getText())) {
             List<Account> accounts = dao.getAccountsLike(accountField.getText());
             List<Student> students = accounts != null ? accounts.stream()
-                    .filter(a -> a.getStudents() != null)
+                    .filter(a -> a.getStudents() != null && !a.getStudents().isEmpty())
                     .flatMap(a -> a.getStudents().stream().filter(s
                                     -> s.getEnglishName().equalsIgnoreCase(studentField.getText())
                                     || s.getChineseName().equalsIgnoreCase(studentField.getText())))
@@ -99,7 +106,7 @@ public class NotesController implements Initializable {
                 student = new Student();
                 student.setEnglishName(studentField.getText());
                 student.setAccount(account);
-                session = new Session(student, timePicker.getCalendar().getTime());
+                session = new Session(student, new Timestamp(timePicker.getCalendar().getTimeInMillis()));
                 note = new Note(session, fluencyCoherenceNote.getText().replaceAll("`", ""),
                         vocabularyNote.getText().replaceAll("`", ""),
                         grammarNote.getText().replaceAll("`", ""),
@@ -115,7 +122,7 @@ public class NotesController implements Initializable {
                 student = new Student();
                 student.setEnglishName(studentField.getText());
                 student.setAccount(account);
-                session = new Session(student, timePicker.getCalendar().getTime());
+                session = new Session(student, new Timestamp(timePicker.getCalendar().getTimeInMillis()));
                 note = new Note(session, fluencyCoherenceNote.getText().replaceAll("`", ""),
                         vocabularyNote.getText().replaceAll("`", ""),
                         grammarNote.getText().replaceAll("`", ""),
@@ -131,7 +138,7 @@ public class NotesController implements Initializable {
                 student = students.get(0);
                 for (Student s : account.getStudents()) {
                     if (s.getId() == student.getId()) {
-                        session = new Session(s, timePicker.getCalendar().getTime());
+                        session = new Session(s, new Timestamp(timePicker.getCalendar().getTimeInMillis()));
                         note = new Note(session, fluencyCoherenceNote.getText().replaceAll("`", ""),
                                 vocabularyNote.getText().replaceAll("`", ""),
                                 grammarNote.getText().replaceAll("`", ""),
@@ -145,7 +152,8 @@ public class NotesController implements Initializable {
                 }
             }
             dao.updateAccount(account);
-        }else{
+            viewSession(session);
+        } else {
             Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
                     + "the account, student, and session ID text fields are "
                     + "filled in correctly before saving.");
@@ -173,6 +181,8 @@ public class NotesController implements Initializable {
             cal.set(Calendar.MINUTE, 00);
             cal.set(Calendar.HOUR_OF_DAY, hour + 1);
         }
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
         timePicker.setCalendar(cal);
 
         TextFields.bindAutoCompletion(accountField, t -> {
@@ -195,4 +205,22 @@ public class NotesController implements Initializable {
         commSkillsNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
     }
 
+    private void viewSession(Session session) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/session.fxml"));
+        SessionController sessionController = new SessionController(session);
+        fxmlLoader.setController(sessionController);
+        Stage stage = (Stage) ((Node) tilePane).getScene().getWindow();
+        Scene scene = null;
+        Parent root = null;
+        try {
+            root = (Parent) fxmlLoader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
+        stage.show();
+    }
 }
