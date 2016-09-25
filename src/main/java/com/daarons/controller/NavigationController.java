@@ -25,7 +25,7 @@ public class NavigationController implements Initializable {
     private Button infoBtn;
 
     @FXML
-    private void handleButtonAction(ActionEvent event) throws Exception {
+    private void navigate(ActionEvent event) throws Exception {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = null;
         Parent root = null;
@@ -49,6 +49,6 @@ public class NavigationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        
     }
 }
