@@ -28,7 +28,7 @@ public class EMSingleton {
     private static EntityManager em;
     
     public static EntityManagerFactory getEntityManagerFactory(){
-        if(emf == null){
+        if(emf == null || !emf.isOpen()){
             emf = Persistence.createEntityManagerFactory("StudentManagerPU");
         }
         return emf;
