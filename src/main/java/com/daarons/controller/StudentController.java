@@ -17,7 +17,7 @@ package com.daarons.controller;
 
 import com.daarons.DAO.AccountDAO;
 import com.daarons.DAO.DAOFactory;
-import com.daarons.model.AbstractTreeItem;
+import com.daarons.control.AbstractTreeItem;
 import com.daarons.model.Account;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
