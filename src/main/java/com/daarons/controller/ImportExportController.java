@@ -15,19 +15,14 @@
  */
 package com.daarons.controller;
 
-import com.daarons.DAO.DAOFactory;
-import com.daarons.DAO.ImportExportDAO;
+import com.daarons.DAO.*;
 import java.io.File;
 import java.net.URL;
-import java.util.Optional;
-import java.util.ResourceBundle;
+import java.util.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
+import javafx.fxml.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
+import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
 
@@ -41,7 +36,7 @@ public class ImportExportController implements Initializable {
     private File folder;
     private boolean importDB;
     private boolean exportDB;
-    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("derby");
+    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("hibernate");
 
     @FXML
     private Button importBtn;

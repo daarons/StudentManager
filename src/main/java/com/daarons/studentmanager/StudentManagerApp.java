@@ -1,8 +1,7 @@
 package com.daarons.studentmanager;
 
-import com.daarons.DAO.EMFSingleton;
-import java.io.File;
-import java.io.IOException;
+import com.daarons.DAO.EMSingleton;
+import java.io.*;
 import java.util.logging.LogManager;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -10,21 +9,14 @@ import static javafx.application.Application.launch;
 import javafx.concurrent.Task;
 import javafx.event.Event;
 import javafx.fxml.FXMLLoader;
-import javafx.geometry.Pos;
-import javafx.geometry.Rectangle2D;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Label;
-import javafx.scene.control.ProgressBar;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
+import javafx.geometry.*;
+import javafx.scene.*;
+import javafx.scene.control.*;
+import javafx.scene.image.*;
+import javafx.scene.layout.*;
 import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
-import javafx.stage.StageStyle;
+import javafx.stage.*;
 import javafx.util.Duration;
 
 public class StudentManagerApp extends Application {
@@ -43,7 +35,7 @@ public class StudentManagerApp extends Application {
                 //turns off logging b/c derby logs a lot on startup
                 LogManager.getLogManager().reset(); 
                 //connects to db
-                EMFSingleton.getEntityManagerFactory(); 
+                EMSingleton.getEntityManager(); 
                 return null;
             }
         };        
@@ -77,7 +69,8 @@ public class StudentManagerApp extends Application {
 
     @Override
     public void stop() {
-        EMFSingleton.getEntityManagerFactory().close();
+        EMSingleton.getEntityManager().close();
+        EMSingleton.getEntityManagerFactory().close();
     }
 
     private void showMainStage() {

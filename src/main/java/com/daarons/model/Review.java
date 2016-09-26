@@ -16,16 +16,7 @@
 package com.daarons.model;
 
 import java.io.Serializable;
-import javax.persistence.AttributeOverride;
-import javax.persistence.AttributeOverrides;
-import javax.persistence.Column;
-import javax.persistence.Embedded;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.OneToOne;
+import javax.persistence.*;
 
 /**
  *
@@ -79,12 +70,12 @@ public class Review implements Serializable {
     
     public Review(){
         this.session = null;
-        this.fluencyAndCoherence = null;
-        this.vocabulary = null;
-        this.grammar = null;
-        this.pronunciation = null;
-        this.interactionAndEngagement = null;
-        this.communicationSkills = null;
+        this.fluencyAndCoherence = new ReviewSection();
+        this.vocabulary = new ReviewSection();
+        this.grammar = new ReviewSection();
+        this.pronunciation = new ReviewSection();
+        this.interactionAndEngagement = new ReviewSection();
+        this.communicationSkills = new ReviewSection();
     }
     
     public Review(Session session, ReviewSection fluencyAndCoherence,

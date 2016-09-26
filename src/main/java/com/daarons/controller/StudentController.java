@@ -15,54 +15,26 @@
  */
 package com.daarons.controller;
 
-import com.daarons.DAO.AccountDAO;
-import com.daarons.DAO.DAOFactory;
-import com.daarons.model.AbstractTreeItem;
-import com.daarons.model.Account;
-import com.daarons.model.Session;
-import com.daarons.model.Student;
-import com.daarons.util.HandleTab;
-import com.daarons.util.Validator;
+import com.daarons.DAO.*;
+import com.daarons.control.AbstractTreeItem;
+import com.daarons.model.*;
+import com.daarons.util.*;
 import extfx.scene.chart.DateAxis;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.net.URL;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import java.util.*;
+import javafx.beans.property.*;
+import javafx.event.*;
+import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
+import javafx.scene.*;
+import javafx.scene.chart.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableRow;
-import javafx.scene.control.TreeTableView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
 import javafx.util.Duration;
 
 /**
@@ -72,7 +44,7 @@ import javafx.util.Duration;
  */
 public class StudentController implements Initializable {
 
-    private final AccountDAO dao = DAOFactory.getAccountDAO("derby");
+    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private Student student;
     private TreeTableView sessionTableView;
 
@@ -151,12 +123,15 @@ public class StudentController implements Initializable {
                 student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
                 student.setMotive(motivesArea.getText().replaceAll("`", ""));
                 student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
+                
+                //get account and replace the old student with the new student
                 Account account = student.getAccount();
                 for (Student s : account.getStudents()) {
                     if (s.getId() == student.getId()) {
                         s = student;
                     }
                 }
+                
                 dao.updateAccount(account);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
@@ -174,9 +149,9 @@ public class StudentController implements Initializable {
         sessionTableView.setMaxHeight(Double.MAX_VALUE);
         sessionTableView.setMaxWidth(Double.MAX_VALUE);
 
-        TreeTableColumn<Session, String> sessionCol = new TreeTableColumn("Session ID");
+        TreeTableColumn<Session, Number> sessionCol = new TreeTableColumn("Session ID");
         sessionCol.setCellValueFactory(ti
-                -> new ReadOnlyStringWrapper(String.valueOf(ti.getValue().getValue().getSessionId())));
+                -> new ReadOnlyLongWrapper(ti.getValue().getValue().getSessionId()));
 
         TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
         dateCol.setCellValueFactory(ti
@@ -217,7 +192,7 @@ public class StudentController implements Initializable {
 
         DateAxis xAxis = new DateAxis();
         xAxis.setLabel("Date");
-        NumberAxis yAxis = new NumberAxis("Score", 6, 30, 10);
+        NumberAxis yAxis = new NumberAxis("Score", 6, 30, 2);
         LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(student.toString() + "'s scores");
         lineChart.setLegendVisible(false);
@@ -225,11 +200,9 @@ public class StudentController implements Initializable {
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores");
         for (Session s : student.getSessions()) {
-            if (s.getReview() != null) {
-                Date xTimestamp = s.getTimestamp();
-                int yTotalScore = s.getReview().getTotalGrade();
-                series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
-            }
+            Date xTimestamp = s.getTimestamp();
+            int yTotalScore = s.getReview().getTotalGrade();
+            series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
         }
         lineChart.getData().add(series);
 
@@ -291,7 +264,34 @@ public class StudentController implements Initializable {
             viewSession.setOnAction((ActionEvent event) -> {
                 viewSession(session);
             });
-            return new ContextMenu(viewSession);
+            
+            MenuItem deleteSession = new MenuItem("Delete Session");
+            deleteSession.setOnAction((ActionEvent event) -> {
+                Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                        + "sure that you want to delete session "
+                        + session.getSessionId() + " ?");
+                deleteAlert.showAndWait().ifPresent(response -> {
+                    if (response == ButtonType.OK) {
+                        //get account and remove session from it
+                        Account account = session.getStudent().getAccount();
+                        for(Student s : account.getStudents()){
+                            if(s.getId() == student.getId()){
+                                for(Session sess : s.getSessions()){
+                                    if(sess.getId() == session.getId()){
+                                        s.getSessions().remove(sess);
+                                        break;
+                                    }
+                                }
+                                break;
+                            }
+                        }
+                        dao.updateAccount(account);
+                        this.getParent().getChildren().remove(this);
+                    }
+                });
+            });
+            
+            return new ContextMenu(viewSession, deleteSession);
         }
 
         @Override

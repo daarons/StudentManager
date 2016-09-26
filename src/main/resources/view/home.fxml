@@ -31,7 +31,7 @@
                 <Label text="Accounts"  />
                 <Button fx:id="accountsBtn" id="accountsBtn" minHeight="128" minWidth="128" 
                         maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
-                        onAction="#handleButtonAction"/>
+                        onAction="#navigate"/>
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
@@ -40,7 +40,7 @@
                 <Label text="New Notes" />
                 <Button fx:id="notesBtn" id="notesBtn" minHeight="128" minWidth="128" 
                         maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
-                        onAction="#handleButtonAction"/>
+                        onAction="#navigate"/>
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="0" 
@@ -49,7 +49,7 @@
                 <Label text="Import/Export" />
                 <Button fx:id="importExportBtn" id="importExportBtn" minHeight="128" minWidth="128" 
                         maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
-                        onAction="#handleButtonAction"/>
+                        onAction="#navigate"/>
             </children>
         </VBox>
         <VBox spacing="10" alignment="center" GridPane.columnIndex="1" 
@@ -58,7 +58,7 @@
                 <Label text="Info" />
                 <Button fx:id="infoBtn" id="infoBtn" minHeight="128" minWidth="128" 
                         maxHeight="512" maxWidth="512" VBox.vgrow="ALWAYS" 
-                        onAction="#handleButtonAction"/>
+                        onAction="#navigate"/>
             </children>
         </VBox>
     </children>

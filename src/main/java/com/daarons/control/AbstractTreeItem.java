@@ -13,23 +13,17 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.daarons.DAO;
+package com.daarons.control;
 
-import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.Persistence;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.TreeItem;
 
 /**
  *
  * @author David
  */
-public class EMFSingleton {
-    private static EntityManagerFactory emf;
-    
-    public static EntityManagerFactory getEntityManagerFactory(){
-        if(emf == null){
-            emf = Persistence.createEntityManagerFactory("StudentManagerPU");
-        }
-        return emf;
-    }
+public abstract class AbstractTreeItem extends TreeItem {
+    public abstract ContextMenu getContextMenu();
+    public abstract Object getObject();
+    public abstract void setObject(Object o);
 }
