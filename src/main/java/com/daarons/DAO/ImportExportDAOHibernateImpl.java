@@ -17,12 +17,10 @@ package com.daarons.DAO;
 
 import com.daarons.model.Account;
 import java.io.File;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
+import java.sql.*;
 import java.util.List;
 import javax.persistence.EntityManager;
-import org.hibernate.HibernateException;
-import org.hibernate.Session;
+import org.hibernate.*;
 
 /**
  *

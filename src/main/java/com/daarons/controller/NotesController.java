@@ -15,38 +15,23 @@
  */
 package com.daarons.controller;
 
-import com.daarons.DAO.AccountDAO;
-import com.daarons.DAO.DAOFactory;
-import com.daarons.model.Account;
-import com.daarons.model.Note;
-import com.daarons.model.Session;
-import com.daarons.model.Student;
+import com.daarons.DAO.*;
+import com.daarons.model.*;
 import com.daarons.util.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.Calendar;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.TilePane;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+import javafx.stage.*;
 import jfxtras.scene.control.CalendarTimePicker;
 import org.controlsfx.control.textfield.TextFields;
 
@@ -151,6 +136,8 @@ public class NotesController implements Initializable {
                     }
                 }
             }
+            
+            //update the db and get the updated objects
             Account updatedAccount = dao.updateAccount(account);
             students = updatedAccount.getStudents().stream()
                     .filter(s
@@ -163,6 +150,7 @@ public class NotesController implements Initializable {
                     session = sess;
                 }
             }
+            
             viewSession(session);
         } else {
             Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "

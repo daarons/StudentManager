@@ -15,39 +15,19 @@
  */
 package com.daarons.controller;
 
-import com.daarons.DAO.AccountDAO;
-import com.daarons.DAO.DAOFactory;
-import com.daarons.model.Account;
-import com.daarons.model.Note;
-import com.daarons.model.Review;
-import com.daarons.model.ReviewSection;
-import com.daarons.model.Session;
-import com.daarons.model.Student;
-import com.daarons.util.HandleTab;
-import com.daarons.util.Validator;
+import com.daarons.DAO.*;
+import com.daarons.model.*;
+import com.daarons.util.*;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.GregorianCalendar;
-import java.util.ResourceBundle;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import java.util.*;
+import javafx.collections.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ChoiceBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
@@ -121,6 +101,7 @@ public class SessionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         ObservableList<Integer> cbList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
 
+        //init choiceboxes and textareas
         ArrayList<Node> nodes = getAllNodes(borderPane);
         for (Node node : nodes) {
             if (node instanceof ChoiceBox) {
@@ -210,6 +191,7 @@ public class SessionController implements Initializable {
                 review.setSession(session);
                 session.setReview(review);
 
+                //updates the sessions for persisting and get the student view
                 Account account = session.getStudent().getAccount();
                 Student studentView = null;
                 for (Student student : account.getStudents()) {

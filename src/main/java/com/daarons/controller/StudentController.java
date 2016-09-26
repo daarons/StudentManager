@@ -15,56 +15,26 @@
  */
 package com.daarons.controller;
 
-import com.daarons.DAO.AccountDAO;
-import com.daarons.DAO.DAOFactory;
+import com.daarons.DAO.*;
 import com.daarons.control.AbstractTreeItem;
-import com.daarons.model.Account;
-import com.daarons.model.Session;
-import com.daarons.model.Student;
-import com.daarons.util.HandleTab;
-import com.daarons.util.Validator;
+import com.daarons.model.*;
+import com.daarons.util.*;
 import extfx.scene.chart.DateAxis;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.Field;
+import java.lang.reflect.*;
 import java.net.URL;
-import java.util.Date;
-import java.util.List;
-import java.util.ResourceBundle;
-import javafx.beans.property.ReadOnlyLongWrapper;
-import javafx.beans.property.ReadOnlyStringWrapper;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
+import java.util.*;
+import javafx.beans.property.*;
+import javafx.event.*;
+import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.chart.LineChart;
-import javafx.scene.chart.NumberAxis;
-import javafx.scene.chart.XYChart;
-import javafx.scene.control.Alert;
+import javafx.scene.*;
+import javafx.scene.chart.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.control.Tooltip;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeTableColumn;
-import javafx.scene.control.TreeTableRow;
-import javafx.scene.control.TreeTableView;
-import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.GridPane;
-import javafx.scene.layout.RowConstraints;
-import javafx.stage.Screen;
-import javafx.stage.Stage;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
+import javafx.scene.layout.*;
+import javafx.stage.*;
 import javafx.util.Duration;
 
 /**
@@ -153,12 +123,15 @@ public class StudentController implements Initializable {
                 student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
                 student.setMotive(motivesArea.getText().replaceAll("`", ""));
                 student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
+                
+                //get account and replace the old student with the new student
                 Account account = student.getAccount();
                 for (Student s : account.getStudents()) {
                     if (s.getId() == student.getId()) {
                         s = student;
                     }
                 }
+                
                 dao.updateAccount(account);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
@@ -291,6 +264,7 @@ public class StudentController implements Initializable {
             viewSession.setOnAction((ActionEvent event) -> {
                 viewSession(session);
             });
+            
             MenuItem deleteSession = new MenuItem("Delete Session");
             deleteSession.setOnAction((ActionEvent event) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
@@ -298,6 +272,7 @@ public class StudentController implements Initializable {
                         + session.getSessionId() + " ?");
                 deleteAlert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK) {
+                        //get account and remove session from it
                         Account account = session.getStudent().getAccount();
                         for(Student s : account.getStudents()){
                             if(s.getId() == student.getId()){
@@ -315,6 +290,7 @@ public class StudentController implements Initializable {
                     }
                 });
             });
+            
             return new ContextMenu(viewSession, deleteSession);
         }
 

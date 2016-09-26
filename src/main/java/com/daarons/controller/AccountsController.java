@@ -75,6 +75,7 @@ public class AccountsController implements Initializable {
             newAccount = dao.addAccount(newAccount);
             accountsView.getRoot().getChildren().add(new AccountTreeItem(newAccount));
         });
+        
         accountsView.setContextMenu(new ContextMenu(addAccount));
 
         gridPane.add(accountsView, 0, 1);
