@@ -15,33 +15,18 @@
  */
 package com.daarons.controller;
 
-import com.daarons.DAO.AccountDAO;
-import com.daarons.DAO.DAOFactory;
+import com.daarons.DAO.*;
 import com.daarons.control.AbstractTreeItem;
-import com.daarons.model.Account;
-import com.daarons.model.Student;
+import com.daarons.model.*;
 import java.io.IOException;
 import java.net.URL;
-import java.util.List;
-import java.util.ResourceBundle;
+import java.util.*;
 import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.fxml.Initializable;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Alert;
+import javafx.fxml.*;
+import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.ButtonType;
-import javafx.scene.control.ContextMenu;
-import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TreeCell;
-import javafx.scene.control.TreeItem;
-import javafx.scene.control.TreeView;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyEvent;
+import javafx.scene.control.*;
+import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
 
@@ -119,6 +104,7 @@ public class AccountsController implements Initializable {
                     ((Student) ati.getObject()).setAccount(account);
                 }
             });
+
             MenuItem deleteAccount = new MenuItem("Delete Account");
             deleteAccount.setOnAction((ActionEvent t) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
@@ -131,11 +117,11 @@ public class AccountsController implements Initializable {
                     }
                 });
             });
+
             return new ContextMenu(addStudent, deleteAccount);
         }
 
         @Override
-
         public Object getObject() {
             return account;
         }
@@ -160,25 +146,10 @@ public class AccountsController implements Initializable {
         @Override
         public ContextMenu getContextMenu() {
             MenuItem viewStudent = new MenuItem("View Student");
-            viewStudent.setOnAction((ActionEvent event) -> { 
-                //go to student view
-                FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
-                StudentController studentController = new StudentController(student);
-                fxmlLoader.setController(studentController);
-                Stage stage = (Stage) ((Node) accountsView).getScene().getWindow();
-                Scene scene = null;
-                Parent root = null;
-                try {
-                    root = (Parent) fxmlLoader.load();
-                } catch (IOException ex) {
-                    ex.printStackTrace();
-                }
-                scene = new Scene(root);
-                stage.setScene(scene);
-                stage.setHeight(stage.getHeight());
-                stage.setWidth(stage.getWidth());
-                stage.show();
+            viewStudent.setOnAction((ActionEvent event) -> {
+                viewStudent(student);
             });
+            
             MenuItem deleteStudent = new MenuItem("Delete Student");
             deleteStudent.setOnAction((ActionEvent t) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
@@ -199,6 +170,7 @@ public class AccountsController implements Initializable {
                     }
                 });
             });
+            
             return new ContextMenu(viewStudent, deleteStudent);
         }
 
@@ -320,5 +292,24 @@ public class AccountsController implements Initializable {
     private static boolean containsChinese(String text) {
         return text.codePoints().anyMatch(codepoint
                 -> Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
+    }
+
+    private void viewStudent(Student student) {
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
+        StudentController studentController = new StudentController(student);
+        fxmlLoader.setController(studentController);
+        Stage stage = (Stage) ((Node) gridPane).getScene().getWindow();
+        Scene scene = null;
+        Parent root = null;
+        try {
+            root = (Parent) fxmlLoader.load();
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
+        stage.show();
     }
 }
