@@ -20,7 +20,6 @@ import com.daarons.control.AbstractTreeItem;
 import com.daarons.model.*;
 import com.daarons.util.*;
 import extfx.scene.chart.DateAxis;
-import java.io.IOException;
 import java.lang.reflect.*;
 import java.net.URL;
 import java.util.*;
@@ -36,6 +35,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.Duration;
+import org.apache.logging.log4j.*;
 
 /**
  * FXML Controller class
@@ -44,6 +44,7 @@ import javafx.util.Duration;
  */
 public class StudentController implements Initializable {
 
+    private static final Logger log = LogManager.getLogger(StudentController.class);
     private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private Student student;
     private TreeTableView sessionTableView;
@@ -84,8 +85,8 @@ public class StudentController implements Initializable {
         Parent root = null;
         try {
             root = (Parent) fxmlLoader.load();
-        } catch (IOException ex) {
-            System.out.println(ex);
+        } catch (Exception ex) {
+            log.error("Couldn't load session.fxml", ex);
         }
         scene = new Scene(root);
         stage.setScene(scene);
@@ -231,7 +232,7 @@ public class StudentController implements Initializable {
                         }
                     }
                 } catch (Exception ex) {
-                    System.out.println(ex);
+                    log.error("Couldn't set duration of tooltip", ex);
                 }
                 Tooltip.install(d.getNode(), tooltip);
 

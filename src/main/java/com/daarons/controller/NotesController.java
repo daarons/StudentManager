@@ -18,7 +18,6 @@ package com.daarons.controller;
 import com.daarons.DAO.*;
 import com.daarons.model.*;
 import com.daarons.util.*;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
@@ -33,6 +32,7 @@ import javafx.scene.input.*;
 import javafx.scene.layout.TilePane;
 import javafx.stage.*;
 import jfxtras.scene.control.CalendarTimePicker;
+import org.apache.logging.log4j.*;
 import org.controlsfx.control.textfield.TextFields;
 
 /**
@@ -42,6 +42,7 @@ import org.controlsfx.control.textfield.TextFields;
  */
 public class NotesController implements Initializable {
 
+    private static final Logger log = LogManager.getLogger(NotesController.class);
     private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
 
     @FXML
@@ -213,8 +214,8 @@ public class NotesController implements Initializable {
         Parent root = null;
         try {
             root = (Parent) fxmlLoader.load();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            log.error("Couldn't load session", ex);
         }
         scene = new Scene(root);
         stage.setScene(scene);

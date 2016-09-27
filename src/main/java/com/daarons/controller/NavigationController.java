@@ -7,8 +7,11 @@ import javafx.fxml.*;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
 import javafx.scene.*;
+import org.apache.logging.log4j.*;
 
 public class NavigationController implements Initializable {
+
+    private static final Logger log = LogManager.getLogger(NavigationController.class);
 
     @FXML
     private Button homeBtn;
@@ -22,20 +25,24 @@ public class NavigationController implements Initializable {
     private Button infoBtn;
 
     @FXML
-    private void navigate(ActionEvent event) throws Exception {
+    private void navigate(ActionEvent event) {
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = null;
         Parent root = null;
-        if(event.getSource()==homeBtn){
-            root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
-        }else if (event.getSource() == accountsBtn) {
-            root = FXMLLoader.load(getClass().getResource("/view/accounts.fxml"));
-        } else if (event.getSource() == notesBtn) {
-            root = FXMLLoader.load(getClass().getResource("/view/notes.fxml"));
-        } else if (event.getSource() == importExportBtn) {
-            root = FXMLLoader.load(getClass().getResource("/view/importExport.fxml"));
-        } else if (event.getSource() == infoBtn) {
-            root = FXMLLoader.load(getClass().getResource("/view/info.fxml"));
+        try {
+            if (event.getSource() == homeBtn) {
+                root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
+            } else if (event.getSource() == accountsBtn) {
+                root = FXMLLoader.load(getClass().getResource("/view/accounts.fxml"));
+            } else if (event.getSource() == notesBtn) {
+                root = FXMLLoader.load(getClass().getResource("/view/notes.fxml"));
+            } else if (event.getSource() == importExportBtn) {
+                root = FXMLLoader.load(getClass().getResource("/view/importExport.fxml"));
+            } else if (event.getSource() == infoBtn) {
+                root = FXMLLoader.load(getClass().getResource("/view/info.fxml"));
+            }
+        } catch (Exception ex) {
+            log.error("Couldn't navigate", ex);
         }
         scene = new Scene(root);
         stage.setScene(scene);
@@ -46,6 +53,6 @@ public class NavigationController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
     }
 }

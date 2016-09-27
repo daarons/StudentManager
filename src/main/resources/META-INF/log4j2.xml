@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+Copyright 2016 David Aarons.
+
+Licensed under the Apache License, Version 2.0 (the "License");
+you may not use this file except in compliance with the License.
+You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+Unless required by applicable law or agreed to in writing, software
+distributed under the License is distributed on an "AS IS" BASIS,
+WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+See the License for the specific language governing permissions and
+limitations under the License.
+-->
+
+<configuration status="INFO">
+    <properties>
+        <property name="name">StudentManagerApp</property>
+        <property name="pattern">%d{yyyy-MM-dd HH:mm:ss.SSS}[%p] %c{2}:%L(%M) | %msg%n</property>
+    </properties>
+    <appenders>
+        <Console name="console" target="SYSTEM_OUT">
+            <PatternLayout>
+                <pattern>${pattern}</pattern>
+            </PatternLayout>
+        </Console>
+        <File name="debugFile" fileName="logs/${name}.log">
+            <PatternLayout>
+                <pattern>${pattern}</pattern>
+            </PatternLayout>
+        </File>
+    </appenders>
+    <loggers>
+        <root level="all">
+            <appender-ref ref="console" level="info"/>
+            <appender-ref ref="debugFile" level="info"/>           
+        </root>
+        <logger name="com.mchange" level="off"/>
+        <logger name="org.hibernate" level="off"/>  
+        <logger name="org.jboss.logging" level="off"/>  
+    </loggers>   
+</configuration>

@@ -18,12 +18,14 @@ package com.daarons.DAO;
 import com.daarons.model.Account;
 import java.util.List;
 import javax.persistence.*;
+import org.apache.logging.log4j.*;
 
 /**
  *
  * @author David
  */
 public class AccountDAOHibernateImpl implements AccountDAO {
+    private static final Logger log = LogManager.getLogger(AccountDAOHibernateImpl.class);
 
     @Override
     public Account getAccount(long id) {
@@ -53,7 +55,7 @@ public class AccountDAOHibernateImpl implements AccountDAO {
                 accounts = null;
             }
         } catch (NoResultException e) {
-            e.printStackTrace();
+            //no logging needed for NoResultException
         } finally {
             em.close();
         }
@@ -69,7 +71,7 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             em.persist(a);
             trans.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Couldn't add account", e);
             trans.rollback();
         } finally {
             em.close();
@@ -86,7 +88,7 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             a = em.merge(a);
             trans.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Couldn't update account", e);
             trans.rollback();
         } finally {
             em.close();
@@ -103,7 +105,7 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             em.remove(em.merge(a));
             trans.commit();
         } catch (Exception e) {
-            e.printStackTrace();
+            log.error("Couldn't delete account", e);
             trans.rollback();
         } finally {
             em.close();

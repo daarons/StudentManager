@@ -20,6 +20,7 @@ import java.io.File;
 import java.sql.*;
 import java.util.List;
 import javax.persistence.EntityManager;
+import org.apache.logging.log4j.*;
 import org.hibernate.*;
 
 /**
@@ -28,6 +29,7 @@ import org.hibernate.*;
  */
 public class ImportExportDAOHibernateImpl implements ImportExportDAO {
 
+    private static final Logger log = LogManager.getLogger(ImportExportDAOHibernateImpl.class);
     private EntityManager em;
     private Session session;
 
@@ -57,14 +59,14 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
                         ps.setString(7, "1");
                         ps.execute();
                     }
-                } catch (Exception e) {
+                } catch (Exception e) {                    
                     throw new HibernateException("Import failed.", e);
                 } finally {
                     connection.close();
                 }
             });
         } catch (Exception e) {
-            System.out.println(e);
+            log.error("Import failed", e);
             return false;
         } finally {
             em.close();
@@ -100,7 +102,7 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
                 }
             });
         } catch (Exception e) {
-            System.out.println(e);
+            log.error("Couldn't export", e);
             return false;
         } finally {
             em.close();

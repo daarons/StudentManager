@@ -18,7 +18,6 @@ package com.daarons.controller;
 import com.daarons.DAO.*;
 import com.daarons.model.*;
 import com.daarons.util.*;
-import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
@@ -32,6 +31,7 @@ import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
+import org.apache.logging.log4j.*;
 
 /**
  * FXML Controller class
@@ -40,6 +40,7 @@ import jfxtras.scene.control.CalendarTimePicker;
  */
 public class SessionController implements Initializable {
 
+    private static final Logger log = LogManager.getLogger(SessionController.class);
     private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private Session session;
 
@@ -241,8 +242,8 @@ public class SessionController implements Initializable {
         Parent root = null;
         try {
             root = (Parent) fxmlLoader.load();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            log.error("Couldn't load student.fxml", ex);
         }
         scene = new Scene(root);
         stage.setScene(scene);

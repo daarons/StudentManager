@@ -19,9 +19,9 @@ import java.io.*;
 import java.net.URL;
 import java.nio.file.*;
 import java.util.ResourceBundle;
-import java.util.logging.*;
 import javafx.fxml.*;
 import javafx.scene.control.TextArea;
+import org.apache.logging.log4j.*;
 
 /**
  * FXML Controller class
@@ -29,6 +29,8 @@ import javafx.scene.control.TextArea;
  * @author David
  */
 public class InfoController implements Initializable {
+    
+    private static final Logger log = LogManager.getLogger(InfoController.class);
     
     @FXML
     private TextArea legalText;
@@ -65,9 +67,9 @@ public class InfoController implements Initializable {
             in.close();
             in = null;
         } catch (FileNotFoundException ex) {
-            Logger.getLogger(InfoController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("Couldn't find file", ex);
         } catch (IOException ex) {
-            Logger.getLogger(InfoController.class.getName()).log(Level.SEVERE, null, ex);
+            log.error("IO failed", ex);
         }
     }
 

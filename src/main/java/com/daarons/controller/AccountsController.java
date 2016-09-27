@@ -18,7 +18,6 @@ package com.daarons.controller;
 import com.daarons.DAO.*;
 import com.daarons.control.AbstractTreeItem;
 import com.daarons.model.*;
-import java.io.IOException;
 import java.net.URL;
 import java.util.*;
 import javafx.event.ActionEvent;
@@ -29,6 +28,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
 import javafx.stage.Stage;
+import org.apache.logging.log4j.*;
 
 /**
  * FXML Controller class
@@ -36,7 +36,8 @@ import javafx.stage.Stage;
  * @author David
  */
 public class AccountsController implements Initializable {
-
+    
+    private static final Logger log = LogManager.getLogger(AccountsController.class);
     private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
     private TreeView accountsView;
 
@@ -304,8 +305,8 @@ public class AccountsController implements Initializable {
         Parent root = null;
         try {
             root = (Parent) fxmlLoader.load();
-        } catch (IOException ex) {
-            ex.printStackTrace();
+        } catch (Exception ex) {
+            log.error("Couldn't load student.fxml", ex);
         }
         scene = new Scene(root);
         stage.setScene(scene);

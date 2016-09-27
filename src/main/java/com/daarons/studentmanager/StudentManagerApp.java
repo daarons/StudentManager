@@ -2,7 +2,6 @@ package com.daarons.studentmanager;
 
 import com.daarons.DAO.EMSingleton;
 import java.io.*;
-import java.util.logging.LogManager;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -18,8 +17,11 @@ import javafx.scene.paint.Color;
 import javafx.scene.text.Font;
 import javafx.stage.*;
 import javafx.util.Duration;
+import org.apache.logging.log4j.*;
 
 public class StudentManagerApp extends Application {
+
+    private static final Logger log = LogManager.getLogger(StudentManagerApp.class);
     private final String sep = File.separator;
     private final String SPLASH_IMAGE_URL = "src" + sep + "main" + sep
             + "resources" + sep + "image" + sep + "splash.jpeg";
@@ -27,18 +29,27 @@ public class StudentManagerApp extends Application {
     private Stage splashStage, mainStage;
 
     @Override
-    public void start(Stage stage) throws Exception {       
+    public void init() {
+        //sets location for log4j config file
+        System.setProperty("log4j.configurationFile", "src" + sep + "main" + 
+                sep + "resources" + sep + "META-INF" + sep);
+        
+        //stops unnecessary logging for hibernate/c3p0
+        System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
+        System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
+    }
+
+    @Override
+    public void start(Stage stage) throws Exception {
 
         final Task connectToDB = new Task() {
             @Override
             protected Object call() throws InterruptedException {
-                //turns off logging b/c derby logs a lot on startup
-                LogManager.getLogManager().reset(); 
                 //connects to db
-                EMSingleton.getEntityManager(); 
+                EMSingleton.getEntityManager();
                 return null;
             }
-        };        
+        };
         connectToDB.setOnSucceeded((Event event) -> {
             FadeTransition fade = new FadeTransition(Duration.seconds(1.2), splashLayout);
             fade.setFromValue(1.0);
@@ -49,9 +60,9 @@ public class StudentManagerApp extends Application {
             });
             fade.play();
         });
-        
+
         showSplash();
-        
+
         new Thread(connectToDB).start();
     }
 
@@ -77,11 +88,10 @@ public class StudentManagerApp extends Application {
         Parent root = null;
         try {
             root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
-        } catch (IOException ex) {
-            System.out.println(ex);
+        } catch (Exception ex) {
+            log.error("Couldn't load home.fxml", ex);
         }
         Scene scene = new Scene(root);
-        scene.getStylesheets().add("/css/style.css");
 
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
 
@@ -97,28 +107,28 @@ public class StudentManagerApp extends Application {
 
     private void showSplash() {
         splashStage = new Stage();
-        
+
         File imageFile = new File(SPLASH_IMAGE_URL);
         ImageView splashImage = new ImageView(new Image(imageFile.toURI().toString()));
         splashImage.setFitHeight(300);
         splashImage.setFitWidth(300);
         splashImage.setPreserveRatio(true);
-        
+
         Label title = new Label("Student Manager");
         title.setFont(Font.font(STYLESHEET_MODENA, 35));
         StackPane.setAlignment(title, Pos.BOTTOM_CENTER);
         title.setStyle("-fx-padding: 0 0 20px 0; -fx-font-weight: bold;");
-        
+
         ProgressBar progress = new ProgressBar();
         progress.setMaxWidth(300);
         StackPane.setAlignment(progress, Pos.BOTTOM_LEFT);
-        
+
         splashLayout = new StackPane();
         splashLayout.setMaxSize(300, 300);
         splashLayout.getChildren().addAll(splashImage, title, progress);
-        
+
         Scene splashScene = new Scene(splashLayout, Color.TRANSPARENT);
-        
+
         splashStage.setScene(splashScene);
         splashStage.initStyle(StageStyle.TRANSPARENT);
         splashStage.show();
