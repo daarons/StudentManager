@@ -124,7 +124,7 @@ public class StudentController implements Initializable {
                 student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
                 student.setMotive(motivesArea.getText().replaceAll("`", ""));
                 student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
-                
+
                 //get account and replace the old student with the new student
                 Account account = student.getAccount();
                 for (Student s : account.getStudents()) {
@@ -132,7 +132,7 @@ public class StudentController implements Initializable {
                         s = student;
                     }
                 }
-                
+
                 dao.updateAccount(account);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
@@ -265,7 +265,7 @@ public class StudentController implements Initializable {
             viewSession.setOnAction((ActionEvent event) -> {
                 viewSession(session);
             });
-            
+
             MenuItem deleteSession = new MenuItem("Delete Session");
             deleteSession.setOnAction((ActionEvent event) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
@@ -275,10 +275,10 @@ public class StudentController implements Initializable {
                     if (response == ButtonType.OK) {
                         //get account and remove session from it
                         Account account = session.getStudent().getAccount();
-                        for(Student s : account.getStudents()){
-                            if(s.getId() == student.getId()){
-                                for(Session sess : s.getSessions()){
-                                    if(sess.getId() == session.getId()){
+                        for (Student s : account.getStudents()) {
+                            if (s.getId() == student.getId()) {
+                                for (Session sess : s.getSessions()) {
+                                    if (sess.getId() == session.getId()) {
                                         s.getSessions().remove(sess);
                                         break;
                                     }
@@ -291,7 +291,7 @@ public class StudentController implements Initializable {
                     }
                 });
             });
-            
+
             return new ContextMenu(viewSession, deleteSession);
         }
 
