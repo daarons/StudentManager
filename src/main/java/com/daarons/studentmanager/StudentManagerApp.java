@@ -30,10 +30,6 @@ public class StudentManagerApp extends Application {
 
     @Override
     public void init() {
-        //sets location for log4j config file
-        System.setProperty("log4j.configurationFile", "src" + sep + "main" + 
-                sep + "resources" + sep + "META-INF" + sep);
-        
         //stops unnecessary logging for hibernate/c3p0
         System.setProperty("com.mchange.v2.log.MLog", "com.mchange.v2.log.FallbackMLog");
         System.setProperty("com.mchange.v2.log.FallbackMLog.DEFAULT_CUTOFF_LEVEL", "WARNING");
