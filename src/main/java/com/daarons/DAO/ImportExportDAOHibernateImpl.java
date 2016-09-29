@@ -40,7 +40,6 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
             deleteAccounts();
 
             em = EMSingleton.getEntityManager();
-            em.getTransaction().begin();
             session = em.unwrap(Session.class);
             session.doWork((Connection connection) -> {
                 String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
@@ -78,7 +77,6 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
     public boolean exportDB(File folder) {
         try {
             em = EMSingleton.getEntityManager();
-            em.getTransaction().begin();
             session = em.unwrap(Session.class);
             session.doWork((Connection connection) -> {
                 String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
@@ -113,6 +111,7 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
     private void deleteAccounts() {
         AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
         List<Account> accounts = dao.getAccountsLike("*");
-        accounts.forEach(account -> dao.deleteAccount(account));
+        if(accounts != null)
+            accounts.forEach(account -> dao.deleteAccount(account));
     }
 }
