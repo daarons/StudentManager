@@ -17,7 +17,6 @@ package com.daarons.controller;
  */
 import java.io.*;
 import java.net.URL;
-import java.nio.file.*;
 import java.util.ResourceBundle;
 import javafx.fxml.*;
 import javafx.scene.control.TextArea;
@@ -42,12 +41,11 @@ public class InfoController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Path licensePath = Paths.get("src/main/resources/text/license.txt");
-        File licenseFile = licensePath.toFile();
-        Path attrPath = Paths.get("src/main/resources/text/attributions.txt");
-        File attrFile = attrPath.toFile();
+        final String license = "/text/license.txt";
+        final String attributions = "/text/attributions.txt";
         try{
-            BufferedReader in = new BufferedReader(new FileReader(licenseFile));
+            BufferedReader in = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(license)));
             String line = in.readLine();
             while (line != null) {
                 legalText.appendText(line + "\n");
@@ -57,7 +55,8 @@ public class InfoController implements Initializable {
             in.close();
             in = null;
             
-            in = new BufferedReader(new FileReader(attrFile));
+            in = new BufferedReader(
+                    new InputStreamReader(getClass().getResourceAsStream(attributions)));
             line = in.readLine();
             while (line != null) {
                 attrText.appendText(line + "\n");
