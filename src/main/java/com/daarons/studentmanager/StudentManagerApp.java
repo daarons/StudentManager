@@ -106,6 +106,9 @@ public class StudentManagerApp extends Application {
 
     private void showSplash() {
         splashStage = new Stage();
+        splashStage.getIcons().addAll(new Image(WINDOW_ICON_URL1),
+                new Image(WINDOW_ICON_URL2), new Image(WINDOW_ICON_URL3),
+                new Image(WINDOW_ICON_URL4));
 
         Label title = new Label("Student Manager");
         title.setFont(Font.font(STYLESHEET_MODENA, 35));
