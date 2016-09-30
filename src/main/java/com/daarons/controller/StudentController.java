@@ -285,8 +285,23 @@ public class StudentController implements Initializable {
                                 break;
                             }
                         }
-                        dao.updateAccount(account);
-                        this.getParent().getChildren().remove(this);
+                        Account updatedAccount = dao.updateAccount(account);
+                        Student updatedStudent = updatedAccount
+                                .getStudents()
+                                .stream()
+                                .filter(s -> s.getId() == student.getId())
+                                .findFirst()
+                                .get();
+                        student = updatedStudent;
+                        List<Session> updatedSessions = updatedStudent.getSessions();
+                        List<AbstractTreeItem> oldSessions = this.getParent().getChildren();
+                        oldSessions.remove(this);
+                        if (updatedSessions.size() > 0) {
+                            for (int i = 0; i < updatedSessions.size(); i++) {
+                                //automatically removes this SessionTreeItem from view
+                                oldSessions.get(i).setObject(updatedSessions.get(i));
+                            }
+                        }
                     }
                 });
             });
