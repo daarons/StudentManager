@@ -118,8 +118,7 @@ public class StudentController implements Initializable {
                     && Validator.isNumber(ageField.getText())) {
                 student.setEnglishName(englishNameField.getText().replaceAll("`", ""));
                 student.setChineseName(chineseNameField.getText().replaceAll("`", ""));
-                Integer age = Integer.getInteger(ageField.getText());
-                student.setAge(age == null ? 0 : age);
+                student.setAge(Integer.parseInt(ageField.getText()));
                 student.setLocation(locationField.getText().replaceAll("`", ""));
                 student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
                 student.setMotive(motivesArea.getText().replaceAll("`", ""));
