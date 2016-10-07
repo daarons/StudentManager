@@ -118,13 +118,12 @@ public class StudentController implements Initializable {
                     && Validator.isNumber(ageField.getText())) {
                 student.setEnglishName(englishNameField.getText().replaceAll("`", ""));
                 student.setChineseName(chineseNameField.getText().replaceAll("`", ""));
-                Integer age = Integer.getInteger(ageField.getText());
-                student.setAge(age == null ? 0 : age);
+                student.setAge(Integer.parseInt(ageField.getText()));
                 student.setLocation(locationField.getText().replaceAll("`", ""));
                 student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
                 student.setMotive(motivesArea.getText().replaceAll("`", ""));
                 student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
-                
+
                 //get account and replace the old student with the new student
                 Account account = student.getAccount();
                 for (Student s : account.getStudents()) {
@@ -132,7 +131,7 @@ public class StudentController implements Initializable {
                         s = student;
                     }
                 }
-                
+
                 dao.updateAccount(account);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
@@ -265,7 +264,7 @@ public class StudentController implements Initializable {
             viewSession.setOnAction((ActionEvent event) -> {
                 viewSession(session);
             });
-            
+
             MenuItem deleteSession = new MenuItem("Delete Session");
             deleteSession.setOnAction((ActionEvent event) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
@@ -275,10 +274,10 @@ public class StudentController implements Initializable {
                     if (response == ButtonType.OK) {
                         //get account and remove session from it
                         Account account = session.getStudent().getAccount();
-                        for(Student s : account.getStudents()){
-                            if(s.getId() == student.getId()){
-                                for(Session sess : s.getSessions()){
-                                    if(sess.getId() == session.getId()){
+                        for (Student s : account.getStudents()) {
+                            if (s.getId() == student.getId()) {
+                                for (Session sess : s.getSessions()) {
+                                    if (sess.getId() == session.getId()) {
                                         s.getSessions().remove(sess);
                                         break;
                                     }
@@ -286,12 +285,27 @@ public class StudentController implements Initializable {
                                 break;
                             }
                         }
-                        dao.updateAccount(account);
-                        this.getParent().getChildren().remove(this);
+                        Account updatedAccount = dao.updateAccount(account);
+                        Student updatedStudent = updatedAccount
+                                .getStudents()
+                                .stream()
+                                .filter(s -> s.getId() == student.getId())
+                                .findFirst()
+                                .get();
+                        student = updatedStudent;
+                        List<Session> updatedSessions = updatedStudent.getSessions();
+                        List<AbstractTreeItem> oldSessions = this.getParent().getChildren();
+                        oldSessions.remove(this);
+                        if (updatedSessions.size() > 0) {
+                            for (int i = 0; i < updatedSessions.size(); i++) {
+                                //automatically removes this SessionTreeItem from view
+                                oldSessions.get(i).setObject(updatedSessions.get(i));
+                            }
+                        }
                     }
                 });
             });
-            
+
             return new ContextMenu(viewSession, deleteSession);
         }
 

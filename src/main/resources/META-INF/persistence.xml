@@ -6,7 +6,7 @@
         <properties>
             <property name="hibernate.dialect" value="org.hibernate.dialect.DerbyTenSevenDialect"/>
             <property name="hibernate.cache.provider_class" value="org.hibernate.cache.NoCacheProvider"/>
-            <property name="javax.persistence.jdbc.url" value="jdbc:derby:INSERT_LOCATION_HERE;create=true;collation=TERRITORY_BASED:SECONDARY"/>
+            <property name="javax.persistence.jdbc.url" value="jdbc:derby:db;create=true;collation=TERRITORY_BASED:SECONDARY"/>
             <property name="javax.persistence.jdbc.driver" value="org.apache.derby.jdbc.EmbeddedDriver"/>
             <property name="javax.persistence.schema-generation.database.action" value="create"/>
             <property name="org.hibernate.engine.jdbc.connections.internal.DriverManagerConnectionProviderImpl" value="org.hibernate.connection.C3P0ConnectionProvider"/>

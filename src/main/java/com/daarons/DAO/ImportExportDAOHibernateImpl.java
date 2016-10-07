@@ -54,7 +54,7 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
                         ps.setString(3, folder.getPath() + File.separator + tables[i] + ".dat");
                         ps.setString(4, "`");
                         ps.setString(5, null);
-                        ps.setString(6, null);
+                        ps.setString(6, "UTF-8");
                         ps.setString(7, "1");
                         ps.execute();
                     }
@@ -90,7 +90,7 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
                         ps.setString(3, folder.getPath() + File.separator + tables[i] + ".dat");
                         ps.setString(4, "`");
                         ps.setString(5, null);
-                        ps.setString(6, null);
+                        ps.setString(6, "UTF-8");
                         ps.execute();
                     }
                 } catch (Exception e) {

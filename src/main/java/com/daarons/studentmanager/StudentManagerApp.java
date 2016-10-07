@@ -1,7 +1,6 @@
 package com.daarons.studentmanager;
 
 import com.daarons.DAO.EMSingleton;
-import java.io.*;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -22,9 +21,10 @@ import org.apache.logging.log4j.*;
 public class StudentManagerApp extends Application {
 
     private static final Logger log = LogManager.getLogger(StudentManagerApp.class);
-    private final String sep = File.separator;
-    private final String SPLASH_IMAGE_URL = "src" + sep + "main" + sep
-            + "resources" + sep + "image" + sep + "splash.jpeg";
+    private final String WINDOW_ICON_URL1 = "/image/16x16-icon.png";
+    private final String WINDOW_ICON_URL2 = "/image/20x20-icon.png";
+    private final String WINDOW_ICON_URL3 = "/image/24x24-icon.png";
+    private final String WINDOW_ICON_URL4 = "/image/32x32-icon.png";  
     private Pane splashLayout;
     private Stage splashStage, mainStage;
 
@@ -92,6 +92,9 @@ public class StudentManagerApp extends Application {
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
 
         mainStage = new Stage();
+        mainStage.getIcons().addAll(new Image(WINDOW_ICON_URL1),
+                new Image(WINDOW_ICON_URL2), new Image(WINDOW_ICON_URL3),
+                new Image(WINDOW_ICON_URL4));
         mainStage.setTitle("Student Manager");
         mainStage.setScene(scene);
         mainStage.setHeight(screenSize.getHeight());
@@ -103,12 +106,9 @@ public class StudentManagerApp extends Application {
 
     private void showSplash() {
         splashStage = new Stage();
-
-        File imageFile = new File(SPLASH_IMAGE_URL);
-        ImageView splashImage = new ImageView(new Image(imageFile.toURI().toString()));
-        splashImage.setFitHeight(300);
-        splashImage.setFitWidth(300);
-        splashImage.setPreserveRatio(true);
+        splashStage.getIcons().addAll(new Image(WINDOW_ICON_URL1),
+                new Image(WINDOW_ICON_URL2), new Image(WINDOW_ICON_URL3),
+                new Image(WINDOW_ICON_URL4));
 
         Label title = new Label("Student Manager");
         title.setFont(Font.font(STYLESHEET_MODENA, 35));
@@ -120,8 +120,13 @@ public class StudentManagerApp extends Application {
         StackPane.setAlignment(progress, Pos.BOTTOM_LEFT);
 
         splashLayout = new StackPane();
+        splashLayout.setMinSize(300, 300);
         splashLayout.setMaxSize(300, 300);
-        splashLayout.getChildren().addAll(splashImage, title, progress);
+        splashLayout.setStyle("-fx-background-image: url('/image/splash.jpeg');"
+                + "-fx-background-repeat: no-repeat;"
+                + "-fx-background-position: center;"
+                + "-fx-background-size: cover");
+        splashLayout.getChildren().addAll(title, progress);
 
         Scene splashScene = new Scene(splashLayout, Color.TRANSPARENT);
 

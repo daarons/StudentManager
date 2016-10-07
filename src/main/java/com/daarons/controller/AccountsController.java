@@ -95,8 +95,8 @@ public class AccountsController implements Initializable {
         public ContextMenu getContextMenu() {
             MenuItem addStudent = new MenuItem("Add Student");
             addStudent.setOnAction((ActionEvent t) -> {
-                Student newStudent = new Student(account, null, "New Student", 0,
-                        null, null, null, null);
+                Student newStudent = new Student(account, "", "New Student", 0,
+                        "", "", "", "");
                 account.getStudents().add(newStudent);
                 account = dao.updateAccount(account);
                 newStudent = account.getStudents().get(account.getStudents().size() - 1);
