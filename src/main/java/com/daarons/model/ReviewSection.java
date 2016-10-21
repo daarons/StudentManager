@@ -25,8 +25,6 @@ import javax.persistence.*;
 @Embeddable
 public class ReviewSection implements Serializable {
     private int grade;
-    @Column(columnDefinition="longvarchar")
-    @Lob
     private String comment;
     
     public ReviewSection(){

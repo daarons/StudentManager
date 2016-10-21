@@ -34,37 +34,37 @@ public class Review implements Serializable {
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "grade", column = @Column(name = "fluencyAndCoherenceGrade")),
-        @AttributeOverride(name = "comment", column = @Column(name = "fluencyAndCoherenceComment"))
+        @AttributeOverride(name = "comment", column = @Column(name = "fluencyAndCoherenceComment", columnDefinition="long varchar"))
     })
     private ReviewSection fluencyAndCoherence;
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "grade", column = @Column(name = "vocabularyGrade")),
-        @AttributeOverride(name = "comment", column = @Column(name = "vocabularyComment"))
+        @AttributeOverride(name = "comment", column = @Column(name = "vocabularyComment", columnDefinition="long varchar"))
     })
     private ReviewSection vocabulary;
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "grade", column = @Column(name = "grammarGrade")),
-        @AttributeOverride(name = "comment", column = @Column(name = "grammarComment"))
+        @AttributeOverride(name = "comment", column = @Column(name = "grammarComment", columnDefinition="long varchar"))
     })
     private ReviewSection grammar;
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "grade", column = @Column(name = "pronunciationGrade")),
-        @AttributeOverride(name = "comment", column = @Column(name = "pronunciationComment"))
+        @AttributeOverride(name = "comment", column = @Column(name = "pronunciationComment", columnDefinition="long varchar"))
     })
     private ReviewSection pronunciation;
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "grade", column = @Column(name = "interactionAndEngagementGrade")),
-        @AttributeOverride(name = "comment", column = @Column(name = "interactionAndEngagementComment"))
+        @AttributeOverride(name = "comment", column = @Column(name = "interactionAndEngagementComment", columnDefinition="long varchar"))
     })
     private ReviewSection interactionAndEngagement;
     @Embedded
     @AttributeOverrides({
         @AttributeOverride(name = "grade", column = @Column(name = "communicationSkillsGrade")),
-        @AttributeOverride(name = "comment", column = @Column(name = "communicationSkillsComment"))
+        @AttributeOverride(name = "comment", column = @Column(name = "communicationSkillsComment", columnDefinition="long varchar"))
     })
     private ReviewSection communicationSkills;
     
