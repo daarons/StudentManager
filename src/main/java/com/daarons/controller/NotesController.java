@@ -23,12 +23,14 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
+import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.TilePane;
 import javafx.stage.*;
 import jfxtras.scene.control.CalendarTimePicker;
@@ -44,7 +46,10 @@ public class NotesController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(NotesController.class);
     private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    private Stage stage;
 
+    @FXML
+    private BorderPane borderPane;
     @FXML
     private TilePane tilePane;
     @FXML
@@ -69,8 +74,62 @@ public class NotesController implements Initializable {
     private TextField studentField;
     @FXML
     private TextField sessionIdField;
+    
+    public NotesController(Stage stage){
+        this.stage = stage;
+    }
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        saveBtn.setOnMouseClicked(new EventHandler<MouseEvent>(){
+            @Override
+            public void handle(MouseEvent event) {
+                saveNotes(event);
+            }           
+        });
+        
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        tilePane.prefTileHeightProperty().bind(stage.widthProperty().divide(3.5));
+        tilePane.setPrefTileWidth(screenSize.getWidth() / 6.5);
 
-    @FXML
+        timePicker.setPrefSize(screenSize.getWidth() / 5, 60);
+        Calendar cal = Calendar.getInstance();
+        cal.setTimeInMillis(System.currentTimeMillis());
+        int minute = cal.get(Calendar.MINUTE);
+        int hour = cal.get(Calendar.HOUR_OF_DAY);
+        if (minute > 5 && minute < 35) {
+            cal.set(Calendar.MINUTE, 30);
+        } else {
+            cal.set(Calendar.MINUTE, 00);
+            cal.set(Calendar.HOUR_OF_DAY, hour + 1);
+        }
+        cal.clear(Calendar.SECOND);
+        cal.clear(Calendar.MILLISECOND);
+        timePicker.setCalendar(cal);
+
+        TextFields.bindAutoCompletion(accountField, t -> {
+            return dao.getAccountsLike(t.getUserText());
+        });
+        TextFields.bindAutoCompletion(studentField, t -> {
+            List<Account> accounts = dao.getAccountsLike(accountField.getText());
+            return accounts.stream().filter(a -> a.getStudents() != null)
+                    .flatMap(a -> a.getStudents().stream()).collect(Collectors.toList());
+        });
+
+        studentField.disableProperty().bind(
+                Bindings.isEmpty(accountField.textProperty()));
+
+        fluencyCoherenceNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        vocabularyNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        grammarNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        pronunciationNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        interactEngageNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        commSkillsNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+    }
+    
     private void saveNotes(MouseEvent event) {
         if (event.getSource() == saveBtn
                 && !accountField.getText().trim().isEmpty()
@@ -159,50 +218,6 @@ public class NotesController implements Initializable {
                     + "filled in correctly before saving.");
             saveAlert.showAndWait();
         }
-    }
-
-    /**
-     * Initializes the controller class.
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        tilePane.setPrefTileHeight(screenSize.getHeight() / 4.5);
-        tilePane.setPrefTileWidth(screenSize.getWidth() / 6.5);
-
-        timePicker.setPrefSize(screenSize.getWidth() / 5, 60);
-        Calendar cal = Calendar.getInstance();
-        cal.setTimeInMillis(System.currentTimeMillis());
-        int minute = cal.get(Calendar.MINUTE);
-        int hour = cal.get(Calendar.HOUR_OF_DAY);
-        if (minute > 5 && minute < 35) {
-            cal.set(Calendar.MINUTE, 30);
-        } else {
-            cal.set(Calendar.MINUTE, 00);
-            cal.set(Calendar.HOUR_OF_DAY, hour + 1);
-        }
-        cal.clear(Calendar.SECOND);
-        cal.clear(Calendar.MILLISECOND);
-        timePicker.setCalendar(cal);
-
-        TextFields.bindAutoCompletion(accountField, t -> {
-            return dao.getAccountsLike(t.getUserText());
-        });
-        TextFields.bindAutoCompletion(studentField, t -> {
-            List<Account> accounts = dao.getAccountsLike(accountField.getText());
-            return accounts.stream().filter(a -> a.getStudents() != null)
-                    .flatMap(a -> a.getStudents().stream()).collect(Collectors.toList());
-        });
-
-        studentField.disableProperty().bind(
-                Bindings.isEmpty(accountField.textProperty()));
-
-        fluencyCoherenceNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        vocabularyNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        grammarNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        pronunciationNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        interactEngageNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        commSkillsNote.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
     }
 
     private void viewSession(Session session) {
