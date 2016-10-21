@@ -30,16 +30,22 @@ public class Note implements Serializable {
     @OneToOne
     @JoinColumn(name="session", nullable=false)
     private Session session;
+    @Column(columnDefinition="longvarchar")
     @Lob
     private String fluencyAndCoherence;
+    @Column(columnDefinition="longvarchar")
     @Lob
     private String vocabulary;
+    @Column(columnDefinition="longvarchar")
     @Lob
     private String grammar;
+    @Column(columnDefinition="longvarchar")
     @Lob
     private String pronunciation;
+    @Column(columnDefinition="longvarchar")
     @Lob
     private String interactionAndEngagement;
+    @Column(columnDefinition="longvarchar")
     @Lob
     private String communicationSkills;
     
