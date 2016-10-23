@@ -1,6 +1,7 @@
 package com.daarons.studentmanager;
 
 import com.daarons.DAO.EMSingleton;
+import com.daarons.config.SpringConfig;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
 import static javafx.application.Application.launch;
@@ -17,10 +18,13 @@ import javafx.scene.text.Font;
 import javafx.stage.*;
 import javafx.util.Duration;
 import org.apache.logging.log4j.*;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 public class StudentManagerApp extends Application {
 
     private static final Logger log = LogManager.getLogger(StudentManagerApp.class);
+    private ApplicationContext applicationContext;
     private final String WINDOW_ICON_URL1 = "/image/16x16-icon.png";
     private final String WINDOW_ICON_URL2 = "/image/20x20-icon.png";
     private final String WINDOW_ICON_URL3 = "/image/24x24-icon.png";
@@ -52,7 +56,10 @@ public class StudentManagerApp extends Application {
             fade.setToValue(0.0);
             fade.setOnFinished(actionEvent -> {
                 splashStage.close();
+                applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+                SpringConfig.setApplicationContext(applicationContext);
                 showMainStage();
+                SpringConfig.setStage(mainStage);
             });
             fade.play();
         });
@@ -80,10 +87,13 @@ public class StudentManagerApp extends Application {
         EMSingleton.getEntityManagerFactory().close();
     }
 
-    private void showMainStage() {
+    private void showMainStage() {       
+        FXMLLoader fxmlLoader = null;
         Parent root = null;
         try {
-            root = FXMLLoader.load(getClass().getResource("/view/home.fxml"));
+            fxmlLoader = new FXMLLoader(getClass().getResource("/view/home.fxml"));
+            fxmlLoader.setControllerFactory(applicationContext::getBean);
+            root = fxmlLoader.load();
         } catch (Exception ex) {
             log.error("Couldn't load home.fxml", ex);
         }
