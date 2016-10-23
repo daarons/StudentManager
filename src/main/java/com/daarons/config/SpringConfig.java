@@ -27,21 +27,37 @@ import com.daarons.controller.NotesController;
 import com.daarons.controller.SessionController;
 import com.daarons.controller.StudentController;
 import javafx.stage.Stage;
+import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Lazy;
 
 /**
  *
  * @author David
  */
 @Configuration
+@Lazy
 @ComponentScan("com.daarons.DAO")
 public class SpringConfig {
     private static Stage stage;
+    private static ApplicationContext applicationContext;
     
     public static void setStage(Stage injectedStage){
         stage = injectedStage;
+    }
+    
+    public static Stage getStage(){
+        return stage;
+    }
+    
+    public static void setApplicationContext(ApplicationContext injectedApplicationContext){
+        applicationContext = injectedApplicationContext;
+    }
+    
+    public static ApplicationContext getApplicationContext(){
+        return applicationContext;
     }
     
     @Bean
@@ -76,16 +92,16 @@ public class SpringConfig {
     
     @Bean
     public NotesController notesController(){
-        return new NotesController(stage);
+        return new NotesController(getStage());
     }
     
-    @Bean
-    public SessionController sessionController(){
-        return new SessionController();
-    }
-    
-    @Bean
-    public StudentController studentController(){
-        return new StudentController();
-    }
+//    @Bean
+//    public SessionController sessionController(){
+//        return new SessionController();
+//    }
+//    
+//    @Bean
+//    public StudentController studentController(){
+//        return new StudentController();
+//    }
 }
