@@ -19,11 +19,13 @@ import com.daarons.model.Account;
 import java.util.List;
 import javax.persistence.*;
 import org.apache.logging.log4j.*;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author David
  */
+@Repository
 public class AccountDAOHibernateImpl implements AccountDAO {
     private static final Logger log = LogManager.getLogger(AccountDAOHibernateImpl.class);
 

@@ -22,11 +22,13 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.logging.log4j.*;
 import org.hibernate.*;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author David
  */
+@Repository
 public class ImportExportDAOHibernateImpl implements ImportExportDAO {
 
     private static final Logger log = LogManager.getLogger(ImportExportDAOHibernateImpl.class);
