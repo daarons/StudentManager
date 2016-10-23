@@ -10,7 +10,7 @@
 <?import jfxtras.scene.control.*?>
 
 <BorderPane xmlns:fx="http://javafx.com/fxml/1" stylesheets="@/css/main.css, @/css/buttons.css" 
-            fx:id="borderPane" minHeight="400"
+            fx:controller="com.daarons.controller.NotesController" fx:id="borderPane" minHeight="400"
             minWidth="450" maxHeight="Infinity" maxWidth="Infinity" styleClass="pane">
     <top>
         <HBox BorderPane.alignment="TOP_LEFT"
