@@ -26,6 +26,8 @@ import com.daarons.controller.NavigationController;
 import com.daarons.controller.NotesController;
 import com.daarons.controller.SessionController;
 import com.daarons.controller.StudentController;
+import com.daarons.model.Session;
+import com.daarons.model.Student;
 import javafx.stage.Stage;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
@@ -95,13 +97,13 @@ public class SpringConfig {
         return new NotesController(getStage());
     }
     
-//    @Bean
-//    public SessionController sessionController(){
-//        return new SessionController();
-//    }
-//    
-//    @Bean
-//    public StudentController studentController(){
-//        return new StudentController();
-//    }
+    @Bean
+    public SessionController sessionController(Session session){
+        return new SessionController(session);
+    }
+    
+    @Bean
+    public StudentController studentController(Student student){
+        return new StudentController(student);
+    }
 }
