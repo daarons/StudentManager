@@ -1,6 +1,8 @@
 package com.daarons.controller;
 
 import com.daarons.config.SpringConfig;
+import com.daarons.model.Session;
+import com.daarons.model.Student;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -29,6 +31,7 @@ public class NavigationController implements Initializable {
 
     @FXML
     private void navigate(ActionEvent event) {
+        //this is only for navigating with the main buttons on the 1st page and button bar
         ApplicationContext applicationContext = SpringConfig.getApplicationContext();
         Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
         Scene scene = null;
@@ -65,5 +68,45 @@ public class NavigationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+    }
+    
+    public static void viewStudent(Student student){
+        FXMLLoader fxmlLoader = new FXMLLoader(NavigationController.class.getResource("/view/student.fxml"));
+        StudentController studentController = (StudentController) SpringConfig.getApplicationContext()
+                .getBean("studentController", student);
+        fxmlLoader.setController(studentController);
+        Stage stage = SpringConfig.getStage();
+        Scene scene = null;
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception ex) {
+            log.error("Couldn't load student.fxml", ex);
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
+        stage.show();
+    }
+    
+    public static void viewSession(Session session){
+        FXMLLoader fxmlLoader = new FXMLLoader(NavigationController.class.getResource("/view/session.fxml"));
+        SessionController sessionController = (SessionController) SpringConfig.getApplicationContext()
+                .getBean("sessionController", session);
+        fxmlLoader.setController(sessionController);
+        Stage stage = SpringConfig.getStage();
+        Scene scene = null;
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception ex) {
+            log.error("Couldn't load session.fxml", ex);
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
+        stage.show();
     }
 }

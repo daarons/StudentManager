@@ -208,7 +208,7 @@ public class SessionController implements Initializable {
                     }
                 }
                 dao.updateAccount(account);
-                viewStudent(studentView);
+                NavigationController.viewStudent(studentView);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "The session ID "
                         + "field does not contain a session ID.");
@@ -232,24 +232,4 @@ public class SessionController implements Initializable {
             }
         }
     }
-
-    private void viewStudent(Student student) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
-        StudentController studentController = new StudentController(student);
-        fxmlLoader.setController(studentController);
-        Stage stage = (Stage) ((Node) borderPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load student.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
-    }
-
 }

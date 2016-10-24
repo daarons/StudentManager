@@ -27,7 +27,6 @@ import javafx.beans.property.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.*;
 import javafx.scene.chart.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
@@ -74,25 +73,6 @@ public class StudentController implements Initializable {
 
     public StudentController(Student student) {
         this.student = student;
-    }
-
-    private void viewSession(Session session) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/session.fxml"));
-        SessionController sessionController = new SessionController(session);
-        fxmlLoader.setController(sessionController);
-        Stage stage = (Stage) ((Node) borderPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load session.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
     }
 
     /**
@@ -178,7 +158,7 @@ public class StudentController implements Initializable {
                     if (event.getClickCount() == 2) {
                         AbstractTreeItem ati = (AbstractTreeItem) sessionTableView.getSelectionModel().getSelectedItem();
                         Session session = (Session) ati.getObject();
-                        viewSession(session);
+                        NavigationController.viewSession(session);
                     }
                 }
             });
@@ -262,7 +242,7 @@ public class StudentController implements Initializable {
         public ContextMenu getContextMenu() {
             MenuItem viewSession = new MenuItem("View Session");
             viewSession.setOnAction((ActionEvent event) -> {
-                viewSession(session);
+                NavigationController.viewSession(session);
             });
 
             MenuItem deleteSession = new MenuItem("Delete Session");

@@ -16,6 +16,7 @@
 package com.daarons.controller;
 
 import com.daarons.DAO.*;
+import com.daarons.config.SpringConfig;
 import com.daarons.control.AbstractTreeItem;
 import com.daarons.model.*;
 import java.net.URL;
@@ -149,7 +150,7 @@ public class AccountsController implements Initializable {
         public ContextMenu getContextMenu() {
             MenuItem viewStudent = new MenuItem("View Student");
             viewStudent.setOnAction((ActionEvent event) -> {
-                viewStudent(student);
+                NavigationController.viewStudent(student);
             });
             
             MenuItem deleteStudent = new MenuItem("Delete Student");
@@ -294,24 +295,5 @@ public class AccountsController implements Initializable {
     private static boolean containsChinese(String text) {
         return text.codePoints().anyMatch(codepoint
                 -> Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
-    }
-
-    private void viewStudent(Student student) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
-        StudentController studentController = new StudentController(student);
-        fxmlLoader.setController(studentController);
-        Stage stage = (Stage) ((Node) gridPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load student.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
     }
 }
