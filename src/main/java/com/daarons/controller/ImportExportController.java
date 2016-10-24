@@ -25,6 +25,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -36,7 +37,8 @@ public class ImportExportController implements Initializable {
     private File folder;
     private boolean importDB;
     private boolean exportDB;
-    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("hibernate");
+    @Autowired
+    private ImportExportDAO dao;
 
     @FXML
     private Button importBtn;

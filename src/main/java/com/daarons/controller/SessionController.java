@@ -28,10 +28,10 @@ import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -40,8 +40,9 @@ import org.apache.logging.log4j.*;
  */
 public class SessionController implements Initializable {
 
-    private static final Logger log = LogManager.getLogger(SessionController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    private static final Logger log = LogManager.getLogger(SessionController.class);   
+    @Autowired
+    private AccountDAO dao;
     private Session session;
 
     public SessionController(Session session) {

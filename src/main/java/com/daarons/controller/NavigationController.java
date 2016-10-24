@@ -33,7 +33,7 @@ public class NavigationController implements Initializable {
     private void navigate(ActionEvent event) {
         //this is only for navigating with the main buttons on the 1st page and button bar
         ApplicationContext applicationContext = SpringConfig.getApplicationContext();
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        Stage stage = SpringConfig.getStage();
         Scene scene = null;
         Parent root = null;
         FXMLLoader fxmlLoader = null;

@@ -35,6 +35,7 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.Duration;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -44,7 +45,8 @@ import org.apache.logging.log4j.*;
 public class StudentController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(StudentController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    @Autowired
+    private AccountDAO dao;
     private Student student;
     private TreeTableView sessionTableView;
 

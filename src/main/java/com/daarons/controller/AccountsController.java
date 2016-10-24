@@ -16,20 +16,18 @@
 package com.daarons.controller;
 
 import com.daarons.DAO.*;
-import com.daarons.config.SpringConfig;
 import com.daarons.control.AbstractTreeItem;
 import com.daarons.model.*;
 import java.net.URL;
 import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -39,7 +37,8 @@ import org.apache.logging.log4j.*;
 public class AccountsController implements Initializable {
     
     private static final Logger log = LogManager.getLogger(AccountsController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    @Autowired
+    private AccountDAO dao;
     private TreeView accountsView;
 
     @FXML
