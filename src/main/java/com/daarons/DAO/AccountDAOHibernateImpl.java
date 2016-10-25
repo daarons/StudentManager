@@ -20,6 +20,7 @@ import java.util.List;
 import javax.persistence.*;
 import org.apache.logging.log4j.*;
 import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
@@ -28,10 +29,12 @@ import org.springframework.stereotype.Repository;
 @Repository
 public class AccountDAOHibernateImpl implements AccountDAO {
     private static final Logger log = LogManager.getLogger(AccountDAOHibernateImpl.class);
+    
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
     public Account getAccount(long id) {
-        EntityManager em = EMSingleton.getEntityManager();
         Account account = em.find(Account.class, id);
         em.close();
         return account;
@@ -39,7 +42,6 @@ public class AccountDAOHibernateImpl implements AccountDAO {
 
     @Override
     public List<Account> getAccountsLike(String name) {
-        EntityManager em = EMSingleton.getEntityManager();
         String qStringLike = "SELECT a FROM Account a WHERE a.name LIKE :name";
         String qStringAll = "FROM Account";
         TypedQuery<Account> q;
@@ -65,16 +67,12 @@ public class AccountDAOHibernateImpl implements AccountDAO {
     }
 
     @Override
+    @Transactional
     public Account addAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
         try {
             em.persist(a);
-            trans.commit();
         } catch (Exception e) {
             log.error("Couldn't add account", e);
-            trans.rollback();
         } finally {
             em.close();
         }
@@ -82,16 +80,12 @@ public class AccountDAOHibernateImpl implements AccountDAO {
     }
 
     @Override
+    @Transactional
     public Account updateAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
         try {
             a = em.merge(a);
-            trans.commit();
         } catch (Exception e) {
             log.error("Couldn't update account", e);
-            trans.rollback();
         } finally {
             em.close();
         }
@@ -99,16 +93,12 @@ public class AccountDAOHibernateImpl implements AccountDAO {
     }
 
     @Override
+    @Transactional
     public Account deleteAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
         try {
             em.remove(em.merge(a));
-            trans.commit();
         } catch (Exception e) {
             log.error("Couldn't delete account", e);
-            trans.rollback();
         } finally {
             em.close();
         }
