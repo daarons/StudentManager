@@ -29,12 +29,15 @@ import com.daarons.controller.StudentController;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
 import javafx.stage.Stage;
+import javax.persistence.EntityManagerFactory;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.orm.jpa.JpaTransactionManager;
 import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
@@ -45,7 +48,7 @@ import org.springframework.transaction.annotation.EnableTransactionManagement;
 @EnableTransactionManagement
 @Lazy
 @ComponentScan("com.daarons.DAO")
-public class SpringConfig {
+public class SpringConfig{
     private static Stage stage;
     private static ApplicationContext applicationContext;
     
@@ -68,6 +71,11 @@ public class SpringConfig {
     @Bean
     public LocalContainerEntityManagerFactoryBean emf(){
         return new LocalContainerEntityManagerFactoryBean();
+    }
+    
+    @Bean
+    public PlatformTransactionManager transactionManager(EntityManagerFactory emf){
+        return new JpaTransactionManager(emf);
     }
     
     @Bean
