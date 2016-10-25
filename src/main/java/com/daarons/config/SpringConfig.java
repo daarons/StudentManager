@@ -34,12 +34,15 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Lazy;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 /**
  *
  * @author David
  */
 @Configuration
+@EnableTransactionManagement
 @Lazy
 @ComponentScan("com.daarons.DAO")
 public class SpringConfig {
@@ -60,6 +63,11 @@ public class SpringConfig {
     
     public static ApplicationContext getApplicationContext(){
         return applicationContext;
+    }
+    
+    @Bean
+    public LocalContainerEntityManagerFactoryBean emf(){
+        return new LocalContainerEntityManagerFactoryBean();
     }
     
     @Bean
