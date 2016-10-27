@@ -43,6 +43,10 @@ public class SessionController implements Initializable {
     private static final Logger log = LogManager.getLogger(SessionController.class);   
     @Autowired
     private AccountDAO dao;
+    @Autowired
+    private StudentDAO studentDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Session session;
 
     public SessionController(Session session) {
@@ -194,21 +198,9 @@ public class SessionController implements Initializable {
                 session.setReview(review);
 
                 //updates the sessions for persisting and get the student view
-                Account account = session.getStudent().getAccount();
-                Student studentView = null;
-                for (Student student : account.getStudents()) {
-                    if (student.getId() == session.getStudent().getId()) {
-                        for (Session s : student.getSessions()) {
-                            if (s.getId() == session.getId()) {
-                                s = session;
-                                studentView = student;
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                dao.updateAccount(account);
+                session = sessionDAO.updateSession(session);
+                Student studentView = session.getStudent();  
+                studentView = studentDAO.getStudentWithSessions(studentView.getId());
                 NavigationController.viewStudent(studentView);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "The session ID "

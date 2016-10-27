@@ -46,7 +46,9 @@ public class StudentController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(StudentController.class);
     @Autowired
-    private AccountDAO dao;
+    private AccountDAO accountDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Student student;
     private TreeTableView sessionTableView;
 
@@ -114,7 +116,7 @@ public class StudentController implements Initializable {
                     }
                 }
 
-                dao.updateAccount(account);
+                accountDAO.addOrUpdateAccount(account);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
                         + "at least one name field is filled in and the age is a "
@@ -160,6 +162,7 @@ public class StudentController implements Initializable {
                     if (event.getClickCount() == 2) {
                         AbstractTreeItem ati = (AbstractTreeItem) sessionTableView.getSelectionModel().getSelectedItem();
                         Session session = (Session) ati.getObject();
+                        session = sessionDAO.getSessionWithNoteAndReview(session.getId());
                         NavigationController.viewSession(session);
                     }
                 }
@@ -244,6 +247,7 @@ public class StudentController implements Initializable {
         public ContextMenu getContextMenu() {
             MenuItem viewSession = new MenuItem("View Session");
             viewSession.setOnAction((ActionEvent event) -> {
+                session = sessionDAO.getSessionWithNoteAndReview(session.getId());
                 NavigationController.viewSession(session);
             });
 
@@ -267,7 +271,7 @@ public class StudentController implements Initializable {
                                 break;
                             }
                         }
-                        Account updatedAccount = dao.updateAccount(account);
+                        Account updatedAccount = accountDAO.addOrUpdateAccount(account);
                         Student updatedStudent = updatedAccount
                                 .getStudents()
                                 .stream()

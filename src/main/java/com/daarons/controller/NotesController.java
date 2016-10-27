@@ -46,7 +46,11 @@ public class NotesController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(NotesController.class);
     @Autowired
-    private AccountDAO dao;
+    private AccountDAO accountDAO;
+    @Autowired
+    private StudentDAO studentDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Stage stage;
 
     @FXML
@@ -85,11 +89,8 @@ public class NotesController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        saveBtn.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                saveNotes(event);
-            }           
+        saveBtn.setOnMouseClicked((MouseEvent event) -> {
+            saveNotes(event);           
         });
         
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
@@ -112,10 +113,10 @@ public class NotesController implements Initializable {
         timePicker.setCalendar(cal);
 
         TextFields.bindAutoCompletion(accountField, t -> {
-            return dao.getAccountsLike(t.getUserText());
+            return accountDAO.getAccountsLike(t.getUserText());
         });
         TextFields.bindAutoCompletion(studentField, t -> {
-            List<Account> accounts = dao.getAccountsLike(accountField.getText());
+            List<Account> accounts = accountDAO.getAccountsLike(accountField.getText());
             return accounts.stream().filter(a -> a.getStudents() != null)
                     .flatMap(a -> a.getStudents().stream()).collect(Collectors.toList());
         });
@@ -136,7 +137,7 @@ public class NotesController implements Initializable {
                 && !accountField.getText().trim().isEmpty()
                 && !studentField.getText().trim().isEmpty()
                 && Validator.isNumber(sessionIdField.getText())) {
-            List<Account> accounts = dao.getAccountsLike(accountField.getText());
+            List<Account> accounts = accountDAO.getAccountsLike(accountField.getText());
             List<Student> students = accounts != null ? accounts.stream()
                     .filter(a -> a.getStudents() != null && !a.getStudents().isEmpty())
                     .flatMap(a -> a.getStudents().stream().filter(s
@@ -193,25 +194,27 @@ public class NotesController implements Initializable {
                                 commSkillsNote.getText().replaceAll("`", ""));
                         session.setNote(note);
                         session.setSessionId(Long.parseLong(sessionIdField.getText()));
+                        s = studentDAO.getStudentWithSessions(s.getId());
                         s.getSessions().add(session);
                     }
                 }
             }
             
             //update the db and get the updated objects
-            Account updatedAccount = dao.addOrUpdateAccount(account);
+            Account updatedAccount = accountDAO.addOrUpdateAccount(account);
             students = updatedAccount.getStudents().stream()
                     .filter(s
                             -> s.getEnglishName().equalsIgnoreCase(studentField.getText())
                             || s.getChineseName().equalsIgnoreCase(studentField.getText()))
                     .collect(Collectors.toList());
             student = students.get(0);
+            student = studentDAO.getStudentWithSessions(student.getId());
             for(Session sess : student.getSessions()){
                 if(sess.getSessionId() == session.getSessionId()){
                     session = sess;
                 }
             }
-            
+            //session = sessionDAO.getSessionWithNoteAndReview(session.getId());
             NavigationController.viewSession(session);
         } else {
             Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
