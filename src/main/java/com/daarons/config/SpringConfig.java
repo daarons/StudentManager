@@ -15,28 +15,14 @@
  */
 package com.daarons.config;
 
-import com.daarons.DAO.AccountDAO;
-import com.daarons.DAO.AccountDAOHibernateImpl;
-import com.daarons.DAO.ImportExportDAO;
-import com.daarons.DAO.ImportExportDAOHibernateImpl;
-import com.daarons.controller.AccountsController;
-import com.daarons.controller.ImportExportController;
-import com.daarons.controller.InfoController;
-import com.daarons.controller.NavigationController;
-import com.daarons.controller.NotesController;
-import com.daarons.controller.SessionController;
-import com.daarons.controller.StudentController;
-import com.daarons.model.Session;
-import com.daarons.model.Student;
+import com.daarons.DAO.*;
+import com.daarons.controller.*;
+import com.daarons.model.*;
 import javafx.stage.Stage;
 import javax.persistence.EntityManagerFactory;
 import org.springframework.context.ApplicationContext;
-import org.springframework.context.annotation.Bean;
-import org.springframework.context.annotation.ComponentScan;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.orm.jpa.JpaTransactionManager;
-import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.context.annotation.*;
+import org.springframework.orm.jpa.*;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
@@ -79,46 +65,53 @@ public class SpringConfig{
     }
     
     @Bean
-    public AccountDAO accountDAOHibernateImpl(){
-        return new AccountDAOHibernateImpl();
+    public AccountDAO accountDAOJpaImpl(){
+        return new AccountDAOJpaImpl();
     }
     
     @Bean
-    public ImportExportDAO importExportDAOHibernateImpl(){
-        return new ImportExportDAOHibernateImpl();
+    public ImportExportDAO importExportDAOJpaImpl(){
+        return new ImportExportDAOJpaImpl();
     }
     
     @Bean
+    @Scope("prototype")
     public NavigationController navigationController(){
         return new NavigationController();
     }
     
     @Bean
+    @Scope("prototype")
     public AccountsController accountsController(){
         return new AccountsController();
     }
     
     @Bean
+    @Scope("prototype")
     public ImportExportController importExportController(){
         return new ImportExportController();
     }
     
     @Bean
+    @Scope("prototype")
     public InfoController infoController(){
         return new InfoController();
     }
     
     @Bean
+    @Scope("prototype")
     public NotesController notesController(){
         return new NotesController(getStage());
     }
     
     @Bean
+    @Scope("prototype")
     public SessionController sessionController(Session session){
         return new SessionController(session);
     }
     
     @Bean
+    @Scope("prototype")
     public StudentController studentController(Student student){
         return new StudentController(student);
     }
