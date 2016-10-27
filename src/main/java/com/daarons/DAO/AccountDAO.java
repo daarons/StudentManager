@@ -24,7 +24,6 @@ import java.util.List;
  */
 public interface AccountDAO{
     public List<Account> getAccountsLike(String name);
-    public Account addAccount(Account a);
-    public Account updateAccount(Account a);
+    public Account addOrUpdateAccount(Account a);
     public Account deleteAccount(Account a);
 }

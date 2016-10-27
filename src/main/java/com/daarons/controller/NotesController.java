@@ -199,7 +199,7 @@ public class NotesController implements Initializable {
             }
             
             //update the db and get the updated objects
-            Account updatedAccount = dao.updateAccount(account);
+            Account updatedAccount = dao.addOrUpdateAccount(account);
             students = updatedAccount.getStudents().stream()
                     .filter(s
                             -> s.getEnglishName().equalsIgnoreCase(studentField.getText())

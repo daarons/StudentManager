@@ -60,18 +60,7 @@ public class AccountDAOJpaImpl implements AccountDAO {
 
     @Override
     @Transactional
-    public Account addAccount(Account a) {
-        try {
-            em.persist(a);
-        } catch (Exception e) {
-            log.error("Couldn't add account", e);
-        }
-        return a;
-    }
-
-    @Override
-    @Transactional
-    public Account updateAccount(Account a) {
+    public Account addOrUpdateAccount(Account a) {
         try {
             a = em.merge(a);
         } catch (Exception e) {
