@@ -65,16 +65,6 @@ public class SpringConfig{
     }
     
     @Bean
-    public AccountDAO accountDAOJpaImpl(){
-        return new AccountDAOJpaImpl();
-    }
-    
-    @Bean
-    public ImportExportDAO importExportDAOJpaImpl(){
-        return new ImportExportDAOJpaImpl();
-    }
-    
-    @Bean
     @Scope("prototype")
     public NavigationController navigationController(){
         return new NavigationController();
