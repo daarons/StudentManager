@@ -26,7 +26,7 @@ import javax.persistence.*;
 @Entity
 public class Session implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long sessionId;
     @ManyToOne
