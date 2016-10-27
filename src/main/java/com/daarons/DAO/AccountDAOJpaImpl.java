@@ -27,20 +27,21 @@ import org.springframework.transaction.annotation.Transactional;
  * @author David
  */
 @Repository
-public class AccountDAOHibernateImpl implements AccountDAO {
-    private static final Logger log = LogManager.getLogger(AccountDAOHibernateImpl.class);
+public class AccountDAOJpaImpl implements AccountDAO {
+    private static final Logger log = LogManager.getLogger(AccountDAOJpaImpl.class);
     
     @PersistenceContext
     private EntityManager em;
 
     @Override
+    @Transactional(readOnly=true)
     public Account getAccount(long id) {
         Account account = em.find(Account.class, id);
-        em.close();
         return account;
     }
 
     @Override
+    @Transactional(readOnly=true)
     public List<Account> getAccountsLike(String name) {
         String qStringLike = "SELECT a FROM Account a WHERE a.name LIKE :name";
         String qStringAll = "FROM Account";
@@ -60,8 +61,6 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             }
         } catch (NoResultException e) {
             //no logging needed for NoResultException
-        } finally {
-            em.close();
         }
         return accounts;
     }
@@ -73,8 +72,6 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             em.persist(a);
         } catch (Exception e) {
             log.error("Couldn't add account", e);
-        } finally {
-            em.close();
         }
         return a;
     }
@@ -86,8 +83,6 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             a = em.merge(a);
         } catch (Exception e) {
             log.error("Couldn't update account", e);
-        } finally {
-            em.close();
         }
         return a;
     }
@@ -99,8 +94,6 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             em.remove(em.merge(a));
         } catch (Exception e) {
             log.error("Couldn't delete account", e);
-        } finally {
-            em.close();
         }
         return a;
     }
