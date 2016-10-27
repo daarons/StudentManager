@@ -23,7 +23,6 @@ import java.util.List;
  * @author David
  */
 public interface AccountDAO{
-    public Account getAccount(long id);
     public List<Account> getAccountsLike(String name);
     public Account addAccount(Account a);
     public Account updateAccount(Account a);

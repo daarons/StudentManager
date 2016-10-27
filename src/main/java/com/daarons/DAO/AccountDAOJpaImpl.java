@@ -35,13 +35,6 @@ public class AccountDAOJpaImpl implements AccountDAO {
 
     @Override
     @Transactional(readOnly=true)
-    public Account getAccount(long id) {
-        Account account = em.find(Account.class, id);
-        return account;
-    }
-
-    @Override
-    @Transactional(readOnly=true)
     public List<Account> getAccountsLike(String name) {
         String qStringLike = "SELECT a FROM Account a WHERE a.name LIKE :name";
         String qStringAll = "FROM Account";
