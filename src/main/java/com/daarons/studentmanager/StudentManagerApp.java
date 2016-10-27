@@ -1,6 +1,5 @@
 package com.daarons.studentmanager;
 
-import com.daarons.DAO.EMSingleton;
 import com.daarons.config.SpringConfig;
 import javafx.animation.FadeTransition;
 import javafx.application.Application;
@@ -18,13 +17,14 @@ import javafx.scene.text.Font;
 import javafx.stage.*;
 import javafx.util.Duration;
 import org.apache.logging.log4j.*;
-import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.support.AbstractApplicationContext;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
 
 public class StudentManagerApp extends Application {
 
     private static final Logger log = LogManager.getLogger(StudentManagerApp.class);
-    private ApplicationContext applicationContext;
+    private AbstractApplicationContext applicationContext;
     private final String WINDOW_ICON_URL1 = "/image/16x16-icon.png";
     private final String WINDOW_ICON_URL2 = "/image/20x20-icon.png";
     private final String WINDOW_ICON_URL3 = "/image/24x24-icon.png";
@@ -42,22 +42,24 @@ public class StudentManagerApp extends Application {
     @Override
     public void start(Stage stage) throws Exception {
 
-        final Task connectToDB = new Task() {
+        final Task startSpring = new Task() {
             @Override
             protected Object call() throws InterruptedException {
-                //connects to db
-                EMSingleton.getEntityManager();
+                //starts Spring context
+                applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
+                //saves context for access later
+                SpringConfig.setApplicationContext(applicationContext);
+                //starts entity manager factory
+                applicationContext.getBean(LocalContainerEntityManagerFactoryBean.class);
                 return null;
             }
         };
-        connectToDB.setOnSucceeded((Event event) -> {
+        startSpring.setOnSucceeded((Event event) -> {
             FadeTransition fade = new FadeTransition(Duration.seconds(1.2), splashLayout);
             fade.setFromValue(1.0);
             fade.setToValue(0.0);
             fade.setOnFinished(actionEvent -> {
                 splashStage.close();
-                applicationContext = new AnnotationConfigApplicationContext(SpringConfig.class);
-                SpringConfig.setApplicationContext(applicationContext);
                 showMainStage();
                 SpringConfig.setStage(mainStage);
             });
@@ -66,7 +68,7 @@ public class StudentManagerApp extends Application {
 
         showSplash();
 
-        new Thread(connectToDB).start();
+        new Thread(startSpring).start();
     }
 
     /**
@@ -83,8 +85,8 @@ public class StudentManagerApp extends Application {
 
     @Override
     public void stop() {
-        EMSingleton.getEntityManager().close();
-        EMSingleton.getEntityManagerFactory().close();
+        //closes Spring
+        applicationContext.close();
     }
 
     private void showMainStage() {       
