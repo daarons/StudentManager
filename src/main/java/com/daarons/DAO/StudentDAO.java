@@ -23,4 +23,5 @@ import com.daarons.model.Student;
  */
 public interface StudentDAO {
     public Student getStudentWithSessions(long id);
+    public Student updateStudent(Student student);
 }

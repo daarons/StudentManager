@@ -1,6 +1,7 @@
 package com.daarons.controller;
 
 import com.daarons.config.SpringConfig;
+import com.daarons.model.Account;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
 import java.io.IOException;
@@ -68,6 +69,25 @@ public class NavigationController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
 
+    }
+    
+    public static void viewAccount(){
+        FXMLLoader fxmlLoader = new FXMLLoader(NavigationController.class.getResource("/view/accounts.fxml"));
+        ApplicationContext applicationContext = SpringConfig.getApplicationContext();
+        fxmlLoader.setControllerFactory(applicationContext::getBean);
+        Stage stage = SpringConfig.getStage();
+        Scene scene = null;
+        Parent root = null;
+        try {
+            root = fxmlLoader.load();
+        } catch (Exception ex) {
+            log.error("Couldn't load accounts.fxml", ex);
+        }
+        scene = new Scene(root);
+        stage.setScene(scene);
+        stage.setHeight(stage.getHeight());
+        stage.setWidth(stage.getWidth());
+        stage.show();
     }
     
     public static void viewStudent(Student student){

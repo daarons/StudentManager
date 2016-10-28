@@ -22,11 +22,11 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
 import javafx.collections.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
@@ -40,7 +40,7 @@ import org.springframework.beans.factory.annotation.Autowired;
  */
 public class SessionController implements Initializable {
 
-    private static final Logger log = LogManager.getLogger(SessionController.class);   
+    private static final Logger log = LogManager.getLogger(SessionController.class);
     @Autowired
     private AccountDAO dao;
     @Autowired
@@ -99,6 +99,10 @@ public class SessionController implements Initializable {
     private CalendarTimePicker timePicker;
     @FXML
     private Button saveBtn;
+    @FXML
+    private Button backBtn;
+    @FXML
+    private Button trashBtn;
 
     /**
      * Initializes the controller class.
@@ -148,7 +152,7 @@ public class SessionController implements Initializable {
         commSkillsBox.setValue(sessionReview.getCommunicationSkills().getGrade());
         commSkillsReview.setText(sessionReview.getCommunicationSkills().getComment());
 
-        saveBtn.setOnAction((ActionEvent event) -> {
+        saveBtn.setOnMouseClicked((MouseEvent event) -> {
             if (Validator.isNumber(sessionIdField.getText())) {
                 long sessionId = Long.parseLong(sessionIdField.getText());
                 session.setSessionId(sessionId);
@@ -199,7 +203,7 @@ public class SessionController implements Initializable {
 
                 //updates the sessions for persisting and get the student view
                 session = sessionDAO.updateSession(session);
-                Student studentView = session.getStudent();  
+                Student studentView = session.getStudent();
                 studentView = studentDAO.getStudentWithSessions(studentView.getId());
                 NavigationController.viewStudent(studentView);
             } else {
@@ -209,6 +213,31 @@ public class SessionController implements Initializable {
             }
         });
 
+        backBtn.setOnMouseClicked((MouseEvent event) -> {
+            Student student = session.getStudent();
+            student = studentDAO.getStudentWithSessions(student.getId());
+            NavigationController.viewStudent(student);
+        });
+
+        trashBtn.setOnMouseClicked((MouseEvent event) -> {
+            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                    + "sure that you want to delete session "
+                    + session.getSessionId() + " ?");
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    Student student = session.getStudent();
+                    student = studentDAO.getStudentWithSessions(student.getId());
+                    for (Session sess : student.getSessions()) {
+                        if (sess.getId() == session.getId()) {
+                            student.getSessions().remove(sess);
+                            break;
+                        }
+                    }
+                    student = studentDAO.updateStudent(student);
+                    NavigationController.viewStudent(student);
+                }
+            });
+        });
     }
 
     private static ArrayList<Node> getAllNodes(Parent root) {

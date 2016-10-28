@@ -74,6 +74,8 @@ public class StudentController implements Initializable {
     private GridPane gridPaneLeft;
     @FXML
     private GridPane gridPaneCenter;
+    @FXML
+    private Button trashBtn;
 
     public StudentController(Student student) {
         this.student = student;
@@ -96,7 +98,7 @@ public class StudentController implements Initializable {
         motivesArea.setText(student.getMotive());
         notesArea.setText(student.getOtherInfo());
 
-        saveBtn.setOnAction((ActionEvent event) -> {
+        saveBtn.setOnMouseClicked((MouseEvent event) -> {
             if ((!englishNameField.getText().trim().isEmpty()
                     || !chineseNameField.getText().trim().isEmpty())
                     && Validator.isNumber(ageField.getText())) {
@@ -123,6 +125,25 @@ public class StudentController implements Initializable {
                         + "number before saving.");
                 saveAlert.showAndWait();
             }
+        });
+
+        trashBtn.setOnMouseClicked((MouseEvent event) -> {
+            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                    + "sure that you want to delete student "
+                    + student.toString() + " ?");
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    Account account = student.getAccount();
+                    for (Student stu : account.getStudents()) {
+                        if (stu.getId() == student.getId()) {
+                            account.getStudents().remove(stu);
+                            break;
+                        }
+                    }
+                    accountDAO.addOrUpdateAccount(account);
+                    NavigationController.viewAccount();
+                }
+            });
         });
 
         hobbiesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());

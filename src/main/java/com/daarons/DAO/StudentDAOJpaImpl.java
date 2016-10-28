@@ -41,5 +41,16 @@ public class StudentDAOJpaImpl implements StudentDAO{
         student.getSessions().size();
         return student;
     }
+
+    @Override
+    @Transactional
+    public Student updateStudent(Student student) {
+        try{
+            student = em.merge(student);
+        }catch(Exception e){
+            log.error("Couldn't update student", e);
+        }
+        return student;
+    }
     
 }
