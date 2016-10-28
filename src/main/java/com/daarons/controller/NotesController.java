@@ -26,7 +26,6 @@ import javafx.beans.binding.Bindings;
 import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
@@ -36,6 +35,7 @@ import javafx.stage.*;
 import jfxtras.scene.control.CalendarTimePicker;
 import org.apache.logging.log4j.*;
 import org.controlsfx.control.textfield.TextFields;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -45,7 +45,12 @@ import org.controlsfx.control.textfield.TextFields;
 public class NotesController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(NotesController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    @Autowired
+    private AccountDAO accountDAO;
+    @Autowired
+    private StudentDAO studentDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Stage stage;
 
     @FXML
@@ -84,11 +89,8 @@ public class NotesController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        saveBtn.setOnMouseClicked(new EventHandler<MouseEvent>(){
-            @Override
-            public void handle(MouseEvent event) {
-                saveNotes(event);
-            }           
+        saveBtn.setOnMouseClicked((MouseEvent event) -> {
+            saveNotes(event);           
         });
         
         Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
@@ -111,10 +113,10 @@ public class NotesController implements Initializable {
         timePicker.setCalendar(cal);
 
         TextFields.bindAutoCompletion(accountField, t -> {
-            return dao.getAccountsLike(t.getUserText());
+            return accountDAO.getAccountsLike(t.getUserText());
         });
         TextFields.bindAutoCompletion(studentField, t -> {
-            List<Account> accounts = dao.getAccountsLike(accountField.getText());
+            List<Account> accounts = accountDAO.getAccountsLike(accountField.getText());
             return accounts.stream().filter(a -> a.getStudents() != null)
                     .flatMap(a -> a.getStudents().stream()).collect(Collectors.toList());
         });
@@ -135,7 +137,7 @@ public class NotesController implements Initializable {
                 && !accountField.getText().trim().isEmpty()
                 && !studentField.getText().trim().isEmpty()
                 && Validator.isNumber(sessionIdField.getText())) {
-            List<Account> accounts = dao.getAccountsLike(accountField.getText());
+            List<Account> accounts = accountDAO.getAccountsLike(accountField.getText());
             List<Student> students = accounts != null ? accounts.stream()
                     .filter(a -> a.getStudents() != null && !a.getStudents().isEmpty())
                     .flatMap(a -> a.getStudents().stream().filter(s
@@ -192,50 +194,33 @@ public class NotesController implements Initializable {
                                 commSkillsNote.getText().replaceAll("`", ""));
                         session.setNote(note);
                         session.setSessionId(Long.parseLong(sessionIdField.getText()));
+                        s = studentDAO.getStudentWithSessions(s.getId());
                         s.getSessions().add(session);
                     }
                 }
             }
             
             //update the db and get the updated objects
-            Account updatedAccount = dao.updateAccount(account);
+            Account updatedAccount = accountDAO.addOrUpdateAccount(account);
             students = updatedAccount.getStudents().stream()
                     .filter(s
                             -> s.getEnglishName().equalsIgnoreCase(studentField.getText())
                             || s.getChineseName().equalsIgnoreCase(studentField.getText()))
                     .collect(Collectors.toList());
             student = students.get(0);
+            student = studentDAO.getStudentWithSessions(student.getId());
             for(Session sess : student.getSessions()){
                 if(sess.getSessionId() == session.getSessionId()){
                     session = sess;
                 }
             }
-            
-            viewSession(session);
+            //session = sessionDAO.getSessionWithNoteAndReview(session.getId());
+            NavigationController.viewSession(session);
         } else {
             Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
                     + "the account, student, and session ID text fields are "
                     + "filled in correctly before saving.");
             saveAlert.showAndWait();
         }
-    }
-
-    private void viewSession(Session session) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/session.fxml"));
-        SessionController sessionController = new SessionController(session);
-        fxmlLoader.setController(sessionController);
-        Stage stage = (Stage) ((Node) tilePane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load session", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
     }
 }

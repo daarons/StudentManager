@@ -15,14 +15,13 @@
  */
 package com.daarons.DAO;
 
-import com.daarons.model.Account;
-import java.util.List;
+import com.daarons.model.Session;
 
 /**
  *
  * @author David
  */
-public interface AccountReader {
-    public Account getAccount(long id);
-    public List<Account> getAccountsLike(String name);
+public interface SessionDAO {
+    public Session getSessionWithNoteAndReview(long id);
+    public Session updateSession(Session session);
 }

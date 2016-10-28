@@ -15,14 +15,12 @@
  */
 package com.daarons.DAO;
 
-import com.daarons.model.Account;
+import com.daarons.model.Student;
 
 /**
  *
  * @author David
  */
-public interface AccountWriter {
-    public Account addAccount(Account a);
-    public Account updateAccount(Account a);
-    public Account deleteAccount(Account a);
+public interface StudentDAO {
+    public Student getStudentWithSessions(long id);
 }

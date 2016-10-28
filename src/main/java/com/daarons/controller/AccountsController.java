@@ -22,13 +22,12 @@ import java.net.URL;
 import java.util.*;
 import javafx.event.ActionEvent;
 import javafx.fxml.*;
-import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.input.*;
 import javafx.scene.layout.GridPane;
-import javafx.stage.Stage;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -37,8 +36,11 @@ import org.apache.logging.log4j.*;
  */
 public class AccountsController implements Initializable {
     
-    private static final Logger log = LogManager.getLogger(AccountsController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    private static final Logger log = LogManager.getLogger(AccountsController.class);   
+    @Autowired
+    private AccountDAO accountDAO;  
+    @Autowired
+    private StudentDAO studentDAO;
     private TreeView accountsView;
 
     @FXML
@@ -51,7 +53,7 @@ public class AccountsController implements Initializable {
         if (event.getSource() == searchAccountsField) {
             accountsView.setRoot(createTree(null));
             if (!searchAccountsField.getText().isEmpty()) {
-                List<Account> accounts = dao.getAccountsLike(searchAccountsField.getText());
+                List<Account> accounts = accountDAO.getAccountsLike(searchAccountsField.getText());
                 if (accounts != null) {
                     accountsView.setRoot(createTree(accounts));
                 }
@@ -73,7 +75,7 @@ public class AccountsController implements Initializable {
         MenuItem addAccount = new MenuItem("Add Account");
         addAccount.setOnAction((ActionEvent t) -> {
             Account newAccount = new Account("New Account");
-            newAccount = dao.addAccount(newAccount);
+            newAccount = accountDAO.addOrUpdateAccount(newAccount);
             accountsView.getRoot().getChildren().add(new AccountTreeItem(newAccount));
         });
         
@@ -98,7 +100,7 @@ public class AccountsController implements Initializable {
                 Student newStudent = new Student(account, "", "New Student", 0,
                         "", "", "", "");
                 account.getStudents().add(newStudent);
-                account = dao.updateAccount(account);
+                account = accountDAO.addOrUpdateAccount(account);
                 newStudent = account.getStudents().get(account.getStudents().size() - 1);
                 this.getChildren().add(new StudentTreeItem(newStudent));
                 List<AbstractTreeItem> children = this.getChildren();
@@ -114,7 +116,7 @@ public class AccountsController implements Initializable {
                         + account.getName() + " ?");
                 deleteAlert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK) {
-                        dao.deleteAccount(account);
+                        accountDAO.deleteAccount(account);
                         this.getParent().getChildren().remove(this);
                     }
                 });
@@ -149,7 +151,8 @@ public class AccountsController implements Initializable {
         public ContextMenu getContextMenu() {
             MenuItem viewStudent = new MenuItem("View Student");
             viewStudent.setOnAction((ActionEvent event) -> {
-                viewStudent(student);
+                student = studentDAO.getStudentWithSessions(student.getId());
+                NavigationController.viewStudent(student);
             });
             
             MenuItem deleteStudent = new MenuItem("Delete Student");
@@ -162,7 +165,7 @@ public class AccountsController implements Initializable {
                         int index = this.getParent().getChildren().indexOf(this);
                         Account parentAccount = ((Account) ((AbstractTreeItem) this.getParent()).getObject());
                         parentAccount.getStudents().remove(index);
-                        Account newParentAccount = dao.updateAccount(parentAccount);
+                        Account newParentAccount = accountDAO.addOrUpdateAccount(parentAccount);
                         ((AbstractTreeItem) this.getParent()).setObject(newParentAccount);
                         List<AbstractTreeItem> children = this.getParent().getChildren();
                         for (AbstractTreeItem ati : children) {
@@ -262,7 +265,7 @@ public class AccountsController implements Initializable {
                         ti.setValue(s);
                         ti.setObject(s);
                     }
-                    dao.updateAccount(a);
+                    accountDAO.addOrUpdateAccount(a);
                     commitEdit(textField.getText().replaceAll("`", ""));
                 } else if (t.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
@@ -294,24 +297,5 @@ public class AccountsController implements Initializable {
     private static boolean containsChinese(String text) {
         return text.codePoints().anyMatch(codepoint
                 -> Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
-    }
-
-    private void viewStudent(Student student) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
-        StudentController studentController = new StudentController(student);
-        fxmlLoader.setController(studentController);
-        Stage stage = (Stage) ((Node) gridPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load student.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
     }
 }

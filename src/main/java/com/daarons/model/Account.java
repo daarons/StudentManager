@@ -26,7 +26,7 @@ import javax.persistence.*;
 @Entity
 public class Account implements Serializable {
     @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private String name;
     @OneToMany(fetch=FetchType.EAGER, mappedBy="account", cascade=CascadeType.ALL, orphanRemoval=true)

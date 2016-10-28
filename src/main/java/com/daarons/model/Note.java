@@ -25,7 +25,7 @@ import javax.persistence.*;
 @Entity
 public class Note implements Serializable {
     @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
     @JoinColumn(name="session", nullable=false)

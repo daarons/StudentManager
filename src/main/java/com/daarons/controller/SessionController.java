@@ -28,10 +28,10 @@ import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -40,8 +40,13 @@ import org.apache.logging.log4j.*;
  */
 public class SessionController implements Initializable {
 
-    private static final Logger log = LogManager.getLogger(SessionController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    private static final Logger log = LogManager.getLogger(SessionController.class);   
+    @Autowired
+    private AccountDAO dao;
+    @Autowired
+    private StudentDAO studentDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Session session;
 
     public SessionController(Session session) {
@@ -193,22 +198,10 @@ public class SessionController implements Initializable {
                 session.setReview(review);
 
                 //updates the sessions for persisting and get the student view
-                Account account = session.getStudent().getAccount();
-                Student studentView = null;
-                for (Student student : account.getStudents()) {
-                    if (student.getId() == session.getStudent().getId()) {
-                        for (Session s : student.getSessions()) {
-                            if (s.getId() == session.getId()) {
-                                s = session;
-                                studentView = student;
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                dao.updateAccount(account);
-                viewStudent(studentView);
+                session = sessionDAO.updateSession(session);
+                Student studentView = session.getStudent();  
+                studentView = studentDAO.getStudentWithSessions(studentView.getId());
+                NavigationController.viewStudent(studentView);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "The session ID "
                         + "field does not contain a session ID.");
@@ -232,24 +225,4 @@ public class SessionController implements Initializable {
             }
         }
     }
-
-    private void viewStudent(Student student) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
-        StudentController studentController = new StudentController(student);
-        fxmlLoader.setController(studentController);
-        Stage stage = (Stage) ((Node) borderPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load student.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
-    }
-
 }

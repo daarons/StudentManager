@@ -27,7 +27,6 @@ import javafx.beans.property.*;
 import javafx.event.*;
 import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
-import javafx.scene.*;
 import javafx.scene.chart.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
@@ -36,6 +35,7 @@ import javafx.scene.layout.*;
 import javafx.stage.*;
 import javafx.util.Duration;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -45,7 +45,10 @@ import org.apache.logging.log4j.*;
 public class StudentController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(StudentController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    @Autowired
+    private AccountDAO accountDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Student student;
     private TreeTableView sessionTableView;
 
@@ -74,25 +77,6 @@ public class StudentController implements Initializable {
 
     public StudentController(Student student) {
         this.student = student;
-    }
-
-    private void viewSession(Session session) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/session.fxml"));
-        SessionController sessionController = new SessionController(session);
-        fxmlLoader.setController(sessionController);
-        Stage stage = (Stage) ((Node) borderPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load session.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
     }
 
     /**
@@ -132,7 +116,7 @@ public class StudentController implements Initializable {
                     }
                 }
 
-                dao.updateAccount(account);
+                accountDAO.addOrUpdateAccount(account);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
                         + "at least one name field is filled in and the age is a "
@@ -178,7 +162,8 @@ public class StudentController implements Initializable {
                     if (event.getClickCount() == 2) {
                         AbstractTreeItem ati = (AbstractTreeItem) sessionTableView.getSelectionModel().getSelectedItem();
                         Session session = (Session) ati.getObject();
-                        viewSession(session);
+                        session = sessionDAO.getSessionWithNoteAndReview(session.getId());
+                        NavigationController.viewSession(session);
                     }
                 }
             });
@@ -262,7 +247,8 @@ public class StudentController implements Initializable {
         public ContextMenu getContextMenu() {
             MenuItem viewSession = new MenuItem("View Session");
             viewSession.setOnAction((ActionEvent event) -> {
-                viewSession(session);
+                session = sessionDAO.getSessionWithNoteAndReview(session.getId());
+                NavigationController.viewSession(session);
             });
 
             MenuItem deleteSession = new MenuItem("Delete Session");
@@ -285,7 +271,7 @@ public class StudentController implements Initializable {
                                 break;
                             }
                         }
-                        Account updatedAccount = dao.updateAccount(account);
+                        Account updatedAccount = accountDAO.addOrUpdateAccount(account);
                         Student updatedStudent = updatedAccount
                                 .getStudents()
                                 .stream()
