@@ -84,7 +84,7 @@ public class AccountsController implements Initializable {
         gridPane.add(accountsView, 0, 1);
     }
 
-    public class AccountTreeItem extends AbstractTreeItem {
+    private class AccountTreeItem extends AbstractTreeItem {
 
         private Account account;
 
@@ -138,7 +138,7 @@ public class AccountsController implements Initializable {
         }
     }
 
-    public class StudentTreeItem extends AbstractTreeItem {
+    private class StudentTreeItem extends AbstractTreeItem {
 
         private Student student;
 
@@ -192,7 +192,7 @@ public class AccountsController implements Initializable {
         }
     }
 
-    public final class TextFieldTreeCell extends TreeCell {
+    private final class TextFieldTreeCell extends TreeCell {
 
         private TextField textField;
         private ContextMenu menu;
