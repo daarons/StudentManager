@@ -23,7 +23,6 @@ import java.sql.Timestamp;
 import java.util.*;
 import java.util.stream.Collectors;
 import javafx.beans.binding.Bindings;
-import javafx.event.EventHandler;
 import javafx.fxml.*;
 import javafx.geometry.Rectangle2D;
 import javafx.scene.control.Alert.AlertType;
@@ -214,7 +213,6 @@ public class NotesController implements Initializable {
                     session = sess;
                 }
             }
-            //session = sessionDAO.getSessionWithNoteAndReview(session.getId());
             NavigationController.viewSession(session);
         } else {
             Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "

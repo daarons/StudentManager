@@ -1,7 +1,6 @@
 package com.daarons.controller;
 
 import com.daarons.config.SpringConfig;
-import com.daarons.model.Account;
 import com.daarons.model.Session;
 import com.daarons.model.Student;
 import java.io.IOException;

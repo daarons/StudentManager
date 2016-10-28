@@ -38,7 +38,7 @@ public class ImportExportController implements Initializable {
     private boolean importDB;
     private boolean exportDB;
     @Autowired
-    private ImportExportDAO dao;
+    private ImportExportDAO importExportDAO;
 
     @FXML
     private Button importBtn;
@@ -86,7 +86,7 @@ public class ImportExportController implements Initializable {
                     + " will delete the current database. Do you want to continue?");
             Optional<ButtonType> result = importAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                boolean isImported = dao.importDB(folder);
+                boolean isImported = importExportDAO.importDB(folder);
                 if(isImported){
                     folderName.setText("Import successful!");
                 }else{
@@ -97,7 +97,7 @@ public class ImportExportController implements Initializable {
                 }
             }
         }else if(exportDB){
-            boolean isExported = dao.exportDB(folder);
+            boolean isExported = importExportDAO.exportDB(folder);
             if(isExported){
                 folderName.setText("Export successful!");
             }else{
