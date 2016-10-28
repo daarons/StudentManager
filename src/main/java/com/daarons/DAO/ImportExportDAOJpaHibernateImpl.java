@@ -32,9 +32,9 @@ import org.springframework.stereotype.Repository;
  * @author David
  */
 @Repository
-public class ImportExportDAOJpaImpl implements ImportExportDAO {
+public class ImportExportDAOJpaHibernateImpl implements ImportExportDAO {
 
-    private static final Logger log = LogManager.getLogger(ImportExportDAOJpaImpl.class);
+    private static final Logger log = LogManager.getLogger(ImportExportDAOJpaHibernateImpl.class);
     private EntityManager em;
     private Session session;
     
