@@ -86,135 +86,43 @@ public class StudentController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
-        gridPaneLeft.setMaxWidth(screenSize.getWidth() / 2);
-        gridPaneCenter.setMaxWidth(screenSize.getWidth() / 2);
-
-        englishNameField.setText(student.getEnglishName());
-        chineseNameField.setText(student.getChineseName());
-        ageField.setText(String.valueOf(student.getAge()));
-        locationField.setText(student.getLocation());
-        hobbiesArea.setText(student.getHobbies());
-        motivesArea.setText(student.getMotive());
-        notesArea.setText(student.getOtherInfo());
-
-        saveBtn.setOnMouseClicked((MouseEvent event) -> {
-            if ((!englishNameField.getText().trim().isEmpty()
-                    || !chineseNameField.getText().trim().isEmpty())
-                    && Validator.isNumber(ageField.getText())) {
-                student.setEnglishName(englishNameField.getText().replaceAll("`", ""));
-                student.setChineseName(chineseNameField.getText().replaceAll("`", ""));
-                student.setAge(Integer.parseInt(ageField.getText()));
-                student.setLocation(locationField.getText().replaceAll("`", ""));
-                student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
-                student.setMotive(motivesArea.getText().replaceAll("`", ""));
-                student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
-
-                //get account and replace the old student with the new student
-                Account account = student.getAccount();
-                for (Student s : account.getStudents()) {
-                    if (s.getId() == student.getId()) {
-                        s = student;
-                    }
-                }
-
-                accountDAO.addOrUpdateAccount(account);
-            } else {
-                Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
-                        + "at least one name field is filled in and the age is a "
-                        + "number before saving.");
-                saveAlert.showAndWait();
-            }
-        });
-
-        trashBtn.setOnMouseClicked((MouseEvent event) -> {
-            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
-                    + "sure that you want to delete student "
-                    + student.toString() + " ?");
-            deleteAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    Account account = student.getAccount();
-                    for (Student stu : account.getStudents()) {
-                        if (stu.getId() == student.getId()) {
-                            account.getStudents().remove(stu);
-                            break;
-                        }
-                    }
-                    accountDAO.addOrUpdateAccount(account);
-                    NavigationController.viewAccount();
-                }
-            });
-        });
-
-        hobbiesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        motivesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-        notesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
-
-        sessionTableView = new TreeTableView();
-        sessionTableView.setMaxHeight(Double.MAX_VALUE);
-        sessionTableView.setMaxWidth(Double.MAX_VALUE);
-
-        TreeTableColumn<Session, Number> sessionCol = new TreeTableColumn("Session ID");
-        sessionCol.setCellValueFactory(ti
-                -> new ReadOnlyLongWrapper(ti.getValue().getValue().getSessionId()));
-
-        TreeTableColumn<Session, String> dateCol = new TreeTableColumn("Date");
-        dateCol.setCellValueFactory(ti
-                -> new ReadOnlyStringWrapper(ti.getValue().getValue().getTimestamp().toString()));
-
-        sessionTableView.getColumns().addAll(sessionCol, dateCol);
-        sessionTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
-
-        sessionTableView.setRowFactory(ttv -> {
-            TreeTableRow row = new TreeTableRow() {
-                @Override
-                protected void updateItem(Object item, boolean empty) {
-                    super.updateItem(item, empty);
-                    if (empty) {
-                        setContextMenu(null);
-                    } else {
-                        setContextMenu(((AbstractTreeItem) getTreeItem()).getContextMenu());
-                    }
-                }
-            };
-            row.setOnMouseClicked(new EventHandler<MouseEvent>() {
-                @Override
-                public void handle(MouseEvent event) {
-                    if (event.getClickCount() == 2) {
-                        AbstractTreeItem ati = (AbstractTreeItem) sessionTableView.getSelectionModel().getSelectedItem();
-                        Session session = (Session) ati.getObject();
-                        session = sessionDAO.getSessionWithNoteAndReview(session.getId());
-                        NavigationController.viewSession(session);
-                    }
-                }
-            });
-            return row;
-        });
-
-        sessionTableView.setRoot(createTree(student.getSessions()));
-        sessionTableView.setShowRoot(false);
-
+        initGridPanes();
+        initTextFieldsAndAreas();
+        installSaveBtnEventHandler();
+        installTrashBtnEventHandler();
+        installHandleTabEventHandler();
+        
+        initSessionTableView();
         gridPaneCenter.add(sessionTableView, 0, 0);
 
+        LineChart<Date, Number> lineChart = initLineChart();
+        gridPaneCenter.add(lineChart, 0, 1);
+    }
+
+    private LineChart<Date, Number> initLineChart() {
         DateAxis xAxis = new DateAxis();
         xAxis.setLabel("Date");
         NumberAxis yAxis = new NumberAxis("Score", 6, 30, 2);
         LineChart<Date, Number> lineChart = new LineChart(xAxis, yAxis);
         lineChart.setTitle(student.toString() + "'s scores");
         lineChart.setLegendVisible(false);
-
         XYChart.Series<Date, Number> series = new XYChart.Series();
         series.setName("Scores");
-        for (Session s : student.getSessions()) {
-            Date xTimestamp = s.getTimestamp();
-            int yTotalScore = s.getReview().getTotalGrade();
+        for (Session session : student.getSessions()) {
+            Date xTimestamp = session.getTimestamp();
+            int yTotalScore = session.getReview().getTotalGrade();
             series.getData().add(new XYChart.Data(xTimestamp, yTotalScore));
         }
         lineChart.getData().add(series);
+        
+        setTooltipDuration(lineChart);
+        return lineChart;
+    }
 
-        for (XYChart.Series<Date, Number> s : lineChart.getData()) {
-            for (XYChart.Data<Date, Number> d : s.getData()) {
-                Tooltip tooltip = new Tooltip(d.getXValue().toString() + "\nScore: " + d.getYValue());
+    private void setTooltipDuration(LineChart<Date, Number> lineChart) {
+        for (XYChart.Series<Date, Number> dataSeries : lineChart.getData()) {
+            for (XYChart.Data<Date, Number> data : dataSeries.getData()) {
+                Tooltip tooltip = new Tooltip(data.getXValue().toString() + "\nScore: " + data.getYValue());
                 try {
                     Field fieldBehavior = tooltip.getClass().getDeclaredField("BEHAVIOR");
                     fieldBehavior.setAccessible(true);
@@ -239,15 +147,129 @@ public class StudentController implements Initializable {
                 } catch (Exception ex) {
                     log.error("Couldn't set duration of tooltip", ex);
                 }
-                Tooltip.install(d.getNode(), tooltip);
+                Tooltip.install(data.getNode(), tooltip);
 
-                d.getNode().setOnMouseEntered(event -> d.getNode().getStyleClass().add("onHover"));
-                d.getNode().setOnMouseExited(event -> d.getNode().getStyleClass().remove("onHover"));
+                data.getNode().setOnMouseEntered(event -> data.getNode().getStyleClass().add("onHover"));
+                data.getNode().setOnMouseExited(event -> data.getNode().getStyleClass().remove("onHover"));
             }
         }
+    }
 
-        gridPaneCenter.add(lineChart, 0, 1);
+    private void initSessionTableView() {
+        sessionTableView = new TreeTableView();
+        sessionTableView.setMaxHeight(Double.MAX_VALUE);
+        sessionTableView.setMaxWidth(Double.MAX_VALUE);
+        
+        TreeTableColumn<Session, Number> sessionColumn = new TreeTableColumn("Session ID");
+        sessionColumn.setCellValueFactory(column
+                -> new ReadOnlyLongWrapper(column.getValue().getValue().getSessionId()));
+        
+        TreeTableColumn<Session, String> dateColumn = new TreeTableColumn("Date");
+        dateColumn.setCellValueFactory(column
+                -> new ReadOnlyStringWrapper(column.getValue().getValue().getTimestamp().toString()));
+        
+        sessionTableView.getColumns().addAll(sessionColumn, dateColumn);
+        sessionTableView.setColumnResizePolicy(TreeTableView.CONSTRAINED_RESIZE_POLICY);
+        
+        sessionTableView.setRowFactory(treeTableView -> {
+            TreeTableRow row = new TreeTableRow() {
+                @Override
+                protected void updateItem(Object item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setContextMenu(null);
+                    } else {
+                        setContextMenu(((AbstractTreeItem) getTreeItem()).getContextMenu());
+                    }
+                }
+            };
+            row.setOnMouseClicked((MouseEvent event) -> {
+                if (event.getClickCount() == 2) {
+                    SessionTreeItem sessionTreeItem = (SessionTreeItem) sessionTableView.getSelectionModel().getSelectedItem();
+                    Session session = sessionTreeItem.getSession();
+                    session = sessionDAO.getSessionWithNoteAndReview(session.getId());
+                    NavigationController.viewSession(session);
+                }
+            });
+            return row;
+        });
+        
+        sessionTableView.setRoot(createTree(student.getSessions()));
+        sessionTableView.setShowRoot(false);
+    }
 
+    private void installHandleTabEventHandler() {
+        hobbiesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        motivesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+        notesArea.addEventHandler(KeyEvent.KEY_PRESSED, new HandleTab());
+    }
+
+    private void installTrashBtnEventHandler() {
+        trashBtn.setOnMouseClicked((MouseEvent event) -> {
+            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                    + "sure that you want to delete student "
+                    + this.student.toString() + " ?");
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    Account account = this.student.getAccount();
+                    for (Student student : account.getStudents()) {
+                        if (student.getId() == this.student.getId()) {
+                            account.getStudents().remove(student);
+                            break;
+                        }
+                    }
+                    accountDAO.addOrUpdateAccount(account);
+                    NavigationController.viewAccount();
+                }
+            });
+        });
+    }
+
+    private void installSaveBtnEventHandler() {
+        saveBtn.setOnMouseClicked((MouseEvent event) -> {
+            if ((!englishNameField.getText().trim().isEmpty()
+                    || !chineseNameField.getText().trim().isEmpty())
+                    && Validator.isNumber(ageField.getText())) {
+                student.setEnglishName(englishNameField.getText().replaceAll("`", ""));
+                student.setChineseName(chineseNameField.getText().replaceAll("`", ""));
+                student.setAge(Integer.parseInt(ageField.getText()));
+                student.setLocation(locationField.getText().replaceAll("`", ""));
+                student.setHobbies(hobbiesArea.getText().replaceAll("`", ""));
+                student.setMotive(motivesArea.getText().replaceAll("`", ""));
+                student.setOtherInfo(notesArea.getText().replaceAll("`", ""));
+                
+                //get account and replace the old student with the new student
+                Account account = this.student.getAccount();
+                for (Student student : account.getStudents()) {
+                    if (student.getId() == this.student.getId()) {
+                        student = this.student;
+                    }
+                }
+                
+                accountDAO.addOrUpdateAccount(account);
+            } else {
+                Alert saveAlert = new Alert(AlertType.ERROR, "Please make sure that "
+                        + "at least one name field is filled in and the age is a "
+                        + "number before saving.");
+                saveAlert.showAndWait();
+            }
+        });
+    }
+
+    private void initTextFieldsAndAreas() {
+        englishNameField.setText(student.getEnglishName());
+        chineseNameField.setText(student.getChineseName());
+        ageField.setText(String.valueOf(student.getAge()));
+        locationField.setText(student.getLocation());
+        hobbiesArea.setText(student.getHobbies());
+        motivesArea.setText(student.getMotive());
+        notesArea.setText(student.getOtherInfo());
+    }
+
+    private void initGridPanes() {
+        Rectangle2D screenSize = Screen.getPrimary().getVisualBounds();
+        gridPaneLeft.setMaxWidth(screenSize.getWidth() / 2);
+        gridPaneCenter.setMaxWidth(screenSize.getWidth() / 2);
         RowConstraints row1 = new RowConstraints();
         row1.setPercentHeight(50);
         RowConstraints row2 = new RowConstraints();
@@ -262,10 +284,24 @@ public class StudentController implements Initializable {
         public SessionTreeItem(Session session) {
             this.session = session;
             setValue(session);
+            createContextMenu();
         }
 
         @Override
         public ContextMenu getContextMenu() {
+            return contextMenu;
+        }
+
+        public Session getSession() {
+            return session;
+        }
+
+        public void setSession(Session session) {
+            this.session = session;
+        }
+
+        @Override
+        protected void createContextMenu() {
             MenuItem viewSession = new MenuItem("View Session");
             viewSession.setOnAction((ActionEvent event) -> {
                 session = sessionDAO.getSessionWithNoteAndReview(session.getId());
@@ -301,31 +337,22 @@ public class StudentController implements Initializable {
                                 .get();
                         student = updatedStudent;
                         List<Session> updatedSessions = updatedStudent.getSessions();
-                        List<AbstractTreeItem> oldSessions = this.getParent().getChildren();
+                        List<SessionTreeItem> oldSessions = this.getParent().getChildren();
                         oldSessions.remove(this);
                         if (updatedSessions.size() > 0) {
                             for (int i = 0; i < updatedSessions.size(); i++) {
                                 //automatically removes this SessionTreeItem from view
-                                oldSessions.get(i).setObject(updatedSessions.get(i));
+                                oldSessions.get(i).setSession(updatedSessions.get(i));
                             }
                         }
+                        
+                        //reloads view to show updated linechart
+                        initialize(null, null);
                     }
                 });
             });
 
-            return new ContextMenu(viewSession, deleteSession);
-        }
-
-        @Override
-        public Object getObject() {
-            return session;
-        }
-
-        @Override
-        public void setObject(Object o) {
-            if (o instanceof Session) {
-                session = (Session) o;
-            }
+            contextMenu = new ContextMenu(viewSession, deleteSession);
         }
 
     }
@@ -333,8 +360,8 @@ public class StudentController implements Initializable {
     private TreeItem createTree(List<Session> sessions) {
         TreeItem root = new TreeItem();
         if (sessions != null) {
-            for (Session s : sessions) {
-                SessionTreeItem item = new SessionTreeItem(s);
+            for (Session session : sessions) {
+                SessionTreeItem item = new SessionTreeItem(session);
                 item.setExpanded(true);
                 root.getChildren().add(item);
             }
