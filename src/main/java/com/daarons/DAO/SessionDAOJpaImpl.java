@@ -16,10 +16,8 @@
 package com.daarons.DAO;
 
 import com.daarons.model.Session;
-import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import org.apache.logging.log4j.LogManager;
-import org.apache.logging.log4j.Logger;
+import javax.persistence.*;
+import org.apache.logging.log4j.*;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -29,8 +27,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public class SessionDAOJpaImpl implements SessionDAO{
-    private static final Logger log = LogManager.getLogger(SessionDAOJpaImpl.class);
-    
+    private static final Logger log = LogManager.getLogger(SessionDAOJpaImpl.class);   
     @PersistenceContext
     private EntityManager em;
     

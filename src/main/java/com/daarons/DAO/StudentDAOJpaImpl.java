@@ -29,8 +29,7 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 public class StudentDAOJpaImpl implements StudentDAO{
-    private static final Logger log = LogManager.getLogger(StudentDAOJpaImpl.class);
-    
+    private static final Logger log = LogManager.getLogger(StudentDAOJpaImpl.class);   
     @PersistenceContext
     private EntityManager em;
 

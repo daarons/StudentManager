@@ -36,8 +36,7 @@ public class ImportExportDAOJpaHibernateImpl implements ImportExportDAO {
 
     private static final Logger log = LogManager.getLogger(ImportExportDAOJpaHibernateImpl.class);
     private EntityManager em;
-    private Session session;
-    
+    private Session session;   
     @Autowired
     AccountDAO dao;
 
@@ -57,7 +56,7 @@ public class ImportExportDAOJpaHibernateImpl implements ImportExportDAO {
                 String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
                     "NOTE", "REVIEW"};
 
-                try { //connection is unreachable outside of lambda/inner class
+                try {
                     for (int i = 0; i < 5; i++) {
                         PreparedStatement ps = connection.prepareStatement(
                                 "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
@@ -96,7 +95,7 @@ public class ImportExportDAOJpaHibernateImpl implements ImportExportDAO {
             session.doWork((Connection connection) -> {
                 String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
                     "NOTE", "REVIEW"};
-                try { //connection is unreachable outside of lambda/inner class
+                try {
                     for (int i = 0; i < tables.length; i++) {
                         PreparedStatement ps = connection.prepareStatement(
                                 "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
