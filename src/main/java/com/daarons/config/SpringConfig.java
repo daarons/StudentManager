@@ -15,7 +15,6 @@
  */
 package com.daarons.config;
 
-import com.daarons.DAO.*;
 import com.daarons.controller.*;
 import com.daarons.model.*;
 import javafx.stage.Stage;
