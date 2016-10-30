@@ -3,7 +3,7 @@
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
- * You may obtain a copy of the License at
+ * You may obtain account copy of the License at
  *
  *      http://www.apache.org/licenses/LICENSE-2.0
  *
@@ -18,6 +18,7 @@ package com.daarons.controller;
 import com.daarons.DAO.*;
 import com.daarons.control.AbstractTreeItem;
 import com.daarons.model.*;
+import com.daarons.util.Validator;
 import java.net.URL;
 import java.util.*;
 import javafx.event.ActionEvent;
@@ -41,7 +42,7 @@ public class AccountsController implements Initializable {
     private AccountDAO accountDAO;  
     @Autowired
     private StudentDAO studentDAO;
-    private TreeView accountsView;
+    private TreeView accountsTreeView;
 
     @FXML
     private GridPane gridPane;
@@ -49,13 +50,13 @@ public class AccountsController implements Initializable {
     private TextField searchAccountsField;
 
     @FXML
-    private void searchAccounts(KeyEvent event) throws Exception {
+    private void displayAccounts(KeyEvent event) throws Exception {
         if (event.getSource() == searchAccountsField) {
-            accountsView.setRoot(createTree(null));
+            accountsTreeView.setRoot(createTree(null));
             if (!searchAccountsField.getText().isEmpty()) {
                 List<Account> accounts = accountDAO.getAccountsLike(searchAccountsField.getText());
                 if (accounts != null) {
-                    accountsView.setRoot(createTree(accounts));
+                    accountsTreeView.setRoot(createTree(accounts));
                 }
             }
         }
@@ -66,22 +67,22 @@ public class AccountsController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        accountsView = new TreeView();
-        accountsView.setShowRoot(false);
-        accountsView.setEditable(true);
-        accountsView.setCellFactory(tv -> new TextFieldTreeCell());
-        accountsView.setRoot(createTree(null));
+        accountsTreeView = new TreeView();
+        accountsTreeView.setShowRoot(false);
+        accountsTreeView.setEditable(true);
+        accountsTreeView.setCellFactory(tv -> new TextFieldTreeCell());
+        accountsTreeView.setRoot(createTree(null));
 
         MenuItem addAccount = new MenuItem("Add Account");
-        addAccount.setOnAction((ActionEvent t) -> {
+        addAccount.setOnAction((ActionEvent event) -> {
             Account newAccount = new Account("New Account");
             newAccount = accountDAO.addOrUpdateAccount(newAccount);
-            accountsView.getRoot().getChildren().add(new AccountTreeItem(newAccount));
+            accountsTreeView.getRoot().getChildren().add(new AccountTreeItem(newAccount));
         });
         
-        accountsView.setContextMenu(new ContextMenu(addAccount));
+        accountsTreeView.setContextMenu(new ContextMenu(addAccount));
 
-        gridPane.add(accountsView, 0, 1);
+        gridPane.add(accountsTreeView, 0, 1);
     }
 
     private class AccountTreeItem extends AbstractTreeItem {
@@ -91,26 +92,40 @@ public class AccountsController implements Initializable {
         public AccountTreeItem(Account account) {
             setValue(account);
             this.account = account;
+            createContextMenu();
         }
 
         @Override
         public ContextMenu getContextMenu() {
+            return contextMenu;
+        }
+
+        public Account getAccount() {
+            return account;
+        }
+
+        public void setAccount(Account account) {
+            this.account = account;
+        }
+
+        @Override
+        public void createContextMenu() {
             MenuItem addStudent = new MenuItem("Add Student");
-            addStudent.setOnAction((ActionEvent t) -> {
+            addStudent.setOnAction((ActionEvent event) -> {
                 Student newStudent = new Student(account, "", "New Student", 0,
                         "", "", "", "");
                 account.getStudents().add(newStudent);
                 account = accountDAO.addOrUpdateAccount(account);
                 newStudent = account.getStudents().get(account.getStudents().size() - 1);
                 this.getChildren().add(new StudentTreeItem(newStudent));
-                List<AbstractTreeItem> children = this.getChildren();
-                for (AbstractTreeItem ati : children) {
-                    ((Student) ati.getObject()).setAccount(account);
+                List<StudentTreeItem> children = this.getChildren();
+                for (StudentTreeItem studentTreeItem : children) {
+                    studentTreeItem.getStudent().setAccount(account);
                 }
             });
 
             MenuItem deleteAccount = new MenuItem("Delete Account");
-            deleteAccount.setOnAction((ActionEvent t) -> {
+            deleteAccount.setOnAction((ActionEvent event) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
                         + "sure that you want to delete account "
                         + account.getName() + " ?");
@@ -122,19 +137,7 @@ public class AccountsController implements Initializable {
                 });
             });
 
-            return new ContextMenu(addStudent, deleteAccount);
-        }
-
-        @Override
-        public Object getObject() {
-            return account;
-        }
-
-        @Override
-        public void setObject(Object o) {
-            if (o instanceof Account) {
-                this.account = (Account) o;
-            }
+            contextMenu = new ContextMenu(addStudent, deleteAccount);
         }
     }
 
@@ -142,13 +145,27 @@ public class AccountsController implements Initializable {
 
         private Student student;
 
-        public StudentTreeItem(Student s) {
-            setValue(s);
-            this.student = s;
+        public StudentTreeItem(Student student) {
+            setValue(student);
+            this.student = student;
+            createContextMenu();
         }
 
         @Override
         public ContextMenu getContextMenu() {
+            return contextMenu;
+        }
+
+        public Student getStudent() {
+            return student;
+        }
+
+        public void setStudent(Student student) {
+            this.student = student;
+        }
+
+        @Override
+        public void createContextMenu() {
             MenuItem viewStudent = new MenuItem("View Student");
             viewStudent.setOnAction((ActionEvent event) -> {
                 student = studentDAO.getStudentWithSessions(student.getId());
@@ -156,46 +173,34 @@ public class AccountsController implements Initializable {
             });
             
             MenuItem deleteStudent = new MenuItem("Delete Student");
-            deleteStudent.setOnAction((ActionEvent t) -> {
+            deleteStudent.setOnAction((ActionEvent event) -> {
                 Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
                         + "sure that you want to delete student "
                         + student.toString() + " ?");
                 deleteAlert.showAndWait().ifPresent(response -> {
                     if (response == ButtonType.OK) {
                         int index = this.getParent().getChildren().indexOf(this);
-                        Account parentAccount = ((Account) ((AbstractTreeItem) this.getParent()).getObject());
+                        Account parentAccount = ((AccountTreeItem)this.getParent()).getAccount();
                         parentAccount.getStudents().remove(index);
-                        Account newParentAccount = accountDAO.addOrUpdateAccount(parentAccount);
-                        ((AbstractTreeItem) this.getParent()).setObject(newParentAccount);
-                        List<AbstractTreeItem> children = this.getParent().getChildren();
-                        for (AbstractTreeItem ati : children) {
-                            ((Student) ati.getObject()).setAccount(newParentAccount);
+                        parentAccount = accountDAO.addOrUpdateAccount(parentAccount);
+                        ((AccountTreeItem) this.getParent()).setAccount(parentAccount);
+                        List<StudentTreeItem> children = this.getParent().getChildren();
+                        for (StudentTreeItem studentTreeItem : children) {
+                            studentTreeItem.getStudent().setAccount(parentAccount);
                         }
                         this.getParent().getChildren().remove(this);
                     }
                 });
             });
             
-            return new ContextMenu(viewStudent, deleteStudent);
-        }
-
-        @Override
-        public Object getObject() {
-            return student;
-        }
-
-        @Override
-        public void setObject(Object o) {
-            if (o instanceof Student) {
-                this.student = (Student) o;
-            }
+            contextMenu = new ContextMenu(viewStudent, deleteStudent);
         }
     }
 
     private final class TextFieldTreeCell extends TreeCell {
 
         private TextField textField;
-        private ContextMenu menu;
+        private ContextMenu contextMenu;
 
         @Override
         public void startEdit() {
@@ -242,32 +247,33 @@ public class AccountsController implements Initializable {
                             cancelEdit();
                         }
                     });
-            textField.setOnKeyReleased((KeyEvent t) -> {
-                if (t.getCode() == KeyCode.ENTER) {
-                    AbstractTreeItem ti = (AbstractTreeItem) getTreeItem();
-                    Object o = ti.getObject();
-                    Account a = null;
-                    if (o instanceof Account) {
-                        a = (Account) o;
-                        a.setName(textField.getText().replaceAll("`", ""));
-                        ti.setValue(a);
-                        ti.setObject(a);
-                    } else if (o instanceof Student) {
-                        Student s = (Student) o;
-                        a = s.getAccount();
-                        if (containsChinese(textField.getText())) {
-                            s.setChineseName(textField.getText().replaceAll("`", ""));
+            textField.setOnKeyReleased((KeyEvent event) -> {
+                if (event.getCode() == KeyCode.ENTER) {
+                    AbstractTreeItem treeItem = (AbstractTreeItem) getTreeItem();
+                    Account account = null;
+                    if (treeItem instanceof AccountTreeItem) {
+                        AccountTreeItem accountTreeItem = (AccountTreeItem) treeItem;
+                        account = accountTreeItem.getAccount();
+                        account.setName(textField.getText().replaceAll("`", ""));
+                        accountTreeItem.setAccount(account);
+                        accountTreeItem.setValue(account);
+                    } else if (treeItem instanceof StudentTreeItem) {
+                        StudentTreeItem studentTreeItem = (StudentTreeItem) treeItem;
+                        Student student = studentTreeItem.getStudent();
+                        account = student.getAccount();
+                        if (Validator.containsChinese(textField.getText())) {
+                            student.setChineseName(textField.getText().replaceAll("`", ""));
                         } else {
-                            s.setEnglishName(textField.getText().replaceAll("`", ""));
+                            student.setEnglishName(textField.getText().replaceAll("`", ""));
                         }
-                        int index = getTreeItem().getParent().getChildren().indexOf(ti);
-                        a.getStudents().set(index, s);
-                        ti.setValue(s);
-                        ti.setObject(s);
+                        int index = getTreeItem().getParent().getChildren().indexOf(treeItem);
+                        account.getStudents().set(index, student);
+                        studentTreeItem.setStudent(student);
+                        studentTreeItem.setValue(student);
                     }
-                    accountDAO.addOrUpdateAccount(a);
+                    accountDAO.addOrUpdateAccount(account);
                     commitEdit(textField.getText().replaceAll("`", ""));
-                } else if (t.getCode() == KeyCode.ESCAPE) {
+                } else if (event.getCode() == KeyCode.ESCAPE) {
                     cancelEdit();
                 }
             });
@@ -281,10 +287,10 @@ public class AccountsController implements Initializable {
     private TreeItem createTree(List<Account> accounts) {
         TreeItem root = new TreeItem();
         if (accounts != null) {
-            for (Account a : accounts) {
-                AccountTreeItem item = new AccountTreeItem(a);
+            for (Account account : accounts) {
+                AccountTreeItem item = new AccountTreeItem(account);
                 item.setExpanded(true);
-                a.getStudents().forEach(student -> {
+                account.getStudents().forEach(student -> {
                     item.getChildren().add(new StudentTreeItem(student));
                 });
                 root.getChildren().add(item);
@@ -292,10 +298,5 @@ public class AccountsController implements Initializable {
         }
         root.setExpanded(true);
         return root;
-    }
-
-    private static boolean containsChinese(String text) {
-        return text.codePoints().anyMatch(codepoint
-                -> Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
     }
 }
