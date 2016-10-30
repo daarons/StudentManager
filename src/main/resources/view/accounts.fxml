@@ -41,7 +41,7 @@
                       GridPane.vgrow="ALWAYS" GridPane.hgrow="ALWAYS">
                     <TextField fx:id="searchAccountsField" id="searchAccountsField" 
                                promptText="Search Accounts" HBox.hgrow="ALWAYS" 
-                               onKeyReleased="#searchAccounts" />                   
+                               onKeyReleased="#displayAccounts" />                   
                 </HBox>
                 <!-- TreeView goes here from AccountsController.java -->
             </children>
