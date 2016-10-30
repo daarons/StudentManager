@@ -109,49 +109,49 @@ public class SessionController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ObservableList<Integer> cbList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
-
-        //init choiceboxes and textareas
-        ArrayList<Node> nodes = getAllNodes(borderPane);
-        for (Node node : nodes) {
-            if (node instanceof ChoiceBox) {
-                ((ChoiceBox) node).setItems(cbList);
-                ((ChoiceBox) node).getSelectionModel().selectFirst();
-            } else if (node instanceof TextArea) {
-                ((TextArea) node).setOnKeyPressed(new HandleTab());
-            }
-        }
+        initChoiceBoxesAndTextAreas();
 
         sessionIdField.setText(String.valueOf(session.getSessionId()));
+        initCalendar();
+        initNotes();
+        initReview();
 
-        Date timestamp = session.getTimestamp();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timestamp);
-        calendarPicker.setCalendar(calendar);
-        timePicker.setCalendar(calendar);
+        installSaveBtnEventHandler();
+        installBackBtnEventHandler();
+        installTrashBtnEventHandler();
+    }
 
-        Note sessionNotes = session.getNote();
-        fluencyCoherenceNotes.setText(sessionNotes.getFluencyAndCoherence());
-        vocabularyNotes.setText(sessionNotes.getVocabulary());
-        grammarNotes.setText(sessionNotes.getGrammar());
-        pronunciationNotes.setText(sessionNotes.getPronunciation());
-        interactEngageNotes.setText(sessionNotes.getInteractionAndEngagement());
-        commSkillsNotes.setText(sessionNotes.getCommunicationSkills());
+    private void installTrashBtnEventHandler() {
+        trashBtn.setOnMouseClicked((MouseEvent event) -> {
+            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                    + "sure that you want to delete session "
+                    + session.getSessionId() + " ?");
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    Student student = session.getStudent();
+                    student = studentDAO.getStudentWithSessions(student.getId());
+                    for (Session sess : student.getSessions()) {
+                        if (sess.getId() == session.getId()) {
+                            student.getSessions().remove(sess);
+                            break;
+                        }
+                    }
+                    student = studentDAO.updateStudent(student);
+                    NavigationController.viewStudent(student);
+                }
+            });
+        });
+    }
 
-        Review sessionReview = session.getReview();
-        fluencyCoherenceBox.setValue(sessionReview.getFluencyAndCoherence().getGrade());
-        fluencyCoherenceReview.setText(sessionReview.getFluencyAndCoherence().getComment());
-        vocabularyBox.setValue(sessionReview.getVocabulary().getGrade());
-        vocabularyReview.setText(sessionReview.getVocabulary().getComment());
-        grammarBox.setValue(sessionReview.getGrammar().getGrade());
-        grammarReview.setText(sessionReview.getGrammar().getComment());
-        pronunciationBox.setValue(sessionReview.getPronunciation().getGrade());
-        pronunciationReview.setText(sessionReview.getPronunciation().getComment());
-        interactEngageBox.setValue(sessionReview.getInteractionAndEngagement().getGrade());
-        interactEngageReview.setText(sessionReview.getInteractionAndEngagement().getComment());
-        commSkillsBox.setValue(sessionReview.getCommunicationSkills().getGrade());
-        commSkillsReview.setText(sessionReview.getCommunicationSkills().getComment());
+    private void installBackBtnEventHandler() {
+        backBtn.setOnMouseClicked((MouseEvent event) -> {
+            Student student = session.getStudent();
+            student = studentDAO.getStudentWithSessions(student.getId());
+            NavigationController.viewStudent(student);
+        });
+    }
 
+    private void installSaveBtnEventHandler() {
         saveBtn.setOnMouseClicked((MouseEvent event) -> {
             if (Validator.isNumber(sessionIdField.getText())) {
                 long sessionId = Long.parseLong(sessionIdField.getText());
@@ -212,32 +212,54 @@ public class SessionController implements Initializable {
                 saveAlert.showAndWait();
             }
         });
+    }
 
-        backBtn.setOnMouseClicked((MouseEvent event) -> {
-            Student student = session.getStudent();
-            student = studentDAO.getStudentWithSessions(student.getId());
-            NavigationController.viewStudent(student);
-        });
+    private void initReview() {
+        Review sessionReview = session.getReview();
+        fluencyCoherenceBox.setValue(sessionReview.getFluencyAndCoherence().getGrade());
+        fluencyCoherenceReview.setText(sessionReview.getFluencyAndCoherence().getComment());
+        vocabularyBox.setValue(sessionReview.getVocabulary().getGrade());
+        vocabularyReview.setText(sessionReview.getVocabulary().getComment());
+        grammarBox.setValue(sessionReview.getGrammar().getGrade());
+        grammarReview.setText(sessionReview.getGrammar().getComment());
+        pronunciationBox.setValue(sessionReview.getPronunciation().getGrade());
+        pronunciationReview.setText(sessionReview.getPronunciation().getComment());
+        interactEngageBox.setValue(sessionReview.getInteractionAndEngagement().getGrade());
+        interactEngageReview.setText(sessionReview.getInteractionAndEngagement().getComment());
+        commSkillsBox.setValue(sessionReview.getCommunicationSkills().getGrade());
+        commSkillsReview.setText(sessionReview.getCommunicationSkills().getComment());
+    }
 
-        trashBtn.setOnMouseClicked((MouseEvent event) -> {
-            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
-                    + "sure that you want to delete session "
-                    + session.getSessionId() + " ?");
-            deleteAlert.showAndWait().ifPresent(response -> {
-                if (response == ButtonType.OK) {
-                    Student student = session.getStudent();
-                    student = studentDAO.getStudentWithSessions(student.getId());
-                    for (Session sess : student.getSessions()) {
-                        if (sess.getId() == session.getId()) {
-                            student.getSessions().remove(sess);
-                            break;
-                        }
-                    }
-                    student = studentDAO.updateStudent(student);
-                    NavigationController.viewStudent(student);
-                }
-            });
-        });
+    private void initNotes() {
+        Note sessionNotes = session.getNote();
+        fluencyCoherenceNotes.setText(sessionNotes.getFluencyAndCoherence());
+        vocabularyNotes.setText(sessionNotes.getVocabulary());
+        grammarNotes.setText(sessionNotes.getGrammar());
+        pronunciationNotes.setText(sessionNotes.getPronunciation());
+        interactEngageNotes.setText(sessionNotes.getInteractionAndEngagement());
+        commSkillsNotes.setText(sessionNotes.getCommunicationSkills());
+    }
+
+    private void initCalendar() {
+        Date timestamp = session.getTimestamp();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        calendarPicker.setCalendar(calendar);
+        timePicker.setCalendar(calendar);
+    }
+
+    private void initChoiceBoxesAndTextAreas() {
+        ObservableList<Integer> cbList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
+        
+        ArrayList<Node> nodes = getAllNodes(borderPane);
+        for (Node node : nodes) {
+            if (node instanceof ChoiceBox) {
+                ((ChoiceBox) node).setItems(cbList);
+                ((ChoiceBox) node).getSelectionModel().selectFirst();
+            } else if (node instanceof TextArea) {
+                ((TextArea) node).setOnKeyPressed(new HandleTab());
+            }
+        }
     }
 
     private static ArrayList<Node> getAllNodes(Parent root) {
