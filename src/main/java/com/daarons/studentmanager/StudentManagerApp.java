@@ -60,13 +60,15 @@ public class StudentManagerApp extends Application {
             fade.setToValue(0.0);
             fade.setOnFinished(actionEvent -> {
                 splashStage.close();
-                showMainStage();
+                createMainStage();
+                mainStage.show();
                 SpringConfig.setStage(mainStage);
             });
             fade.play();
         });
 
-        showSplash();
+        createSplash();
+        splashStage.show();
 
         new Thread(startSpring).start();
     }
@@ -89,7 +91,7 @@ public class StudentManagerApp extends Application {
         applicationContext.close();
     }
 
-    private void showMainStage() {       
+    private void createMainStage() {       
         FXMLLoader fxmlLoader = null;
         Parent root = null;
         try {
@@ -113,10 +115,9 @@ public class StudentManagerApp extends Application {
         mainStage.setWidth(473);
         mainStage.setX(screenSize.getMinX());
         mainStage.setY(screenSize.getMinY());
-        mainStage.show();
     }
 
-    private void showSplash() {
+    private void createSplash() {
         splashStage = new Stage();
         splashStage.getIcons().addAll(new Image(WINDOW_ICON_URL1),
                 new Image(WINDOW_ICON_URL2), new Image(WINDOW_ICON_URL3),
@@ -144,6 +145,5 @@ public class StudentManagerApp extends Application {
 
         splashStage.setScene(splashScene);
         splashStage.initStyle(StageStyle.TRANSPARENT);
-        splashStage.show();
     }
 }
