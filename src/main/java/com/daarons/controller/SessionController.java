@@ -22,16 +22,16 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.*;
 import javafx.collections.*;
-import javafx.event.ActionEvent;
 import javafx.fxml.*;
 import javafx.scene.*;
 import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.BorderPane;
-import javafx.stage.Stage;
 import jfxtras.scene.control.CalendarPicker;
 import jfxtras.scene.control.CalendarTimePicker;
 import org.apache.logging.log4j.*;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -41,7 +41,12 @@ import org.apache.logging.log4j.*;
 public class SessionController implements Initializable {
 
     private static final Logger log = LogManager.getLogger(SessionController.class);
-    private final AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
+    @Autowired
+    private AccountDAO dao;
+    @Autowired
+    private StudentDAO studentDAO;
+    @Autowired
+    private SessionDAO sessionDAO;
     private Session session;
 
     public SessionController(Session session) {
@@ -94,56 +99,60 @@ public class SessionController implements Initializable {
     private CalendarTimePicker timePicker;
     @FXML
     private Button saveBtn;
+    @FXML
+    private Button backBtn;
+    @FXML
+    private Button trashBtn;
 
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        ObservableList<Integer> cbList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
-
-        //init choiceboxes and textareas
-        ArrayList<Node> nodes = getAllNodes(borderPane);
-        for (Node node : nodes) {
-            if (node instanceof ChoiceBox) {
-                ((ChoiceBox) node).setItems(cbList);
-                ((ChoiceBox) node).getSelectionModel().selectFirst();
-            } else if (node instanceof TextArea) {
-                ((TextArea) node).setOnKeyPressed(new HandleTab());
-            }
-        }
+        initChoiceBoxesAndTextAreas();
 
         sessionIdField.setText(String.valueOf(session.getSessionId()));
+        initCalendar();
+        initNotes();
+        initReview();
 
-        Date timestamp = session.getTimestamp();
-        Calendar calendar = Calendar.getInstance();
-        calendar.setTime(timestamp);
-        calendarPicker.setCalendar(calendar);
-        timePicker.setCalendar(calendar);
+        installSaveBtnEventHandler();
+        installBackBtnEventHandler();
+        installTrashBtnEventHandler();
+    }
 
-        Note sessionNotes = session.getNote();
-        fluencyCoherenceNotes.setText(sessionNotes.getFluencyAndCoherence());
-        vocabularyNotes.setText(sessionNotes.getVocabulary());
-        grammarNotes.setText(sessionNotes.getGrammar());
-        pronunciationNotes.setText(sessionNotes.getPronunciation());
-        interactEngageNotes.setText(sessionNotes.getInteractionAndEngagement());
-        commSkillsNotes.setText(sessionNotes.getCommunicationSkills());
+    private void installTrashBtnEventHandler() {
+        trashBtn.setOnMouseClicked((MouseEvent event) -> {
+            Alert deleteAlert = new Alert(AlertType.CONFIRMATION, "Are you "
+                    + "sure that you want to delete session "
+                    + session.getSessionId() + " ?");
+            deleteAlert.showAndWait().ifPresent(response -> {
+                if (response == ButtonType.OK) {
+                    Student student = session.getStudent();
+                    student = studentDAO.getStudentWithSessions(student.getId());
+                    for (Session sess : student.getSessions()) {
+                        if (sess.getId() == session.getId()) {
+                            student.getSessions().remove(sess);
+                            break;
+                        }
+                    }
+                    student = studentDAO.updateStudent(student);
+                    NavigationController.viewStudent(student);
+                }
+            });
+        });
+    }
 
-        Review sessionReview = session.getReview();
-        fluencyCoherenceBox.setValue(sessionReview.getFluencyAndCoherence().getGrade());
-        fluencyCoherenceReview.setText(sessionReview.getFluencyAndCoherence().getComment());
-        vocabularyBox.setValue(sessionReview.getVocabulary().getGrade());
-        vocabularyReview.setText(sessionReview.getVocabulary().getComment());
-        grammarBox.setValue(sessionReview.getGrammar().getGrade());
-        grammarReview.setText(sessionReview.getGrammar().getComment());
-        pronunciationBox.setValue(sessionReview.getPronunciation().getGrade());
-        pronunciationReview.setText(sessionReview.getPronunciation().getComment());
-        interactEngageBox.setValue(sessionReview.getInteractionAndEngagement().getGrade());
-        interactEngageReview.setText(sessionReview.getInteractionAndEngagement().getComment());
-        commSkillsBox.setValue(sessionReview.getCommunicationSkills().getGrade());
-        commSkillsReview.setText(sessionReview.getCommunicationSkills().getComment());
+    private void installBackBtnEventHandler() {
+        backBtn.setOnMouseClicked((MouseEvent event) -> {
+            Student student = session.getStudent();
+            student = studentDAO.getStudentWithSessions(student.getId());
+            NavigationController.viewStudent(student);
+        });
+    }
 
-        saveBtn.setOnAction((ActionEvent event) -> {
+    private void installSaveBtnEventHandler() {
+        saveBtn.setOnMouseClicked((MouseEvent event) -> {
             if (Validator.isNumber(sessionIdField.getText())) {
                 long sessionId = Long.parseLong(sessionIdField.getText());
                 session.setSessionId(sessionId);
@@ -193,29 +202,64 @@ public class SessionController implements Initializable {
                 session.setReview(review);
 
                 //updates the sessions for persisting and get the student view
-                Account account = session.getStudent().getAccount();
-                Student studentView = null;
-                for (Student student : account.getStudents()) {
-                    if (student.getId() == session.getStudent().getId()) {
-                        for (Session s : student.getSessions()) {
-                            if (s.getId() == session.getId()) {
-                                s = session;
-                                studentView = student;
-                                break;
-                            }
-                        }
-                        break;
-                    }
-                }
-                dao.updateAccount(account);
-                viewStudent(studentView);
+                session = sessionDAO.updateSession(session);
+                Student studentView = session.getStudent();
+                studentView = studentDAO.getStudentWithSessions(studentView.getId());
+                NavigationController.viewStudent(studentView);
             } else {
                 Alert saveAlert = new Alert(AlertType.ERROR, "The session ID "
                         + "field does not contain a session ID.");
                 saveAlert.showAndWait();
             }
         });
+    }
 
+    private void initReview() {
+        Review sessionReview = session.getReview();
+        fluencyCoherenceBox.setValue(sessionReview.getFluencyAndCoherence().getGrade());
+        fluencyCoherenceReview.setText(sessionReview.getFluencyAndCoherence().getComment());
+        vocabularyBox.setValue(sessionReview.getVocabulary().getGrade());
+        vocabularyReview.setText(sessionReview.getVocabulary().getComment());
+        grammarBox.setValue(sessionReview.getGrammar().getGrade());
+        grammarReview.setText(sessionReview.getGrammar().getComment());
+        pronunciationBox.setValue(sessionReview.getPronunciation().getGrade());
+        pronunciationReview.setText(sessionReview.getPronunciation().getComment());
+        interactEngageBox.setValue(sessionReview.getInteractionAndEngagement().getGrade());
+        interactEngageReview.setText(sessionReview.getInteractionAndEngagement().getComment());
+        commSkillsBox.setValue(sessionReview.getCommunicationSkills().getGrade());
+        commSkillsReview.setText(sessionReview.getCommunicationSkills().getComment());
+    }
+
+    private void initNotes() {
+        Note sessionNotes = session.getNote();
+        fluencyCoherenceNotes.setText(sessionNotes.getFluencyAndCoherence());
+        vocabularyNotes.setText(sessionNotes.getVocabulary());
+        grammarNotes.setText(sessionNotes.getGrammar());
+        pronunciationNotes.setText(sessionNotes.getPronunciation());
+        interactEngageNotes.setText(sessionNotes.getInteractionAndEngagement());
+        commSkillsNotes.setText(sessionNotes.getCommunicationSkills());
+    }
+
+    private void initCalendar() {
+        Date timestamp = session.getTimestamp();
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(timestamp);
+        calendarPicker.setCalendar(calendar);
+        timePicker.setCalendar(calendar);
+    }
+
+    private void initChoiceBoxesAndTextAreas() {
+        ObservableList<Integer> cbList = FXCollections.observableArrayList(1, 2, 3, 4, 5);
+        
+        ArrayList<Node> nodes = getAllNodes(borderPane);
+        for (Node node : nodes) {
+            if (node instanceof ChoiceBox) {
+                ((ChoiceBox) node).setItems(cbList);
+                ((ChoiceBox) node).getSelectionModel().selectFirst();
+            } else if (node instanceof TextArea) {
+                ((TextArea) node).setOnKeyPressed(new HandleTab());
+            }
+        }
     }
 
     private static ArrayList<Node> getAllNodes(Parent root) {
@@ -232,24 +276,4 @@ public class SessionController implements Initializable {
             }
         }
     }
-
-    private void viewStudent(Student student) {
-        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/view/student.fxml"));
-        StudentController studentController = new StudentController(student);
-        fxmlLoader.setController(studentController);
-        Stage stage = (Stage) ((Node) borderPane).getScene().getWindow();
-        Scene scene = null;
-        Parent root = null;
-        try {
-            root = (Parent) fxmlLoader.load();
-        } catch (Exception ex) {
-            log.error("Couldn't load student.fxml", ex);
-        }
-        scene = new Scene(root);
-        stage.setScene(scene);
-        stage.setHeight(stage.getHeight());
-        stage.setWidth(stage.getWidth());
-        stage.show();
-    }
-
 }

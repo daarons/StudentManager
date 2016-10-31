@@ -26,7 +26,7 @@ import javax.persistence.*;
 @Entity
 public class Session implements Serializable {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     private long sessionId;
     @ManyToOne
@@ -34,9 +34,9 @@ public class Session implements Serializable {
     private Student student;
     @Temporal(TemporalType.TIMESTAMP)
     private Date timestamp;
-    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(fetch=FetchType.LAZY, mappedBy="session", cascade=CascadeType.ALL, orphanRemoval=true)
     private Note note;
-    @OneToOne(fetch=FetchType.EAGER, mappedBy="session", cascade=CascadeType.ALL, orphanRemoval=true)
+    @OneToOne(fetch=FetchType.LAZY, mappedBy="session", cascade=CascadeType.ALL, orphanRemoval=true)
     private Review review;
     
     public Session(){

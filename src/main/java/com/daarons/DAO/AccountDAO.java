@@ -15,10 +15,15 @@
  */
 package com.daarons.DAO;
 
+import com.daarons.model.Account;
+import java.util.List;
+
 /**
  *
  * @author David
  */
-public interface AccountDAO extends AccountReader, AccountWriter{
-    
+public interface AccountDAO{
+    public List<Account> getAccountsLike(String name);
+    public Account addOrUpdateAccount(Account a);
+    public Account deleteAccount(Account a);
 }

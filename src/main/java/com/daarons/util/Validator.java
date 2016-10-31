@@ -27,4 +27,9 @@ public class Validator {
         }
         return false;
     }
+    
+    public static boolean containsChinese(String text) {
+        return text.codePoints().anyMatch(codepoint
+                -> Character.UnicodeScript.of(codepoint) == Character.UnicodeScript.HAN);
+    }
 }

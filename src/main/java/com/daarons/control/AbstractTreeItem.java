@@ -23,7 +23,8 @@ import javafx.scene.control.TreeItem;
  * @author David
  */
 public abstract class AbstractTreeItem extends TreeItem {
+    protected ContextMenu contextMenu;
+    
+    protected abstract void createContextMenu();
     public abstract ContextMenu getContextMenu();
-    public abstract Object getObject();
-    public abstract void setObject(Object o);
 }

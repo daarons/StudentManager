@@ -25,6 +25,7 @@ import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 import javafx.stage.DirectoryChooser;
+import org.springframework.beans.factory.annotation.Autowired;
 
 /**
  * FXML Controller class
@@ -36,7 +37,8 @@ public class ImportExportController implements Initializable {
     private File folder;
     private boolean importDB;
     private boolean exportDB;
-    private final ImportExportDAO dao = DAOFactory.getImportExportDAO("hibernate");
+    @Autowired
+    private ImportExportDAO importExportDAO;
 
     @FXML
     private Button importBtn;
@@ -84,7 +86,7 @@ public class ImportExportController implements Initializable {
                     + " will delete the current database. Do you want to continue?");
             Optional<ButtonType> result = importAlert.showAndWait();
             if (result.isPresent() && result.get() == ButtonType.OK) {
-                boolean isImported = dao.importDB(folder);
+                boolean isImported = importExportDAO.importDB(folder);
                 if(isImported){
                     folderName.setText("Import successful!");
                 }else{
@@ -95,7 +97,7 @@ public class ImportExportController implements Initializable {
                 }
             }
         }else if(exportDB){
-            boolean isExported = dao.exportDB(folder);
+            boolean isExported = importExportDAO.exportDB(folder);
             if(isExported){
                 folderName.setText("Export successful!");
             }else{

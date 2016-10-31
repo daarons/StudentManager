@@ -25,22 +25,22 @@ import javax.persistence.*;
 @Entity
 public class Note implements Serializable {
     @Id 
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
     @OneToOne
     @JoinColumn(name="session", nullable=false)
     private Session session;
-    @Lob
+    @Column(columnDefinition="long varchar")
     private String fluencyAndCoherence;
-    @Lob
+    @Column(columnDefinition="long varchar")
     private String vocabulary;
-    @Lob
+    @Column(columnDefinition="long varchar")
     private String grammar;
-    @Lob
+    @Column(columnDefinition="long varchar")
     private String pronunciation;
-    @Lob
+    @Column(columnDefinition="long varchar")
     private String interactionAndEngagement;
-    @Lob
+    @Column(columnDefinition="long varchar")
     private String communicationSkills;
     
     public Note(){

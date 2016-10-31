@@ -67,3 +67,11 @@ limitations under the License.
 #addBtn{
     -fx-background-image: url("/image/sign-add.png");
 }
+
+#backBtn{
+    -fx-background-image: url("/image/sign-left.png");
+}
+
+#trashBtn{
+    -fx-background-image: url("/image/trashcan.png");
+}

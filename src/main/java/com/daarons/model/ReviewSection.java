@@ -25,7 +25,6 @@ import javax.persistence.*;
 @Embeddable
 public class ReviewSection implements Serializable {
     private int grade;
-    @Lob
     private String comment;
     
     public ReviewSection(){

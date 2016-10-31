@@ -15,27 +15,13 @@
  */
 package com.daarons.DAO;
 
-import javax.persistence.*;
+import com.daarons.model.Student;
 
 /**
  *
  * @author David
  */
-public class EMSingleton {
-    private static EntityManagerFactory emf;
-    private static EntityManager em;
-    
-    public static EntityManagerFactory getEntityManagerFactory(){
-        if(emf == null || !emf.isOpen()){
-            emf = Persistence.createEntityManagerFactory("StudentManagerPU");
-        }
-        return emf;
-    }
-    
-    public static EntityManager getEntityManager(){
-        if(em == null || !em.isOpen()){
-            em = getEntityManagerFactory().createEntityManager();
-        }
-        return em;
-    }
+public interface StudentDAO {
+    public Student getStudentWithSessions(long id);
+    public Student updateStudent(Student student);
 }

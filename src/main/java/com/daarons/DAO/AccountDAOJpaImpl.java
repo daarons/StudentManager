@@ -19,25 +19,23 @@ import com.daarons.model.Account;
 import java.util.List;
 import javax.persistence.*;
 import org.apache.logging.log4j.*;
+import org.springframework.stereotype.Repository;
+import org.springframework.transaction.annotation.Transactional;
 
 /**
  *
  * @author David
  */
-public class AccountDAOHibernateImpl implements AccountDAO {
-    private static final Logger log = LogManager.getLogger(AccountDAOHibernateImpl.class);
+@Repository
+public class AccountDAOJpaImpl implements AccountDAO {
+    private static final Logger log = LogManager.getLogger(AccountDAOJpaImpl.class);
+    
+    @PersistenceContext
+    private EntityManager em;
 
     @Override
-    public Account getAccount(long id) {
-        EntityManager em = EMSingleton.getEntityManager();
-        Account account = em.find(Account.class, id);
-        em.close();
-        return account;
-    }
-
-    @Override
+    @Transactional(readOnly=true)
     public List<Account> getAccountsLike(String name) {
-        EntityManager em = EMSingleton.getEntityManager();
         String qStringLike = "SELECT a FROM Account a WHERE a.name LIKE :name";
         String qStringAll = "FROM Account";
         TypedQuery<Account> q;
@@ -56,59 +54,28 @@ public class AccountDAOHibernateImpl implements AccountDAO {
             }
         } catch (NoResultException e) {
             //no logging needed for NoResultException
-        } finally {
-            em.close();
         }
         return accounts;
     }
 
     @Override
-    public Account addAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
-        try {
-            em.persist(a);
-            trans.commit();
-        } catch (Exception e) {
-            log.error("Couldn't add account", e);
-            trans.rollback();
-        } finally {
-            em.close();
-        }
-        return a;
-    }
-
-    @Override
-    public Account updateAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
+    @Transactional
+    public Account addOrUpdateAccount(Account a) {
         try {
             a = em.merge(a);
-            trans.commit();
         } catch (Exception e) {
             log.error("Couldn't update account", e);
-            trans.rollback();
-        } finally {
-            em.close();
         }
         return a;
     }
 
     @Override
+    @Transactional
     public Account deleteAccount(Account a) {
-        EntityManager em = EMSingleton.getEntityManager();
-        EntityTransaction trans = em.getTransaction();
-        trans.begin();
         try {
             em.remove(em.merge(a));
-            trans.commit();
         } catch (Exception e) {
             log.error("Couldn't delete account", e);
-            trans.rollback();
-        } finally {
-            em.close();
         }
         return a;
     }

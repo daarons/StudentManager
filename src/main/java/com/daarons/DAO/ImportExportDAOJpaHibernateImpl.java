@@ -15,6 +15,7 @@
  */
 package com.daarons.DAO;
 
+import com.daarons.config.SpringConfig;
 import com.daarons.model.Account;
 import java.io.File;
 import java.sql.*;
@@ -22,30 +23,40 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import org.apache.logging.log4j.*;
 import org.hibernate.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.stereotype.Repository;
 
 /**
  *
  * @author David
  */
-public class ImportExportDAOHibernateImpl implements ImportExportDAO {
+@Repository
+public class ImportExportDAOJpaHibernateImpl implements ImportExportDAO {
 
-    private static final Logger log = LogManager.getLogger(ImportExportDAOHibernateImpl.class);
+    private static final Logger log = LogManager.getLogger(ImportExportDAOJpaHibernateImpl.class);
     private EntityManager em;
-    private Session session;
+    private Session session;   
+    @Autowired
+    AccountDAO dao;
 
+    @Override
     public boolean importDB(File folder) {
         try {
             //all accounts must be deleted before importing due to derby's 
             //import procedure
             deleteAccounts();
 
-            em = EMSingleton.getEntityManager();
+            em = SpringConfig.getApplicationContext()
+                    .getBean(LocalContainerEntityManagerFactoryBean.class)
+                    .getObject()
+                    .createEntityManager();
             session = em.unwrap(Session.class);
             session.doWork((Connection connection) -> {
                 String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
                     "NOTE", "REVIEW"};
 
-                try { //connection is unreachable outside of lambda/inner class
+                try {
                     for (int i = 0; i < 5; i++) {
                         PreparedStatement ps = connection.prepareStatement(
                                 "CALL SYSCS_UTIL.SYSCS_IMPORT_TABLE (?,?,?,?,?,?,?)");
@@ -58,7 +69,7 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
                         ps.setString(7, "1");
                         ps.execute();
                     }
-                } catch (Exception e) {                    
+                } catch (Exception e) {
                     throw new HibernateException("Import failed.", e);
                 } finally {
                     connection.close();
@@ -76,12 +87,15 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
     @Override
     public boolean exportDB(File folder) {
         try {
-            em = EMSingleton.getEntityManager();
+            em = SpringConfig.getApplicationContext()
+                    .getBean(LocalContainerEntityManagerFactoryBean.class)
+                    .getObject()
+                    .createEntityManager();
             session = em.unwrap(Session.class);
             session.doWork((Connection connection) -> {
                 String[] tables = {"ACCOUNT", "STUDENT", "SESSION",
                     "NOTE", "REVIEW"};
-                try { //connection is unreachable outside of lambda/inner class
+                try {
                     for (int i = 0; i < tables.length; i++) {
                         PreparedStatement ps = connection.prepareStatement(
                                 "CALL SYSCS_UTIL.SYSCS_EXPORT_TABLE (?,?,?,?,?,?)");
@@ -95,7 +109,7 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
                     }
                 } catch (Exception e) {
                     throw new HibernateException("Export failed", e);
-                } finally {
+                }finally{
                     connection.close();
                 }
             });
@@ -109,9 +123,9 @@ public class ImportExportDAOHibernateImpl implements ImportExportDAO {
     }
 
     private void deleteAccounts() {
-        AccountDAO dao = DAOFactory.getAccountDAO("hibernate");
         List<Account> accounts = dao.getAccountsLike("*");
-        if(accounts != null)
+        if (accounts != null) {
             accounts.forEach(account -> dao.deleteAccount(account));
+        }
     }
 }

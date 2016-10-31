@@ -102,7 +102,7 @@
         </GridPane>
     </left>
     <bottom>
-        <HBox maxHeight="200">
+        <HBox maxHeight="200" spacing="10" >
             <BorderPane.margin>
                 <Insets top="3" bottom="3" left="25"/>
             </BorderPane.margin>
@@ -110,6 +110,12 @@
                     maxWidth="60" maxHeight="60">
                 <tooltip>
                     <Tooltip text="Save" />
+                </tooltip>
+            </Button>
+            <Button fx:id="trashBtn" id="trashBtn" HBox.hgrow="ALWAYS" minWidth="30" minHeight="30" 
+                    maxWidth="60" maxHeight="60">
+                <tooltip>
+                    <Tooltip text="Delete" />
                 </tooltip>
             </Button>
         </HBox>
